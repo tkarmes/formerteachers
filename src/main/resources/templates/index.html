@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">FormerTeachers.com</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 60px 20px; background: #f8f9fa; color: #333; }
+        h1 { color: #2c3e50; }
+        p { font-size: 1.2em; max-width: 800px; margin: 30px auto; }
+    </style>
+</head>
+<body>
+<h1 th:text="${title}">FormerTeachers.com</h1>
+<p th:text="${message}">Welcome! This site is dedicated to helping former teachers find meaningful roles.</p>
+<p th:text="${subtext}">Jobs in edtech, instructional design, curriculum, and more. Coming soon.</p>
+
+</body>
+<div class="coming-soon">
+    <h2>Sample Job Listings</h2>
+    <ul th:each="job : ${jobs}" style="list-style: none; padding: 0;">
+        <li th:text="${job}" style="background: white; margin: 10px auto; padding: 15px; max-width: 700px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"></li>
+    </ul>
+    <form>
+        <input type="email" placeholder="your@email.com" style="padding: 10px; width: 300px;">
+        <button type="submit" style="padding: 10px 20px; background: #1a3c5e; color: white; border: none;">Sign Up</button>
+    </form>
+</div>
+<div style="margin-top: 40px; padding: 30px; background: #e8f4fd; border-radius: 12px; max-width: 600px; margin: 40px auto;">
+    <h3>Get Job Alerts</h3>
+    <p>Sign up for updates when we launch with curated listings and pivot resources.</p>
+    <form style="display: flex; justify-content: center; gap: 10px;">
+        <input type="email" placeholder="your@email.com" style="padding: 12px; width: 300px; border: 1px solid #ccc; border-radius: 6px;">
+        <button type="submit" style="padding: 12px 24px; background: #1a3c5e; color: white; border: none; border-radius: 6px; cursor: pointer;">Subscribe</button>
+    </form>
+</div>
+</html>

@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial Spring Boot setup for formerteachers.com">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/HomeController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
+    <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial working landing page with HomeController, index template, and local domain setup">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/Job.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/JobRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/FormerteachersApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/FormerteachersApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +21,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -40,6 +43,8 @@
   "keyToString": {
     "Application.FormerteachersApplication.executor": "Run",
     "DefaultHtmlFileTemplate": "HTML File",
+    "Maven.formerteachers [clean].executor": "Run",
+    "Maven.formerteachers [install].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
@@ -75,11 +80,30 @@
       <option name="project" value="LOCAL" />
       <updated>1772224092397</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Initial working landing page with HomeController, index template, and local domain setup">
+      <option name="closed" value="true" />
+      <created>1772226921023</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1772226921023</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Spring Boot setup for formerteachers.com" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Spring Boot setup for formerteachers.com" />
+    <MESSAGE value="Initial working landing page with HomeController, index template, and local domain setup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial working landing page with HomeController, index template, and local domain setup" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="org.springframework.beans.factory.BeanCreationException" package="org.springframework.beans.factory" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

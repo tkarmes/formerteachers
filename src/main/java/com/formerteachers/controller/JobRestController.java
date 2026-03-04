@@ -2,9 +2,13 @@ package com.formerteachers.controller;
 
 import com.formerteachers.model.Job;
 import com.formerteachers.repository.JobRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -17,13 +21,13 @@ public class JobRestController {
         this.jobRepository = jobRepository;
     }
 
-    // GET /api/jobs → Get all jobs
+    // GET all jobs
     @GetMapping
     public List<Job> getAllJobs() {
         return jobRepository.findAll();
     }
 
-    // GET /api/jobs/{id} → Get a single job
+    // GET single job
     @GetMapping("/{id}")
     public ResponseEntity<Job> getJobById(@PathVariable Long id) {
         return jobRepository.findById(id)
@@ -31,15 +35,24 @@ public class JobRestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST /api/jobs → Create a new job
+    // CREATE job (POST)
     @PostMapping
-    public Job createJob(@RequestBody Job job) {
-        return jobRepository.save(job);
+    public ResponseEntity<Job> createJob(@Valid @RequestBody Job job) {
+        Job savedJob = jobRepository.save(job);
+
+        // Build the URI for the new resource
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedJob.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(savedJob);
     }
 
-    // PUT /api/jobs/{id} → Update an existing job
+    // UPDATE job (PUT)
     @PutMapping("/{id}")
-    public ResponseEntity<Job> updateJob(@PathVariable Long id, @RequestBody Job updatedJob) {
+    public ResponseEntity<Job> updateJob(@PathVariable Long id,
+                                         @Valid @RequestBody Job updatedJob) {
         return jobRepository.findById(id)
                 .map(job -> {
                     job.setTitle(updatedJob.getTitle());
@@ -53,7 +66,7 @@ public class JobRestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE /api/jobs/{id} → Delete a job
+    // DELETE job
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
         return jobRepository.findById(id)

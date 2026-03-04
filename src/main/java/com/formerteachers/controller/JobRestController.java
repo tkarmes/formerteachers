@@ -2,7 +2,7 @@ package com.formerteachers.controller;
 
 import com.formerteachers.model.Job;
 import com.formerteachers.repository.JobRepository;
-import org.springframework.http.HttpStatus;
+import com.formerteachers.dto.JobDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,38 +21,49 @@ public class JobRestController {
         this.jobRepository = jobRepository;
     }
 
+    // Convert Job → JobDTO
+    private JobDTO toDTO(Job job) {
+        return new JobDTO(
+                job.getId(),
+                job.getTitle(),
+                job.getCompany(),
+                job.getLocation(),
+                job.getSalaryRange(),
+                job.getDescription()
+        );
+    }
+
     // GET all jobs
     @GetMapping
-    public List<Job> getAllJobs() {
-        return jobRepository.findAll();
+    public List<JobDTO> getAllJobs() {
+        return jobRepository.findAll().stream()
+                .map(this::toDTO)
+                .toList();
     }
 
     // GET single job
     @GetMapping("/{id}")
-    public ResponseEntity<Job> getJobById(@PathVariable Long id) {
+    public ResponseEntity<JobDTO> getJobById(@PathVariable Long id) {
         return jobRepository.findById(id)
-                .map(ResponseEntity::ok)
+                .map(job -> ResponseEntity.ok(toDTO(job)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // CREATE job (POST)
+    // CREATE job
     @PostMapping
-    public ResponseEntity<Job> createJob(@Valid @RequestBody Job job) {
+    public ResponseEntity<JobDTO> createJob(@Valid @RequestBody Job job) {
         Job savedJob = jobRepository.save(job);
-
-        // Build the URI for the new resource
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(savedJob.getId())
                 .toUri();
-
-        return ResponseEntity.created(location).body(savedJob);
+        return ResponseEntity.created(location).body(toDTO(savedJob));
     }
 
-    // UPDATE job (PUT)
+    // UPDATE job
     @PutMapping("/{id}")
-    public ResponseEntity<Job> updateJob(@PathVariable Long id,
-                                         @Valid @RequestBody Job updatedJob) {
+    public ResponseEntity<JobDTO> updateJob(@PathVariable Long id,
+                                            @Valid @RequestBody Job updatedJob) {
         return jobRepository.findById(id)
                 .map(job -> {
                     job.setTitle(updatedJob.getTitle());
@@ -61,7 +72,7 @@ public class JobRestController {
                     job.setSalaryRange(updatedJob.getSalaryRange());
                     job.setDescription(updatedJob.getDescription());
                     jobRepository.save(job);
-                    return ResponseEntity.ok(job);
+                    return ResponseEntity.ok(toDTO(job));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

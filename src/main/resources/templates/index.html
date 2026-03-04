@@ -7,6 +7,22 @@
         body { font-family: Arial, sans-serif; text-align: center; padding: 60px 20px; background: #f8f9fa; color: #333; }
         h1 { color: #2c3e50; }
         p { font-size: 1.2em; max-width: 800px; margin: 30px auto; }
+        .job-listing {
+            background: white;
+            margin: 10px auto;
+            padding: 20px;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+        .job-title { font-weight: bold; font-size: 1.2em; color: #1a3c5e; }
+        .job-company { font-style: italic; color: #555; }
+        .job-location, .job-salary { color: #666; font-size: 0.95em; }
+        .job-description { margin-top: 10px; }
+        form input[type="email"] { padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 6px; }
+        form button { padding: 10px 20px; background: #1a3c5e; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        .subscription-section { margin-top: 40px; padding: 30px; background: #e8f4fd; border-radius: 12px; max-width: 600px; margin-left: auto; margin-right: auto; }
     </style>
 </head>
 <body>
@@ -14,23 +30,49 @@
 <p th:text="${message}">Welcome! This site is dedicated to helping former teachers find meaningful roles.</p>
 <p th:text="${subtext}">Jobs in edtech, instructional design, curriculum, and more. Coming soon.</p>
 
-</body>
 <div class="coming-soon">
     <h2>Sample Job Listings</h2>
-    <ul th:each="job : ${jobs}" style="list-style: none; padding: 0;">
-        <li th:text="${job}" style="background: white; margin: 10px auto; padding: 15px; max-width: 700px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"></li>
+    <!-- If jobs exist -->
+    <ul th:if="${!#lists.isEmpty(jobs)}" style="list-style: none; padding: 0;">
+        <li th:each="job : ${jobs}" class="job-listing">
+            <div class="job-title" th:text="${job.title}"></div>
+            <div class="job-company" th:text="${job.company}"></div>
+            <div class="job-location" th:text="${job.location}"></div>
+            <div class="job-salary" th:text="${job.salaryRange}"></div>
+            <div class="job-description" th:text="${job.description}"></div>
+        </li>
     </ul>
-    <form>
-        <input type="email" placeholder="your@email.com" style="padding: 10px; width: 300px;">
-        <button type="submit" style="padding: 10px 20px; background: #1a3c5e; color: white; border: none;">Sign Up</button>
+
+    <a href="/jobs/new">
+        <button>Post a Job</button>
+    </a>
+
+    <!-- If no jobs exist -->
+    <div th:if="${#lists.isEmpty(jobs)}"
+         style="margin: 40px auto; max-width: 600px; padding: 30px; background: #ffffff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+
+        <h3 style="margin-bottom: 10px;">No job listings yet.</h3>
+        <p style="margin: 0;">
+            We're actively adding opportunities for former teachers.
+            Check back soon or join the email list below to be notified when new roles are posted.
+        </p>
+    </div>
+
+    <!-- First signup form -->
+    <form action="/subscribe" method="post">
+        <input type="email" name="email" placeholder="your@email.com" required>
+        <button type="submit">Sign Up</button>
     </form>
 </div>
-<div style="margin-top: 40px; padding: 30px; background: #e8f4fd; border-radius: 12px; max-width: 600px; margin: 40px auto;">
+
+<!-- Job Alerts subscription -->
+<div class="subscription-section">
     <h3>Get Job Alerts</h3>
     <p>Sign up for updates when we launch with curated listings and pivot resources.</p>
-    <form style="display: flex; justify-content: center; gap: 10px;">
-        <input type="email" placeholder="your@email.com" style="padding: 12px; width: 300px; border: 1px solid #ccc; border-radius: 6px;">
-        <button type="submit" style="padding: 12px 24px; background: #1a3c5e; color: white; border: none; border-radius: 6px; cursor: pointer;">Subscribe</button>
+    <form action="/subscribe" method="post" style="display: flex; justify-content: center; gap: 10px;">
+        <input type="email" name="email" placeholder="your@email.com" required>
+        <button type="submit">Subscribe</button>
     </form>
 </div>
+</body>
 </html>

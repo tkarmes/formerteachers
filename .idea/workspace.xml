@@ -5,13 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial working landing page with HomeController, index template, and local domain setup">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/Job.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/JobRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/HomeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Job.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Subscriber.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/repository/JobRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/repository/SubscriberRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/create-job.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/edit-job.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/jobs.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/FormerteachersApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/FormerteachersApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/HomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/HomeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/Job.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/JobRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,40 +29,40 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Class" />
         <option value="Interface" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="3AGeeo8nRujR9F25JkUQ5EFF1Of" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.FormerteachersApplication.executor": "Run",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Maven.formerteachers [clean].executor": "Run",
-    "Maven.formerteachers [install].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "onboarding.tips.debug.path": "C:/workspace/FormerTeachers/src/main/java/com/formerteachers/Main.java",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.FormerteachersApplication.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Maven.formerteachers [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.formerteachers [install].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/workspace/FormerTeachers/src/main/java/com/formerteachers/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="FormerTeachers" />

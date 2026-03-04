@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Job Listings</title>
+</head>
+<body>
+<h1>All Jobs</h1>
+
+<table border="1">
+  <tr>
+    <th>Title</th>
+    <th>Company</th>
+    <th>Location</th>
+    <th>Salary</th>
+    <th>Actions</th>
+  </tr>
+  <tr th:each="job : ${jobs}">
+    <td th:text="${job.title}">Title</td>
+    <td th:text="${job.company}">Company</td>
+    <td th:text="${job.location}">Location</td>
+    <td th:text="${job.salaryRange}">Salary</td>
+    <td>
+      <a th:href="@{/jobs/{id}/edit(id=${job.id})}">Edit</a>
+
+      <!-- Delete form -->
+      <form th:action="@{/jobs/{id}(id=${job.id})}" method="post" style="display:inline">
+        <input type="hidden" name="_method" value="delete" />
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+</table>
+
+<a href="/jobs/new">Create New Job</a>
+</body>
+</html>

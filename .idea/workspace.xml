@@ -5,21 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial working landing page with HomeController, index template, and local domain setup">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/HomeController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Job.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Subscriber.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/repository/JobRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/repository/SubscriberRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/create-job.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/edit-job.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/jobs.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobRestController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/FormerteachersApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/FormerteachersApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/HomeController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/Job.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/JobRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,9 +16,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>

@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial working landing page with HomeController, index template, and local domain setup">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/dto/JobDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/exception/GlobalExceptionHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/FormerteachersApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/FormerteachersApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Job.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Job.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/repository/JobRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/repository/JobRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +104,10 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="org.springframework.beans.factory.BeanCreationException" package="org.springframework.beans.factory" />
           <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ClassNotFoundException" package="java.lang" />
+          <option name="timeStamp" value="3" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

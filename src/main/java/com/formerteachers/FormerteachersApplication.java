@@ -15,37 +15,5 @@ public class FormerteachersApplication {
     }
 
 
-    @Bean
-    CommandLineRunner initData(JobRepository jobRepository) {
-        return args -> {
-            if (jobRepository.count() == 0) {
-                jobRepository.save(new Job(
-                        "Instructional Designer - Math Focus",
-                        "McGraw Hill",
-                        "Remote",
-                        "$55k–$64k",
-                        "Create math assessments and content for K-12."
-                ));
-
-                jobRepository.save(new Job(
-                        "Curriculum Specialist (K-12 Math)",
-                        "Savvas Learning",
-                        "Hybrid Denver",
-                        "$37–$40/hr part-time",
-                        "Develop K-12 math curriculum materials."
-                ));
-
-                jobRepository.save(new Job(
-                        "Assessment Content Creator - Middle School Math",
-                        "Khan Academy",
-                        "Remote",
-                        "$77k–$87k fixed-term",
-                        "Create high-quality middle school math assessments."
-                ));
-
-                System.out.println("Sample jobs seeded into DB!");
-            }
-        };
-    }
 
 }

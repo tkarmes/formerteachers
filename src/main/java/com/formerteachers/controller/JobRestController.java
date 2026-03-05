@@ -29,7 +29,8 @@ public class JobRestController {
                 job.getCompany(),
                 job.getLocation(),
                 job.getSalaryRange(),
-                job.getDescription()
+                job.getDescription(),
+                job.getCategory()   // include category in DTO
         );
     }
 
@@ -41,7 +42,7 @@ public class JobRestController {
                 .toList();
     }
 
-    // GET single job
+    // GET job by ID
     @GetMapping("/{id}")
     public ResponseEntity<JobDTO> getJobById(@PathVariable Long id) {
         return jobRepository.findById(id)
@@ -49,7 +50,15 @@ public class JobRestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // CREATE job
+    // GET jobs by category
+    @GetMapping("/category/{category}")
+    public List<JobDTO> getJobsByCategory(@PathVariable String category) {
+        return jobRepository.findByCategoryIgnoreCase(category).stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    // CREATE a job
     @PostMapping
     public ResponseEntity<JobDTO> createJob(@Valid @RequestBody Job job) {
         Job savedJob = jobRepository.save(job);
@@ -60,7 +69,7 @@ public class JobRestController {
         return ResponseEntity.created(location).body(toDTO(savedJob));
     }
 
-    // UPDATE job
+    // UPDATE a job
     @PutMapping("/{id}")
     public ResponseEntity<JobDTO> updateJob(@PathVariable Long id,
                                             @Valid @RequestBody Job updatedJob) {
@@ -71,13 +80,14 @@ public class JobRestController {
                     job.setLocation(updatedJob.getLocation());
                     job.setSalaryRange(updatedJob.getSalaryRange());
                     job.setDescription(updatedJob.getDescription());
+                    job.setCategory(updatedJob.getCategory()); // update category
                     jobRepository.save(job);
                     return ResponseEntity.ok(toDTO(job));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE job
+    // DELETE a job
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
         return jobRepository.findById(id)

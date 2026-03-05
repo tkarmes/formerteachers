@@ -28,16 +28,20 @@ public class Job {
     @NotBlank(message = "Description is required")
     private String description;
 
+    @NotBlank(message = "Category is required")
+    private String category;  // <-- new field
+
     // Default constructor required by JPA
     public Job() {}
 
-    // Convenience constructor
-    public Job(String title, String company, String location, String salaryRange, String description) {
+    // Convenience constructor including category
+    public Job(String title, String company, String location, String salaryRange, String description, String category) {
         this.title = title;
         this.company = company;
         this.location = location;
         this.salaryRange = salaryRange;
         this.description = description;
+        this.category = category;
     }
 
     // Getters and setters
@@ -58,4 +62,7 @@ public class Job {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 }

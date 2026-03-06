@@ -1,10 +1,8 @@
 package com.formerteachers.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Entity
 public class Job {
@@ -29,13 +27,17 @@ public class Job {
     private String description;
 
     @NotBlank(message = "Category is required")
-    private String category;  // <-- new field
+    private String category;
+
+    // NEW: createdAt timestamp
+    private LocalDateTime createdAt;
 
     // Default constructor required by JPA
     public Job() {}
 
-    // Convenience constructor including category
-    public Job(String title, String company, String location, String salaryRange, String description, String category) {
+    // Convenience constructor
+    public Job(String title, String company, String location, String salaryRange,
+               String description, String category) {
         this.title = title;
         this.company = company;
         this.location = location;
@@ -44,9 +46,14 @@ public class Job {
         this.category = category;
     }
 
+    // Automatically set createdAt before saving
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
     // Getters and setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -65,4 +72,6 @@ public class Job {
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }

@@ -37,10 +37,19 @@ public class JobService {
         return jobRepository.findByLocationIgnoreCase(location, pageable);
     }
 
-    public Page<Job> searchJobs(String keyword, Pageable pageable) {
-        return jobRepository.findByTitleContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrCategoryContainingIgnoreCase(
-                keyword, keyword, keyword, pageable
-        );
+    public Page<Job> getJobsByWorkType(String workType, Pageable pageable) {
+        return jobRepository.findByWorkTypeIgnoreCase(workType, pageable);
+    }
+
+    // ⭐ Combined search method
+    public Page<Job> searchJobs(String keyword, String location, String category, String workType, Pageable pageable) {
+        // Make nulls safe for repository query
+        String safeKeyword = (keyword == null) ? "" : keyword;
+        String safeLocation = (location == null) ? "" : location;
+        String safeCategory = (category == null) ? "" : category;
+        String safeWorkType = (workType == null) ? "" : workType;
+
+        return jobRepository.searchJobs(safeKeyword, safeLocation, safeCategory, safeWorkType, pageable);
     }
 
     public Job save(Job job) {

@@ -29,6 +29,9 @@ public class Job {
     @NotBlank(message = "Category is required")
     private String category;
 
+    @NotBlank(message = "Work type is required")
+    private String workType;
+
     // NEW: createdAt timestamp
     private LocalDateTime createdAt;
 
@@ -37,13 +40,14 @@ public class Job {
 
     // Convenience constructor
     public Job(String title, String company, String location, String salaryRange,
-               String description, String category) {
+               String description, String category, String workType) {
         this.title = title;
         this.company = company;
         this.location = location;
         this.salaryRange = salaryRange;
         this.description = description;
         this.category = category;
+        this.workType = workType;
     }
 
     // Automatically set createdAt before saving
@@ -72,6 +76,14 @@ public class Job {
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
+
+    public String getWorkType() {
+        return workType;
+    }
+
+    public void setWorkType(String workType) {
+        this.workType = workType;
+    }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 }

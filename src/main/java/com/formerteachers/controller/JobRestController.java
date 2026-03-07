@@ -35,7 +35,9 @@ public class JobRestController {
                 job.getLocation(),
                 job.getSalaryRange(),
                 job.getDescription(),
-                job.getCategory()
+                job.getCategory(),
+                job.getWorkType(),
+                job.getCreatedAt() // ✅ Added missing parameter
         );
     }
 
@@ -97,9 +99,15 @@ public class JobRestController {
     // SEARCH across title, description, or category
     @GetMapping("/search")
     public JobPageDTO searchJobs(
-            @RequestParam String keyword,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String workType,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return toJobPageDTO(jobService.searchJobs(keyword, pageable));
+
+        return toJobPageDTO(
+                jobService.searchJobs(keyword, location, category, workType, pageable)
+        );
     }
 
     // CREATE job
@@ -127,6 +135,7 @@ public class JobRestController {
                     job.setSalaryRange(updatedJob.getSalaryRange());
                     job.setDescription(updatedJob.getDescription());
                     job.setCategory(updatedJob.getCategory());
+                    job.setWorkType(updatedJob.getWorkType());
 
                     Job savedJob = jobService.save(job);
                     return ResponseEntity.ok(toDTO(savedJob));

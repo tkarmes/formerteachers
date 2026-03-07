@@ -1,5 +1,7 @@
 package com.formerteachers.dto;
 
+import java.time.LocalDateTime;
+
 public class JobDTO {
 
     private Long id;
@@ -9,10 +11,14 @@ public class JobDTO {
     private String salaryRange;
     private String description;
     private String category;
+    private String workType;
+    private LocalDateTime createdAt;
 
     // Constructor
     public JobDTO(Long id, String title, String company, String location,
-                  String salaryRange, String description, String category) {
+                  String salaryRange, String description, String category,
+                  String workType, LocalDateTime createdAt) {
+
         this.id = id;
         this.title = title;
         this.company = company;
@@ -20,6 +26,8 @@ public class JobDTO {
         this.salaryRange = salaryRange;
         this.description = description;
         this.category = category;
+        this.workType = workType;
+        this.createdAt = createdAt;
     }
 
     // Getters and Setters
@@ -43,4 +51,10 @@ public class JobDTO {
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
+
+    public String getWorkType() { return workType; }
+    public void setWorkType(String workType) { this.workType = workType; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

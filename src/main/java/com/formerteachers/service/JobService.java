@@ -5,6 +5,7 @@ import com.formerteachers.repository.JobRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 import java.util.Optional;
 
@@ -19,6 +20,14 @@ public class JobService {
 
     public Page<Job> getAllJobs(Pageable pageable) {
         return jobRepository.findAll(pageable);
+    }
+
+    public List<Job> getAllJobs() {
+        return jobRepository.findAll();
+    }
+
+    public void deleteById(Long id) {
+        jobRepository.deleteById(id);
     }
 
     public Optional<Job> getJobById(Long id) {

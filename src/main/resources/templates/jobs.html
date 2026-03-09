@@ -2,35 +2,95 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Job Listings</title>
+
+  <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f7fb;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    .job-container {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .job-card {
+        display: block;
+        background: white;
+        padding: 20px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        text-decoration: none;
+        color: black;
+        transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .job-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .job-card h2 {
+        margin: 0 0 10px 0;
+    }
+
+    .company {
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .create-job {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+  </style>
+
 </head>
+
 <body>
-<h1>All Jobs</h1>
 
-<table border="1">
-  <tr>
-    <th>Title</th>
-    <th>Company</th>
-    <th>Location</th>
-    <th>Salary</th>
-    <th>Actions</th>
-  </tr>
-  <tr th:each="job : ${jobs}">
-    <td th:text="${job.title}">Title</td>
-    <td th:text="${job.company}">Company</td>
-    <td th:text="${job.location}">Location</td>
-    <td th:text="${job.salaryRange}">Salary</td>
-    <td>
-      <a th:href="@{/jobs/{id}/edit(id=${job.id})}">Edit</a>
+<h1>Job Listings</h1>
 
-      <!-- Delete form -->
-      <form th:action="@{/jobs/{id}(id=${job.id})}" method="post" style="display:inline">
-        <input type="hidden" name="_method" value="delete" />
-        <button type="submit">Delete</button>
-      </form>
-    </td>
-  </tr>
-</table>
+<div class="job-container">
 
-<a href="/jobs/new">Create New Job</a>
+  <a class="job-card"
+     th:each="job : ${jobs}"
+     th:href="@{/jobs/{id}(id=${job.id})}">
+
+    <h2 th:text="${job.title}">Job Title</h2>
+
+    <p class="company" th:text="${job.company}">Company</p>
+
+    <p>
+      <strong>Location:</strong>
+      <span th:text="${job.location}"></span>
+    </p>
+
+    <p>
+      <strong>Salary:</strong>
+      <span th:text="${job.salaryRange}"></span>
+    </p>
+
+    <p>
+      <strong>Work Type:</strong>
+      <span th:text="${job.workType}"></span>
+    </p>
+
+  </a>
+
+</div>
+
+<div class="create-job">
+  <a href="/jobs/new">Create New Job</a>
+</div>
+
 </body>
 </html>

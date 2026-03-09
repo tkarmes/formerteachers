@@ -45,6 +45,16 @@ public class JobViewController {
         return "edit-job";
     }
 
+    @GetMapping("/{id}")
+    public String viewJob(@PathVariable Long id, Model model) {
+
+        Job job = jobService.getJobById(id).orElseThrow();
+
+        model.addAttribute("job", job);
+
+        return "job-detail";
+    }
+
     // Update job
     @PostMapping("/update/{id}")
     public String updateJob(@PathVariable Long id, @ModelAttribute Job updatedJob) {

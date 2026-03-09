@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial working landing page with HomeController, index template, and local domain setup">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/job-detail.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/HomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/service/JobService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/service/JobService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/jobs.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/jobs.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

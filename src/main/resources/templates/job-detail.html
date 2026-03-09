@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${job.title}">Job</title>
+</head>
+<body>
+
+<h1 th:text="${job.title}">Job Title</h1>
+
+<h3 th:text="${job.company}">Company</h3>
+
+<p>
+    <strong>Location:</strong>
+    <span th:text="${job.location}"></span>
+</p>
+
+<p>
+    <strong>Salary:</strong>
+    <span th:text="${job.salaryRange}"></span>
+</p>
+
+<p>
+    <strong>Category:</strong>
+    <span th:text="${job.category}"></span>
+</p>
+
+<p>
+    <strong>Work Type:</strong>
+    <span th:text="${job.workType}"></span>
+</p>
+
+<hr>
+
+<h3>Description</h3>
+
+<p th:text="${job.description}"></p>
+
+<br>
+
+<a href="/jobs">Back to Jobs</a>
+
+</body>
+</html>

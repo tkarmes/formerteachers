@@ -1,155 +1,193 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
+
   <title>Job Listings</title>
+
   <style>
 
-    body {
-        font-family: Arial, sans-serif;
-        background: #f5f7fb;
+    body{
+    font-family:Arial;
+    margin:0;
+    background:#f5f7fb;
     }
 
-    h1 {
-        text-align: center;
+    /* NAVBAR */
+
+    .navbar{
+    background:#1a3c5e;
+    padding:15px 0;
+    margin-bottom:30px;
     }
 
-    .search-bar {
-        max-width: 900px;
-        margin: 20px auto;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
+    .nav-container{
+    max-width:1000px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
     }
 
-    .search-bar input, .search-bar select, .search-bar button {
-        padding: 8px 12px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        font-size: 14px;
+    .logo{
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    text-decoration:none;
     }
 
-    .search-bar button {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
+    .nav-links a{
+    color:white;
+    margin-left:20px;
+    text-decoration:none;
     }
 
-    .search-bar button:hover {
-        background-color: #45a049;
+    .post-job{
+    background:#4CAF50;
+    padding:6px 12px;
+    border-radius:5px;
     }
 
-    .job-container {
-        max-width: 900px;
-        margin: auto;
+    /* PAGE */
+
+    h1{
+    text-align:center;
     }
 
-    .job-card {
-        display: block;
-        background: white;
-        padding: 20px;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        text-decoration: none;
-        color: black;
-        transition: transform 0.1s ease, box-shadow 0.1s ease;
+    .search-bar{
+    max-width:900px;
+    margin:20px auto;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
     }
 
-    .job-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    .search-bar input,
+    .search-bar select,
+    .search-bar button{
+    padding:8px 12px;
+    border-radius:5px;
+    border:1px solid #ccc;
     }
 
-    .job-card h2 {
-        margin: 0 0 10px 0;
+    .search-bar button{
+    background:#4CAF50;
+    color:white;
+    border:none;
     }
 
-    .company {
-        font-weight: bold;
-        margin-bottom: 8px;
+    .job-container{
+    max-width:900px;
+    margin:auto;
     }
 
-    .create-job {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
+    .job-card{
+    display:block;
+    background:white;
+    padding:20px;
+    margin-bottom:15px;
+    border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    text-decoration:none;
+    color:black;
+    }
+
+    .job-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .company{
+    font-weight:bold;
+    margin-bottom:8px;
+    }
+
+    .create-job{
+    text-align:center;
+    margin-top:20px;
     }
 
   </style>
+
 </head>
+
 <body>
 
-<h1>Job Listings</h1>
+<!-- NAVBAR -->
 
-<!-- SEARCH BAR -->
+<nav class="navbar">
+  <div class="nav-container">
+
+    <a href="/" class="logo">
+      FormerTeachers
+    </a>
+
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/jobs">Browse Jobs</a>
+      <a href="/jobs/new" class="post-job">Post a Job</a>
+    </div>
+
+  </div>
+</nav>
+
+
+<h1>Browse Jobs for Former Teachers</h1>
+
+
+<!-- SEARCH -->
+
 <form class="search-bar" th:action="@{/jobs}" method="get">
+
   <input type="text" name="keyword" placeholder="Keyword" th:value="${keyword}">
+
   <input type="text" name="location" placeholder="Location" th:value="${location}">
+
   <input type="text" name="category" placeholder="Category" th:value="${category}">
+
   <select name="workType">
-    <option value="" th:selected="${workType == null or workType == ''}">All Work Types</option>
-    <option value="Full Time" th:selected="${workType == 'Full Time'}">Full Time</option>
-    <option value="Part Time" th:selected="${workType == 'Part Time'}">Part Time</option>
-    <option value="Contract" th:selected="${workType == 'Contract'}">Contract</option>
-    <option value="Remote" th:selected="${workType == 'Remote'}">Remote</option>
+
+    <option value="">All Work Types</option>
+    <option value="Full Time">Full Time</option>
+    <option value="Part Time">Part Time</option>
+    <option value="Contract">Contract</option>
+    <option value="Remote">Remote</option>
+
   </select>
+
   <button type="submit">Search</button>
+
 </form>
 
-<!-- JOB LIST -->
+
+<!-- JOBS -->
+
 <div class="job-container">
+
   <a class="job-card"
      th:each="job : ${jobs}"
      th:href="@{/jobs/{id}(id=${job.id})}">
-    <h2 th:text="${job.title}">Job Title</h2>
-    <p class="company" th:text="${job.company}">Company</p>
+
+    <h2 th:text="${job.title}"></h2>
+
+    <p class="company" th:text="${job.company}"></p>
+
     <p><strong>Location:</strong> <span th:text="${job.location}"></span></p>
+
     <p><strong>Salary:</strong> <span th:text="${job.salaryRange}"></span></p>
+
     <p><strong>Work Type:</strong> <span th:text="${job.workType}"></span></p>
+
   </a>
+
 </div>
 
-<!-- CREATE JOB BUTTON -->
+
+<!-- CREATE -->
+
 <div class="create-job">
+
   <a href="/jobs/new">Create New Job</a>
-</div>
-
-<div style="text-align:center; margin-top:30px;">
-
-  <!-- Previous button -->
-  <a th:if="${currentPage > 0}"
-     th:href="@{/jobs(page=${currentPage - 1},
-                        keyword=${keyword},
-                        location=${location},
-                        category=${category},
-                        workType=${workType})}">
-    Previous
-  </a>
-
-  <!-- Page numbers -->
-  <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-
-        <a th:href="@{/jobs(page=${i},
-                            keyword=${keyword},
-                            location=${location},
-                            category=${category},
-                            workType=${workType})}"
-           th:text="${i + 1}"
-           th:style="${i == currentPage} ? 'font-weight:bold; margin:0 5px;' : 'margin:0 5px;'">
-        </a>
-
-    </span>
-
-  <!-- Next button -->
-  <a th:if="${currentPage < totalPages - 1}"
-     th:href="@{/jobs(page=${currentPage + 1},
-                        keyword=${keyword},
-                        location=${location},
-                        category=${category},
-                        workType=${workType})}">
-    Next
-  </a>
 
 </div>
 

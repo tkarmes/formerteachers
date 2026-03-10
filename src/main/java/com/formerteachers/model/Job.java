@@ -17,28 +17,23 @@ public class Job {
     @NotBlank(message = "Company is required")
     private String company;
 
-    @NotBlank(message = "Location is required")
     private String location;
 
-    @NotBlank(message = "Salary range is required")
     private String salaryRange;
 
     @NotBlank(message = "Description is required")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotBlank(message = "Category is required")
     private String category;
 
-    @NotBlank(message = "Work type is required")
     private String workType;
 
-    // NEW: createdAt timestamp
+    // created timestamp
     private LocalDateTime createdAt;
 
-    // Default constructor required by JPA
     public Job() {}
 
-    // Convenience constructor
     public Job(String title, String company, String location, String salaryRange,
                String description, String category, String workType) {
         this.title = title;
@@ -50,13 +45,11 @@ public class Job {
         this.workType = workType;
     }
 
-    // Automatically set createdAt before saving
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters and setters
     public Long getId() { return id; }
 
     public String getTitle() { return title; }
@@ -77,13 +70,8 @@ public class Job {
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
 
-    public String getWorkType() {
-        return workType;
-    }
-
-    public void setWorkType(String workType) {
-        this.workType = workType;
-    }
+    public String getWorkType() { return workType; }
+    public void setWorkType(String workType) { this.workType = workType; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 }

@@ -4,6 +4,8 @@ import com.formerteachers.model.Job;
 import com.formerteachers.dto.JobDTO;
 import com.formerteachers.dto.JobPageDTO;
 import com.formerteachers.service.JobService;
+import com.formerteachers.service.JobAggregatorService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -21,12 +24,25 @@ import java.util.List;
 public class JobRestController {
 
     private final JobService jobService;
+    private final JobAggregatorService jobAggregatorService;
 
-    public JobRestController(JobService jobService) {
+    // ✅ Constructor injection
+    public JobRestController(JobService jobService, JobAggregatorService jobAggregatorService) {
         this.jobService = jobService;
+        this.jobAggregatorService = jobAggregatorService;
     }
 
-    // Convert Job → DTO
+    // ===============================
+    // AUTOMATIC IMPORT ON STARTUP
+    // ===============================
+    @PostConstruct
+    public void importJobsOnStartup() {
+        // Example: importing from a public API
+        jobAggregatorService.importJobsFromApi("https://remotive.com/api/remote-jobs?search=education");    }
+
+    // ===============================
+    // HELPER: Job → DTO
+    // ===============================
     private JobDTO toDTO(Job job) {
         return new JobDTO(
                 job.getId(),
@@ -37,11 +53,10 @@ public class JobRestController {
                 job.getDescription(),
                 job.getCategory(),
                 job.getWorkType(),
-                job.getCreatedAt() // ✅ Added missing parameter
+                job.getCreatedAt()
         );
     }
 
-    // Convert Page<Job> → JobPageDTO
     private JobPageDTO toJobPageDTO(Page<Job> page) {
         List<JobDTO> content = page.getContent().stream()
                 .map(this::toDTO)
@@ -57,14 +72,16 @@ public class JobRestController {
         );
     }
 
-    // GET all jobs (paginated, newest first by default)
+    // ===============================
+    // API ENDPOINTS
+    // ===============================
+
     @GetMapping
     public JobPageDTO getAllJobs(
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return toJobPageDTO(jobService.getAllJobs(pageable));
     }
 
-    // GET job by ID
     @GetMapping("/{id}")
     public ResponseEntity<JobDTO> getJobById(@PathVariable Long id) {
         return jobService.getJobById(id)
@@ -72,7 +89,6 @@ public class JobRestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // FILTER by company
     @GetMapping("/company/{company}")
     public JobPageDTO getJobsByCompany(
             @PathVariable String company,
@@ -80,7 +96,6 @@ public class JobRestController {
         return toJobPageDTO(jobService.getJobsByCompany(company, pageable));
     }
 
-    // FILTER by category
     @GetMapping("/category/{category}")
     public JobPageDTO getJobsByCategory(
             @PathVariable String category,
@@ -88,7 +103,6 @@ public class JobRestController {
         return toJobPageDTO(jobService.getJobsByCategory(category, pageable));
     }
 
-    // FILTER by location
     @GetMapping("/location/{location}")
     public JobPageDTO getJobsByLocation(
             @PathVariable String location,
@@ -96,7 +110,6 @@ public class JobRestController {
         return toJobPageDTO(jobService.getJobsByLocation(location, pageable));
     }
 
-    // SEARCH across title, description, or category
     @GetMapping("/search")
     public JobPageDTO searchJobs(
             @RequestParam(required = false) String keyword,
@@ -110,21 +123,17 @@ public class JobRestController {
         );
     }
 
-    // CREATE job
     @PostMapping
     public ResponseEntity<JobDTO> createJob(@Valid @RequestBody Job job) {
         Job savedJob = jobService.save(job);
-
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(savedJob.getId())
                 .toUri();
-
         return ResponseEntity.created(location).body(toDTO(savedJob));
     }
 
-    // UPDATE job
     @PutMapping("/{id}")
     public ResponseEntity<JobDTO> updateJob(@PathVariable Long id, @Valid @RequestBody Job updatedJob) {
         return jobService.getJobById(id)
@@ -136,14 +145,12 @@ public class JobRestController {
                     job.setDescription(updatedJob.getDescription());
                     job.setCategory(updatedJob.getCategory());
                     job.setWorkType(updatedJob.getWorkType());
-
                     Job savedJob = jobService.save(job);
                     return ResponseEntity.ok(toDTO(savedJob));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE job
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
         return jobService.getJobById(id)

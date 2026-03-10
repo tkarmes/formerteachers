@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Job Listings</title>
-
   <style>
 
     body {
@@ -12,6 +11,32 @@
 
     h1 {
         text-align: center;
+    }
+
+    .search-bar {
+        max-width: 900px;
+        margin: 20px auto;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .search-bar input, .search-bar select, .search-bar button {
+        padding: 8px 12px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    .search-bar button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .search-bar button:hover {
+        background-color: #45a049;
     }
 
     .job-container {
@@ -52,44 +77,80 @@
     }
 
   </style>
-
 </head>
-
 <body>
 
 <h1>Job Listings</h1>
 
-<div class="job-container">
+<!-- SEARCH BAR -->
+<form class="search-bar" th:action="@{/jobs}" method="get">
+  <input type="text" name="keyword" placeholder="Keyword" th:value="${keyword}">
+  <input type="text" name="location" placeholder="Location" th:value="${location}">
+  <input type="text" name="category" placeholder="Category" th:value="${category}">
+  <select name="workType">
+    <option value="" th:selected="${workType == null or workType == ''}">All Work Types</option>
+    <option value="Full Time" th:selected="${workType == 'Full Time'}">Full Time</option>
+    <option value="Part Time" th:selected="${workType == 'Part Time'}">Part Time</option>
+    <option value="Contract" th:selected="${workType == 'Contract'}">Contract</option>
+    <option value="Remote" th:selected="${workType == 'Remote'}">Remote</option>
+  </select>
+  <button type="submit">Search</button>
+</form>
 
+<!-- JOB LIST -->
+<div class="job-container">
   <a class="job-card"
      th:each="job : ${jobs}"
      th:href="@{/jobs/{id}(id=${job.id})}">
-
     <h2 th:text="${job.title}">Job Title</h2>
-
     <p class="company" th:text="${job.company}">Company</p>
-
-    <p>
-      <strong>Location:</strong>
-      <span th:text="${job.location}"></span>
-    </p>
-
-    <p>
-      <strong>Salary:</strong>
-      <span th:text="${job.salaryRange}"></span>
-    </p>
-
-    <p>
-      <strong>Work Type:</strong>
-      <span th:text="${job.workType}"></span>
-    </p>
-
+    <p><strong>Location:</strong> <span th:text="${job.location}"></span></p>
+    <p><strong>Salary:</strong> <span th:text="${job.salaryRange}"></span></p>
+    <p><strong>Work Type:</strong> <span th:text="${job.workType}"></span></p>
   </a>
-
 </div>
 
+<!-- CREATE JOB BUTTON -->
 <div class="create-job">
   <a href="/jobs/new">Create New Job</a>
+</div>
+
+<div style="text-align:center; margin-top:30px;">
+
+  <!-- Previous button -->
+  <a th:if="${currentPage > 0}"
+     th:href="@{/jobs(page=${currentPage - 1},
+                        keyword=${keyword},
+                        location=${location},
+                        category=${category},
+                        workType=${workType})}">
+    Previous
+  </a>
+
+  <!-- Page numbers -->
+  <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+
+        <a th:href="@{/jobs(page=${i},
+                            keyword=${keyword},
+                            location=${location},
+                            category=${category},
+                            workType=${workType})}"
+           th:text="${i + 1}"
+           th:style="${i == currentPage} ? 'font-weight:bold; margin:0 5px;' : 'margin:0 5px;'">
+        </a>
+
+    </span>
+
+  <!-- Next button -->
+  <a th:if="${currentPage < totalPages - 1}"
+     th:href="@{/jobs(page=${currentPage + 1},
+                        keyword=${keyword},
+                        location=${location},
+                        category=${category},
+                        workType=${workType})}">
+    Next
+  </a>
+
 </div>
 
 </body>

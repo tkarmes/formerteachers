@@ -2,6 +2,9 @@ package com.formerteachers.controller;
 
 import com.formerteachers.model.Job;
 import com.formerteachers.service.JobService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +19,29 @@ public class JobViewController {
         this.jobService = jobService;
     }
 
-    // Show all jobs
+    // Show all jobs with optional search/filter
     @GetMapping
-    public String listJobs(Model model) {
-        model.addAttribute("jobs", jobService.getAllJobs());
+    public String listJobs(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String workType,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Job> jobs = jobService.searchJobs(keyword, location, category, workType, pageable);
+
+        model.addAttribute("jobs", jobs.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", jobs.getTotalPages());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("location", location);
+        model.addAttribute("category", category);
+        model.addAttribute("workType", workType);
+
         return "jobs";
     }
 
@@ -47,18 +69,14 @@ public class JobViewController {
 
     @GetMapping("/{id}")
     public String viewJob(@PathVariable Long id, Model model) {
-
         Job job = jobService.getJobById(id).orElseThrow();
-
         model.addAttribute("job", job);
-
         return "job-detail";
     }
 
     // Update job
     @PostMapping("/update/{id}")
     public String updateJob(@PathVariable Long id, @ModelAttribute Job updatedJob) {
-
         Job job = jobService.getJobById(id).orElseThrow();
 
         job.setTitle(updatedJob.getTitle());

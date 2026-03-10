@@ -22,17 +22,17 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     // ⭐ Cleaner search query for former teachers job board
     @Query("""
-        SELECT j FROM Job j
-        WHERE 
-            (:keyword IS NULL OR :keyword = '' 
-                OR LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) 
-                OR LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                OR LOWER(j.location) LIKE LOWER(CONCAT('%', :keyword, '%')))
-            AND (:location IS NULL OR :location = '' OR LOWER(j.location) LIKE LOWER(CONCAT('%', :location, '%')))
-            AND (:category IS NULL OR :category = '' OR LOWER(j.category) = LOWER(:category))
-            AND (:workType IS NULL OR :workType = '' OR LOWER(j.workType) = LOWER(:workType))
-        ORDER BY j.createdAt DESC
-    """)
+    SELECT j FROM Job j
+    WHERE
+        (:keyword IS NULL OR :keyword = '' OR 
+            LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+            LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        )
+        AND (:location IS NULL OR :location = '' OR LOWER(j.location) LIKE LOWER(CONCAT('%', :location, '%')))
+        AND (:category IS NULL OR :category = '' OR LOWER(j.category) LIKE LOWER(CONCAT('%', :category, '%')))
+        AND (:workType IS NULL OR :workType = '' OR LOWER(j.workType) LIKE LOWER(CONCAT('%', :workType, '%')))
+    ORDER BY j.createdAt DESC
+""")
     Page<Job> searchJobs(
             @Param("keyword") String keyword,
             @Param("location") String location,

@@ -102,6 +102,11 @@
     margin-bottom:8px;
     }
 
+    .pagination{
+    text-align:center;
+    margin-top:30px;
+    }
+
     .create-job{
     text-align:center;
     margin-top:20px;
@@ -131,34 +136,27 @@
   </div>
 </nav>
 
-
 <h1>Browse Jobs for Former Teachers</h1>
-
 
 <!-- SEARCH -->
 
 <form class="search-bar" th:action="@{/jobs}" method="get">
 
   <input type="text" name="keyword" placeholder="Keyword" th:value="${keyword}">
-
   <input type="text" name="location" placeholder="Location" th:value="${location}">
-
   <input type="text" name="category" placeholder="Category" th:value="${category}">
 
   <select name="workType">
-
     <option value="">All Work Types</option>
     <option value="Full Time">Full Time</option>
     <option value="Part Time">Part Time</option>
     <option value="Contract">Contract</option>
     <option value="Remote">Remote</option>
-
   </select>
 
   <button type="submit">Search</button>
 
 </form>
-
 
 <!-- JOBS -->
 
@@ -181,6 +179,9 @@
   </a>
 
 </div>
+
+<!-- PAGINATION -->
+
 
 
 <!-- CREATE -->

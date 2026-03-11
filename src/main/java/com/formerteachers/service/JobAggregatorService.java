@@ -26,14 +26,36 @@ public class JobAggregatorService {
     }
 
     // Runs automatically every 6 hours
-    @Scheduled(fixedRate = 21600000)
+    @Scheduled(fixedRate = 60000) // keep 60 sec while testing
     public void scheduledImport() {
 
-        String apiUrl = "https://remotive.com/api/remote-jobs?search=education";
+        String[] searches = {
+                "instructional designer",
+                "learning and development",
+                "training specialist",
+                "curriculum developer",
+                "education consultant",
+                "customer success",
+                "sales trainer",
+                "corporate trainer",
+                "edtech",
+                "learning specialist",
+                "academic advisor",
+                "program manager"
+        };
 
-        int importedCount = importJobsFromApi(apiUrl);
+        int totalImported = 0;
 
-        System.out.println("Scheduled import completed. Jobs added: " + importedCount);
+        for (String search : searches) {
+
+            String apiUrl = "https://remotive.com/api/remote-jobs?search=" + search;
+
+            int imported = importJobsFromApi(apiUrl);
+
+            totalImported += imported;
+        }
+
+        System.out.println("Scheduled import completed. Jobs added: " + totalImported);
     }
 
     public int importJobsFromApi(String apiUrl) {

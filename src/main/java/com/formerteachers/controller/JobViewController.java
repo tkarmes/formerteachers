@@ -34,7 +34,8 @@ public class JobViewController {
 
         Page<Job> jobs = jobService.searchJobs(keyword, location, category, workType, pageable);
 
-        model.addAttribute("jobs", jobs.getContent());
+        // ✅ Pass the Page object, not just content
+        model.addAttribute("jobs", jobs);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", jobs.getTotalPages());
         model.addAttribute("keyword", keyword);
@@ -44,7 +45,6 @@ public class JobViewController {
 
         return "jobs";
     }
-
     // Show create form
     @GetMapping("/new")
     public String showCreateForm(Model model) {

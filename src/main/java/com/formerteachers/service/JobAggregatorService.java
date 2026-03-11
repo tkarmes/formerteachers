@@ -1,123 +1,82 @@
 package com.formerteachers.service;
 
 import com.formerteachers.model.Job;
+import com.formerteachers.repository.JobRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.*;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.springframework.scheduling.annotation.Scheduled;
-
-import java.util.Iterator;
+import org.springframework.http.ResponseEntity;
+import java.util.List;
 
 @Service
 public class JobAggregatorService {
 
-    private final JobService jobService;
+    private final JobRepository jobRepository;
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
 
-    public JobAggregatorService(JobService jobService) {
-        this.jobService = jobService;
+    public JobAggregatorService(JobRepository jobRepository) {
+        this.jobRepository = jobRepository;
         this.restTemplate = new RestTemplate();
-        this.objectMapper = new ObjectMapper();
     }
 
-    // Runs automatically every 6 hours
-    @Scheduled(fixedRate = 60000) // keep 60 sec while testing
-    public void scheduledImport() {
-
-        String[] searches = {
-                "instructional designer",
-                "learning and development",
-                "training specialist",
-                "curriculum developer",
-                "education consultant",
-                "customer success",
-                "sales trainer",
-                "corporate trainer",
-                "edtech",
-                "learning specialist",
-                "academic advisor",
-                "program manager"
-        };
-
-        int totalImported = 0;
-
-        for (String search : searches) {
-
-            String apiUrl = "https://remotive.com/api/remote-jobs?search=" + search;
-
-            int imported = importJobsFromApi(apiUrl);
-
-            totalImported += imported;
-        }
-
-        System.out.println("Scheduled import completed. Jobs added: " + totalImported);
-    }
-
-    public int importJobsFromApi(String apiUrl) {
+    // ===============================
+    // IMPORT JOBS WITH CATEGORY
+    // ===============================
+    public int importJobsFromApi(String apiUrl, String category) {
         int importedCount = 0;
 
         try {
-            // Call the API
-            ResponseEntity<String> response = restTemplate.exchange(
-                    apiUrl,
-                    HttpMethod.GET,
-                    new HttpEntity<>(new HttpHeaders()),
-                    String.class
-            );
+            // Example: call API (adjust depending on actual API structure)
+            ResponseEntity<JobApiResponse> response = restTemplate.getForEntity(apiUrl, JobApiResponse.class);
+            JobApiResponse apiResponse = response.getBody();
 
-            if (response.getBody() == null) return 0;
+            if (apiResponse != null && apiResponse.jobs != null) {
+                for (JobData jobData : apiResponse.jobs) {
+                    // Optionally filter by category
+                    if (category == null || category.isEmpty() || category.equalsIgnoreCase(jobData.category)) {
+                        Job job = new Job();
+                        job.setTitle(jobData.title);
+                        job.setCompany(jobData.company);
+                        job.setLocation(jobData.location);
+                        job.setDescription(jobData.description);
+                        job.setCategory(jobData.category);
+                        job.setWorkType(jobData.jobType);
+                        job.setSalaryRange(jobData.salary);
 
-            JsonNode root = objectMapper.readTree(response.getBody());
-            JsonNode jobsArray = root.path("jobs");
-
-            if (!jobsArray.isArray()) return 0;
-
-            // Loop through jobs
-            for (JsonNode j : jobsArray) {
-                Job job = new Job();
-                job.setTitle(j.path("title").asText());
-                job.setCompany(j.path("company_name").asText("Unknown"));
-                job.setLocation(j.path("candidate_required_location").asText("Remote"));
-                job.setWorkType(j.path("job_type").asText(""));
-                job.setDescription(j.path("description").asText(""));
-                job.setSalaryRange("");
-                job.setCategory(autoTag(job.getTitle(), job.getDescription()));
-
-                // Save every job without checking for duplicates
-                jobService.save(job);
-                importedCount++;
+                        jobRepository.save(job);
+                        importedCount++;
+                    }
+                }
             }
-
         } catch (Exception e) {
-            System.err.println("Job import failed: " + e.getMessage());
+            System.out.println("Error importing jobs: " + e.getMessage());
         }
 
+        System.out.println("Scheduled import completed. Jobs added: " + importedCount);
         return importedCount;
     }
-    private String autoTag(String title, String description) {
 
-        String combined = (title + " " + description).toLowerCase();
+    // ===============================
+    // SIMPLE IMPORT METHOD (DEFAULT CATEGORY)
+    // ===============================
+    public int importJobsFromApi(String apiUrl) {
+        String defaultCategory = "education";  // default for HomeController & startup
+        return importJobsFromApi(apiUrl, defaultCategory);
+    }
 
-        if (combined.contains("instructional designer"))
-            return "Instructional Design";
+    // ===============================
+    // INNER CLASSES TO MAP API RESPONSE
+    // ===============================
+    public static class JobApiResponse {
+        public List<JobData> jobs;
+    }
 
-        if (combined.contains("curriculum"))
-            return "Curriculum Development";
-
-        if (combined.contains("edtech"))
-            return "Educational Technology";
-
-        if (combined.contains("teacher"))
-            return "Teaching";
-
-        if (combined.contains("training"))
-            return "Corporate Training";
-
-        return "Other";
+    public static class JobData {
+        public String title;
+        public String company;
+        public String location;
+        public String description;
+        public String category;
+        public String jobType;
+        public String salary;
     }
 }

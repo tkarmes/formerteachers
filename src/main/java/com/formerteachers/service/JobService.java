@@ -92,13 +92,7 @@ public class JobService {
                 pageable.getPageSize(),
                 Sort.by("createdAt").descending()
         );
-
-        String safeKeyword = (keyword == null) ? "" : keyword;
-        String safeLocation = (location == null) ? "" : location;
-        String safeCategory = (category == null) ? "" : category;
-        String safeWorkType = (workType == null) ? "" : workType;
-
-        return jobRepository.searchJobs(safeKeyword, safeLocation, safeCategory, safeWorkType, sortedPageable);
+        return jobRepository.searchJobs(keyword, location, category, workType, sortedPageable);
     }
 
     // SAVE job
@@ -114,6 +108,10 @@ public class JobService {
     // GET featured jobs (top 3 newest)
     public List<Job> getFeaturedJobs() {
         return jobRepository.findTop3ByOrderByCreatedAtDesc();
+    }
+
+    public List<Job> saveAll(List<Job> jobs) {
+        return jobRepository.saveAll(jobs);
     }
 
     // CHECK if job exists by title/company/location

@@ -26,7 +26,6 @@ public class JobRestController {
     private final JobService jobService;
     private final JobAggregatorService jobAggregatorService;
 
-    // ✅ Constructor injection
     public JobRestController(JobService jobService, JobAggregatorService jobAggregatorService) {
         this.jobService = jobService;
         this.jobAggregatorService = jobAggregatorService;
@@ -37,8 +36,13 @@ public class JobRestController {
     // ===============================
     @PostConstruct
     public void importJobsOnStartup() {
-        // Example: importing from a public API
-        jobAggregatorService.importJobsFromApi("https://remotive.com/api/remote-jobs?search=education");    }
+        // Pass 2 arguments: API URL + category/keyword (example)
+        int importedCount = jobAggregatorService.importJobsFromApi(
+                "https://remotive.com/api/remote-jobs?search=education",
+                "education"
+        );
+        System.out.println("Scheduled import completed. Jobs added: " + importedCount);
+    }
 
     // ===============================
     // HELPER: Job → DTO
@@ -77,8 +81,7 @@ public class JobRestController {
     // ===============================
 
     @GetMapping
-    public JobPageDTO getAllJobs(
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    public JobPageDTO getAllJobs(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return toJobPageDTO(jobService.getAllJobs(pageable));
     }
 
@@ -89,27 +92,6 @@ public class JobRestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/company/{company}")
-    public JobPageDTO getJobsByCompany(
-            @PathVariable String company,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return toJobPageDTO(jobService.getJobsByCompany(company, pageable));
-    }
-
-    @GetMapping("/category/{category}")
-    public JobPageDTO getJobsByCategory(
-            @PathVariable String category,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return toJobPageDTO(jobService.getJobsByCategory(category, pageable));
-    }
-
-    @GetMapping("/location/{location}")
-    public JobPageDTO getJobsByLocation(
-            @PathVariable String location,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return toJobPageDTO(jobService.getJobsByLocation(location, pageable));
-    }
-
     @GetMapping("/search")
     public JobPageDTO searchJobs(
             @RequestParam(required = false) String keyword,
@@ -118,9 +100,7 @@ public class JobRestController {
             @RequestParam(required = false) String workType,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        return toJobPageDTO(
-                jobService.searchJobs(keyword, location, category, workType, pageable)
-        );
+        return toJobPageDTO(jobService.searchJobs(keyword, location, category, workType, pageable));
     }
 
     @PostMapping

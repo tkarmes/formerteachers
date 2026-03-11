@@ -93,7 +93,7 @@ public class JobViewController {
     }
 
     // Delete job
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/delete")
     public String deleteJob(@PathVariable Long id) {
         jobService.deleteById(id);
         return "redirect:/jobs";

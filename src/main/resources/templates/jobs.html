@@ -52,7 +52,16 @@
 
     h1{
     text-align:center;
+    margin-bottom:5px;
     }
+
+    .job-count{
+    text-align:center;
+    color:#666;
+    margin-bottom:20px;
+    }
+
+    /* SEARCH */
 
     .search-bar{
     max-width:900px;
@@ -60,13 +69,13 @@
     display:flex;
     gap:10px;
     flex-wrap:wrap;
+    justify-content:center;
     }
 
     .search-bar input,
-    .search-bar select,
-    .search-bar button{
-    padding:8px 12px;
-    border-radius:5px;
+    .search-bar select{
+    padding:10px;
+    border-radius:6px;
     border:1px solid #ccc;
     }
 
@@ -74,7 +83,12 @@
     background:#4CAF50;
     color:white;
     border:none;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
     }
+
+    /* JOB LIST */
 
     .job-container{
     max-width:900px;
@@ -90,40 +104,64 @@
     box-shadow:0 2px 6px rgba(0,0,0,0.1);
     text-decoration:none;
     color:black;
+    transition:all .15s ease;
     }
 
     .job-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    transform:translateY(-3px);
+    box-shadow:0 6px 14px rgba(0,0,0,0.15);
+    }
+
+    .job-title{
+    font-size:20px;
+    margin-bottom:6px;
     }
 
     .company{
     font-weight:bold;
-    margin-bottom:8px;
+    color:#444;
+    margin-bottom:10px;
     }
+
+    .job-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    font-size:14px;
+    color:#555;
+    }
+
+    /* TAGS */
+
+    .tag{
+    background:#eef3ff;
+    padding:4px 8px;
+    border-radius:4px;
+    font-size:12px;
+    font-weight:bold;
+    }
+
+    /* PAGINATION */
 
     .pagination{
     text-align:center;
     margin-top:30px;
+    font-size:16px;
     }
+
+    .pagination a{
+    margin:0 10px;
+    text-decoration:none;
+    color:#1a3c5e;
+    font-weight:bold;
+    }
+
+    /* CREATE */
 
     .create-job{
     text-align:center;
     margin-top:20px;
     }
-
-    .pagination{
-text-align:center;
-margin-top:30px;
-font-size:16px;
-}
-
-.pagination a{
-margin:0 10px;
-text-decoration:none;
-color:#1a3c5e;
-font-weight:bold;
-}
 
   </style>
 
@@ -150,6 +188,10 @@ font-weight:bold;
 </nav>
 
 <h1>Browse Jobs for Former Teachers</h1>
+
+<p class="job-count">
+  <span th:text="${jobs.totalElements}"></span> jobs found
+</p>
 
 <!-- SEARCH -->
 
@@ -179,15 +221,24 @@ font-weight:bold;
      th:each="job : ${jobs.content}"
      th:href="@{/jobs/{id}(id=${job.id})}">
 
-    <h2 th:text="${job.title}"></h2>
+    <div class="job-title" th:text="${job.title}"></div>
 
-    <p class="company" th:text="${job.company}"></p>
+    <div class="company" th:text="${job.company}"></div>
 
-    <p><strong>Location:</strong> <span th:text="${job.location}"></span></p>
+    <div class="job-meta">
 
-    <p><strong>Salary:</strong> <span th:text="${job.salaryRange}"></span></p>
+      <span><strong>Location:</strong> <span th:text="${job.location}"></span></span>
 
-    <p><strong>Work Type:</strong> <span th:text="${job.workType}"></span></p>
+      <span th:if="${job.salaryRange != null}">
+<strong>Salary:</strong>
+<span th:text="${job.salaryRange}"></span>
+</span>
+
+      <span class="tag" th:text="${job.workType}"></span>
+
+      <span class="tag" th:text="${job.category}"></span>
+
+    </div>
 
   </a>
 
@@ -199,35 +250,31 @@ font-weight:bold;
 
   <a th:if="${jobs.hasPrevious()}"
      th:href="@{/jobs(page=${jobs.number - 1},
-                     keyword=${keyword},
-                     location=${location},
-                     category=${category},
-                     workType=${workType})}">
+keyword=${keyword},
+location=${location},
+category=${category},
+workType=${workType})}">
     ← Previous
   </a>
 
   <span style="margin:0 10px;">
-    Page <span th:text="${jobs.number + 1}"></span>
-    of <span th:text="${jobs.totalPages}"></span>
-  </span>
+Page <span th:text="${jobs.number + 1}"></span>
+of <span th:text="${jobs.totalPages}"></span>
+</span>
 
   <a th:if="${jobs.hasNext()}"
      th:href="@{/jobs(page=${jobs.number + 1},
-                     keyword=${keyword},
-                     location=${location},
-                     category=${category},
-                     workType=${workType})}">
+keyword=${keyword},
+location=${location},
+category=${category},
+workType=${workType})}">
     Next →
   </a>
 
 </div>
 
-<!-- CREATE -->
-
 <div class="create-job">
-
   <a href="/jobs/new">Create New Job</a>
-
 </div>
 
 </body>

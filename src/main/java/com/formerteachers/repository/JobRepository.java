@@ -22,17 +22,15 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     Page<Job> findByWorkTypeIgnoreCase(String workType, Pageable pageable);
 
-    // Cleaner search query for job board
+    // Cleaner search query for job board using COALESCE for null/empty handling
     @Query("""
         SELECT j FROM Job j
         WHERE
-            (:keyword IS NULL OR :keyword = '' OR 
-                LOWER(j.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
-                LOWER(j.description) LIKE LOWER(CONCAT('%', :keyword, '%'))
-            )
-            AND (:location IS NULL OR :location = '' OR LOWER(j.location) LIKE LOWER(CONCAT('%', :location, '%')))
-            AND (:category IS NULL OR :category = '' OR LOWER(j.category) LIKE LOWER(CONCAT('%', :category, '%')))
-            AND (:workType IS NULL OR :workType = '' OR LOWER(j.workType) LIKE LOWER(CONCAT('%', :workType, '%')))
+            (LOWER(j.title) LIKE LOWER(CONCAT('%', COALESCE(:keyword, ''), '%'))
+             OR LOWER(j.description) LIKE LOWER(CONCAT('%', COALESCE(:keyword, ''), '%')))
+            AND LOWER(j.location) LIKE LOWER(CONCAT('%', COALESCE(:location, ''), '%'))
+            AND LOWER(j.category) LIKE LOWER(CONCAT('%', COALESCE(:category, ''), '%'))
+            AND LOWER(j.workType) LIKE LOWER(CONCAT('%', COALESCE(:workType, ''), '%'))
         ORDER BY j.createdAt DESC
     """)
     Page<Job> searchJobs(

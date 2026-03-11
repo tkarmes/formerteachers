@@ -22,28 +22,28 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(Model model) {
-
         model.addAttribute("title", "FormerTeachers.com");
         model.addAttribute("message", "Welcome! This site is dedicated to helping former teachers find meaningful roles.");
         model.addAttribute("subtext", "Jobs in edtech, instructional design, curriculum, and more.");
 
-        // ⭐ SHOW ONLY NEWEST 3 JOBS
+        // ⭐ Show newest 3 jobs
         List<Job> jobs = jobService.getFeaturedJobs();
         model.addAttribute("jobs", jobs);
 
         return "index";
     }
 
-    // ✅ Optional: trigger import from API when visiting /import-home
+    // Optional: trigger import when visiting /import-home
     @GetMapping("/import-home")
     public String importJobsFromApi(Model model) {
-        // Replace with your public API URL
         String apiUrl = "https://some-public-api/jobs?keywords=edtech";
 
-        int importedCount = jobAggregatorService.importJobsFromApi(apiUrl);
+        // Pass 2 arguments: API URL + keyword/category
+        int importedCount = jobAggregatorService.importJobsFromApi(apiUrl, "edtech");
 
         model.addAttribute("importMessage", "Imported " + importedCount + " new jobs!");
-        // After importing, show homepage with newest 3 jobs
+
+        // Show newest 3 jobs after import
         List<Job> jobs = jobService.getFeaturedJobs();
         model.addAttribute("jobs", jobs);
 

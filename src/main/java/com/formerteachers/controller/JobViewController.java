@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/jobs")
@@ -54,8 +55,12 @@ public class JobViewController {
 
     // Save new job
     @PostMapping
-    public String createJob(@ModelAttribute Job job) {
+    public String createJob(@ModelAttribute Job job, RedirectAttributes redirectAttributes) {
         jobService.save(job);
+
+        // Add success message that survives the redirect
+        redirectAttributes.addFlashAttribute("successMessage", "Job posted successfully! It now appears in the listings.");
+
         return "redirect:/jobs";
     }
 

@@ -189,6 +189,12 @@
 
 <h1>Browse Jobs for Former Teachers</h1>
 
+<!-- Success message after posting -->
+<div th:if="${successMessage}"
+     style="background: #d4edda; color: #155724; padding: 15px; border-radius: 6px; margin: 20px auto; max-width: 900px; text-align: center; border: 1px solid #c3e6cb;">
+  <strong th:text="${successMessage}"></strong>
+</div>
+
 <p class="job-count">
   <span th:text="${jobs.totalElements}"></span> jobs found
 </p>

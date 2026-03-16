@@ -4,7 +4,6 @@ import com.formerteachers.model.Job;
 import com.formerteachers.dto.JobDTO;
 import com.formerteachers.dto.JobPageDTO;
 import com.formerteachers.service.JobService;
-import com.formerteachers.service.JobAggregatorService;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,25 +23,11 @@ import java.util.List;
 public class JobRestController {
 
     private final JobService jobService;
-    private final JobAggregatorService jobAggregatorService;
 
-    public JobRestController(JobService jobService, JobAggregatorService jobAggregatorService) {
+    public JobRestController(JobService jobService) {
         this.jobService = jobService;
-        this.jobAggregatorService = jobAggregatorService;
     }
 
-    // ===============================
-    // AUTOMATIC IMPORT ON STARTUP
-    // ===============================
-    @PostConstruct
-    public void importJobsOnStartup() {
-        // Pass 2 arguments: API URL + category/keyword (example)
-        int importedCount = jobAggregatorService.importJobsFromApi(
-                "https://remotive.com/api/remote-jobs?search=education",
-                "education"
-        );
-        System.out.println("Scheduled import completed. Jobs added: " + importedCount);
-    }
 
     // ===============================
     // HELPER: Job → DTO

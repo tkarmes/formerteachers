@@ -1,7 +1,6 @@
 package com.formerteachers.controller;
 
 import com.formerteachers.service.JobService;
-import com.formerteachers.service.JobAggregatorService;
 import com.formerteachers.model.Job;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,40 +12,31 @@ import java.util.List;
 public class HomeController {
 
     private final JobService jobService;
-    private final JobAggregatorService jobAggregatorService;
 
-    public HomeController(JobService jobService, JobAggregatorService jobAggregatorService) {
+    public HomeController(JobService jobService) {
         this.jobService = jobService;
-        this.jobAggregatorService = jobAggregatorService;
     }
 
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("title", "FormerTeachers.com");
-        model.addAttribute("message", "Welcome! This site is dedicated to helping former teachers find meaningful roles.");
-        model.addAttribute("subtext", "Jobs in edtech, instructional design, curriculum, and more.");
+        model.addAttribute("message", "Welcome! Helping former teachers transition to rewarding careers outside the classroom.");
+        model.addAttribute("subtext", "Discover opportunities in instructional design, learning & development, corporate training, edtech, customer success, and more.");
 
-        // ⭐ Show newest 3 jobs
-        List<Job> jobs = jobService.getFeaturedJobs();
-        model.addAttribute("jobs", jobs);
+        // Show the 3 newest/featured jobs (or empty list if none yet)
+        List<Job> featuredJobs = jobService.getFeaturedJobs();
+        model.addAttribute("featuredJobs", featuredJobs);  // renamed for clarity
 
-        return "index";
-    }
-
-    // Optional: trigger import when visiting /import-home
-    @GetMapping("/import-home")
-    public String importJobsFromApi(Model model) {
-        String apiUrl = "https://some-public-api/jobs?keywords=edtech";
-
-        // Pass 2 arguments: API URL + keyword/category
-        int importedCount = jobAggregatorService.importJobsFromApi(apiUrl, "edtech");
-
-        model.addAttribute("importMessage", "Imported " + importedCount + " new jobs!");
-
-        // Show newest 3 jobs after import
-        List<Job> jobs = jobService.getFeaturedJobs();
-        model.addAttribute("jobs", jobs);
+        // Optional: Add a flag to show/hide a "No jobs yet" message in Thymeleaf
+        model.addAttribute("hasJobs", !featuredJobs.isEmpty());
 
         return "index";
     }
+
+    // If you want a dedicated "Post a Job" page later, add this stub (uncomment when ready)
+    // @GetMapping("/post-job")
+    // public String postJobForm(Model model) {
+    //     model.addAttribute("job", new Job());  // for form binding
+    //     return "post-job";  // create this template next
+    // }
 }

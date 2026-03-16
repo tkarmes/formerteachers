@@ -6,279 +6,251 @@
     <title th:text="${title}">FormerTeachers.com</title>
 
     <style>
-
-        body{
-        font-family: Arial, sans-serif;
-        margin:0;
-        background:#f8f9fa;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
         }
 
         /* NAVBAR */
-
-        .navbar{
-        background:#1a3c5e;
-        padding:15px 0;
+        .navbar {
+            background: #1a3c5e;
+            padding: 15px 0;
         }
 
-        .nav-container{
-        max-width:1000px;
-        margin:auto;
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
+        .nav-container {
+            max-width: 1000px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .logo{
-        color:white;
-        font-size:22px;
-        font-weight:bold;
-        text-decoration:none;
+        .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-decoration: none;
         }
 
-        .nav-links a{
-        color:white;
-        margin-left:20px;
-        text-decoration:none;
+        .nav-links a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
         }
 
-        .post-job{
-        background:#4CAF50;
-        padding:6px 12px;
-        border-radius:5px;
+        .post-job {
+            background: #4CAF50;
+            padding: 6px 12px;
+            border-radius: 5px;
         }
 
         /* HERO */
-
-        .hero{
-        text-align:center;
-        padding:80px 20px;
-        background:white;
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
         }
 
-        .hero h1{
-        font-size:42px;
-        margin-bottom:20px;
-        color:#2c3e50;
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            color: #2c3e50;
         }
 
-        .hero p{
-        font-size:18px;
-        max-width:700px;
-        margin:auto;
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: auto;
         }
 
-        .hero-buttons{
-        margin-top:30px;
+        .hero-buttons {
+            margin-top: 30px;
         }
 
-        .primary-btn{
-        background:#4CAF50;
-        color:white;
-        padding:12px 20px;
-        border:none;
-        border-radius:6px;
-        font-size:16px;
-        margin-right:10px;
-        cursor:pointer;
+        .primary-btn, .secondary-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
-        .secondary-btn{
-        background:#1a3c5e;
-        color:white;
-        padding:12px 20px;
-        border:none;
-        border-radius:6px;
-        font-size:16px;
-        cursor:pointer;
+        .primary-btn {
+            background: #4CAF50;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .secondary-btn {
+            background: #1a3c5e;
+            color: white;
         }
 
         /* FEATURES */
-
-        .features{
-        display:flex;
-        justify-content:center;
-        gap:30px;
-        margin-top:60px;
-        flex-wrap:wrap;
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 60px 20px;
+            flex-wrap: wrap;
         }
 
-        .feature-card{
-        background:white;
-        padding:30px;
-        width:260px;
-        border-radius:10px;
-        box-shadow:0 3px 8px rgba(0,0,0,0.1);
-        text-align:center;
+        .feature-card {
+            background: white;
+            padding: 30px;
+            width: 260px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
         /* FEATURED JOBS */
-
-        .job-preview{
-        display:flex;
-        justify-content:center;
-        gap:20px;
-        flex-wrap:wrap;
-        margin:40px auto;
-        max-width:900px;
+        .job-preview {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 40px auto;
+            max-width: 900px;
         }
 
-        .job-card{
-        background:white;
-        padding:20px;
-        width:250px;
-        border-radius:8px;
-        box-shadow:0 2px 6px rgba(0,0,0,0.1);
+        .job-card {
+            background: white;
+            padding: 20px;
+            width: 280px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .job-card h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .job-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .no-jobs {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+            padding: 40px;
         }
 
         /* EMAIL SECTION */
-
-        .subscription-section{
-        margin-top:40px;
-        padding:30px;
-        background:#e8f4fd;
-        border-radius:12px;
-        max-width:600px;
-        margin-left:auto;
-        margin-right:auto;
-        text-align:center;
+        .subscription-section {
+            margin: 60px auto;
+            padding: 30px;
+            background: #e8f4fd;
+            border-radius: 12px;
+            max-width: 600px;
+            text-align: center;
         }
 
-        .subscription-section input{
-        padding:10px;
-        border-radius:6px;
-        border:1px solid #ccc;
-        margin-right:10px;
+        .subscription-section input {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            width: 250px;
+            margin-right: 10px;
         }
 
-        .subscription-section button{
-        padding:10px 20px;
-        background:#1a3c5e;
-        color:white;
-        border:none;
-        border-radius:6px;
-        cursor:pointer;
+        .subscription-section button {
+            padding: 10px 20px;
+            background: #1a3c5e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
         }
-
     </style>
 </head>
 
 <body>
 
 <!-- NAVBAR -->
-
 <nav class="navbar">
     <div class="nav-container">
-
-        <a href="/" class="logo">
-            FormerTeachers
-        </a>
-
+        <a href="/" class="logo">FormerTeachers</a>
         <div class="nav-links">
             <a href="/">Home</a>
             <a href="/jobs">Browse Jobs</a>
             <a href="/jobs/new" class="post-job">Post a Job</a>
         </div>
-
     </div>
 </nav>
 
-
 <!-- HERO -->
-
 <div class="hero">
-
     <h1>Helping Teachers Find Their Next Career</h1>
-
     <p>
-        FormerTeachers connects educators with opportunities in edtech,
-        instructional design, training, and corporate learning.
+        FormerTeachers connects educators with opportunities in edtech, instructional design, training, corporate learning, customer success, and more.
     </p>
-
     <div class="hero-buttons">
-
-        <a href="/jobs">
-            <button class="primary-btn">Browse Jobs</button>
-        </a>
-
-        <a href="/jobs/new">
-            <button class="secondary-btn">Post a Job</button>
-        </a>
-
+        <a href="/jobs"><button class="primary-btn">Browse Jobs</button></a>
+        <a href="/jobs/new"><button class="secondary-btn">Post a Job</button></a>
     </div>
-
 </div>
-
 
 <!-- FEATURES -->
-
 <div class="features">
-
     <div class="feature-card">
         <h3>🎓 Built for Teachers</h3>
-        <p>
-            Jobs specifically suited for educators transitioning
-            into new industries.
-        </p>
+        <p>Jobs tailored for educators transitioning into industry roles.</p>
     </div>
-
     <div class="feature-card">
         <h3>💼 Curated Opportunities</h3>
-        <p>
-            Roles in edtech, instructional design, training,
-            and education companies.
-        </p>
+        <p>Roles in edtech, L&D, instructional design, and corporate training.</p>
     </div>
-
     <div class="feature-card">
         <h3>🚀 Career Pivot Support</h3>
-        <p>
-            Resources and job listings designed for
-            teachers starting new careers.
-        </p>
+        <p>Resources and listings designed for teachers starting fresh careers.</p>
     </div>
-
 </div>
-
 
 <!-- FEATURED JOBS -->
+<h2 style="text-align:center; margin: 50px 0 20px;">Featured Jobs</h2>
 
-<h2 style="text-align:center;margin-top:50px;">Featured Jobs</h2>
-
-<div class="job-preview">
-
-    <div th:each="job : ${jobs}" class="job-card">
-
+<div class="job-preview" th:if="${hasJobs}">
+    <div th:each="job : ${featuredJobs}" class="job-card">
         <h3 th:text="${job.title}">Job Title</h3>
+        <p><strong th:text="${job.company}">Company</strong></p>
+        <p th:text="${job.location ?: 'Remote / Not Specified'}">Location</p>
+        <p th:if="${job.category}">Category: <span th:text="${job.category}"></span></p>
+        <p th:if="${job.workType}">Type: <span th:text="${job.workType}"></span></p>
 
-        <p th:text="${job.company}">Company</p>
+        <!-- Short description with safe truncation -->
+        <p th:if="${job.description != null and #strings.length(job.description) > 0}"
+           th:utext="${#strings.abbreviate(job.description, 120)}">
+            Short description...
+        </p>
+        <p th:unless="${job.description != null and #strings.length(job.description) > 0}">
+            (No description provided)
+        </p>
 
-        <p th:text="${job.location}">Location</p>
-
-        <a th:href="@{/jobs/{id}(id=${job.id})}">
-            View Job
-        </a>
-
+        <a th:href="@{/jobs/{id}(id=${job.id})}">View Details →</a>
     </div>
-
 </div>
 
+<div class="no-jobs" th:unless="${hasJobs}">
+    <p><strong>No featured jobs yet — but great opportunities are coming!</strong></p>
+    <p>Employers: <a href="/jobs/new">Post your first job here</a> to help former teachers transition.</p>
+</div>
 
 <!-- EMAIL SIGNUP -->
-
 <div class="subscription-section">
-
     <h3>Get Job Alerts</h3>
-
-    <p>Sign up to get notified when new jobs are posted.</p>
-
+    <p>Sign up to get notified when new roles matching your skills are posted.</p>
     <form action="/subscribe" method="post">
-
         <input type="email" name="email" placeholder="your@email.com" required>
-
         <button type="submit">Subscribe</button>
-
     </form>
-
 </div>
 
 </body>

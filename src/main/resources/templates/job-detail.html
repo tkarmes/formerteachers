@@ -1,42 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${job.title}">Job</title>
+    <meta charset="UTF-8">
+    <title th:text="${job.title} + ' - FormerTeachers'">Job Detail</title>
+    <!-- CSS same as above -->
 </head>
 <body>
 
-<h1 th:text="${job.title}">Job Title</h1>
+<!-- Navbar -->
+<nav class="navbar"> <!-- same --> </nav>
 
-<h3 th:text="${job.company}">Company</h3>
+<div class="container">
+    <h1 th:text="${job.title}">Job Title</h1>
 
-<p>
-    <strong>Location:</strong>
-    <span th:text="${job.location}"></span>
-</p>
+    <p><strong>Company:</strong> <span th:text="${job.company}"></span></p>
+    <p><strong>Location:</strong> <span th:text="${job.location ?: 'Not Specified'}"></span></p>
+    <p><strong>Salary Range:</strong> <span th:text="${job.salaryRange ?: 'Not Specified'}"></span></p>
+    <p><strong>Category:</strong> <span th:text="${job.category ?: 'Not Specified'}"></span></p>
+    <p><strong>Work Type:</strong> <span th:text="${job.workType ?: 'Not Specified'}"></span></p>
 
-<p>
-    <strong>Salary:</strong>
-    <span th:text="${job.salaryRange}"></span>
-</p>
+    <hr>
 
-<p>
-    <strong>Category:</strong>
-    <span th:text="${job.category}"></span>
-</p>
+    <h2>Description</h2>
+    <div th:utext="${job.description ?: '(No description provided)'}"></div>
 
-<p>
-    <strong>Work Type:</strong>
-    <span th:text="${job.workType}"></span>
-</p>
-
-<hr>
-
-<h3>Description</h3>
-
-<div th:utext="${job.description}"></div>
-<br>
-
-<a href="/jobs">Back to Jobs</a>
+    <div style="margin-top:40px; text-align:center;">
+        <a href="/jobs">← Back to Browse Jobs</a>
+    </div>
+</div>
 
 </body>
 </html>

@@ -1,21 +1,196 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Edit Job</title>
+  <meta charset="UTF-8">
+  <title>Edit Job - FormerTeachers</title>
+
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f8f9fa;
+    }
+
+    /* NAVBAR (same as index.html) */
+    .navbar {
+        background: #1a3c5e;
+        padding: 15px 0;
+    }
+
+    .nav-container {
+        max-width: 1000px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .nav-links a {
+        color: white;
+        margin-left: 20px;
+        text-decoration: none;
+    }
+
+    .post-job {
+        background: #4CAF50;
+        padding: 6px 12px;
+        border-radius: 5px;
+    }
+
+    /* FORM CONTAINER */
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #444;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    input, textarea, select {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        min-height: 200px;
+        resize: vertical;
+    }
+
+    .error {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    button {
+        background: #4CAF50;
+        color: white;
+        padding: 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background: #45a049;
+    }
+
+    .back {
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .back a {
+        color: #1a3c5e;
+        text-decoration: none;
+        font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-<h1>Edit Job</h1>
 
-<form th:action="@{/jobs/update/{id}(id=${job.id})}" th:object="${job}" method="post">
-  <label>Title:</label>
-  <input type="text" th:field="*{title}" /><br/>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="logo">FormerTeachers</a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/jobs">Browse Jobs</a>
+      <a href="/jobs/new" class="post-job">Post a Job</a>
+    </div>
+  </div>
+</nav>
 
-  <label>Description:</label>
-  <textarea th:field="*{description}"></textarea><br/>
+<div class="container">
+  <h1>Edit Job</h1>
 
-  <button type="submit">Update</button>
-</form>
+  <form th:action="@{/jobs/update/{id}(id=${job.id})}" th:object="${job}" method="post">
 
-<a th:href="@{/jobs}">Back to Jobs</a>
+    <div>
+      <label for="title">Job Title *:</label>
+      <input type="text" id="title" th:field="*{title}" required />
+      <span class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+    </div>
+
+    <div>
+      <label for="company">Company *:</label>
+      <input type="text" id="company" th:field="*{company}" required />
+      <span class="error" th:if="${#fields.hasErrors('company')}" th:errors="*{company}"></span>
+    </div>
+
+    <div>
+      <label for="location">Location:</label>
+      <input type="text" id="location" th:field="*{location}" placeholder="e.g. Remote, New York, NY" />
+    </div>
+
+    <div>
+      <label for="salaryRange">Salary Range:</label>
+      <input type="text" id="salaryRange" th:field="*{salaryRange}" placeholder="e.g. $80,000 - $110,000" />
+    </div>
+
+    <div>
+      <label for="category">Category:</label>
+      <input type="text" id="category" th:field="*{category}" placeholder="e.g. Instructional Design, L&D" />
+    </div>
+
+    <div>
+      <label for="workType">Work Type:</label>
+      <select id="workType" th:field="*{workType}">
+        <option value="">Select...</option>
+        <option value="Full Time">Full Time</option>
+        <option value="Part Time">Part Time</option>
+        <option value="Contract">Contract</option>
+        <option value="Remote">Remote</option>
+        <option value="Hybrid">Hybrid</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="description">Description *:</label>
+      <textarea id="description" th:field="*{description}" required placeholder="Full job description, responsibilities, requirements..."></textarea>
+      <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+    </div>
+
+    <button type="submit">Save Changes</button>
+  </form>
+
+  <div class="back">
+    <a href="/jobs">← Back to Job Listings</a>
+  </div>
+</div>
+
 </body>
 </html>

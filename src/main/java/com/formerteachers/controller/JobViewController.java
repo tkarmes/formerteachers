@@ -60,12 +60,12 @@ public class JobViewController {
     }
 
     // Show edit form
-    @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Job job = jobService.getJobById(id).orElseThrow();
-        model.addAttribute("job", job);
-        return "edit-job";
-    }
+//    @GetMapping("/{id}/edit")
+//    public String showEditForm(@PathVariable Long id, Model model) {
+//        Job job = jobService.getJobById(id).orElseThrow();
+//        model.addAttribute("job", job);
+//        return "edit-job";
+//    }
 
     @GetMapping("/{id}")
     public String viewJob(@PathVariable Long id, Model model) {
@@ -75,27 +75,27 @@ public class JobViewController {
     }
 
     // Update job
-    @PostMapping("/update/{id}")
-    public String updateJob(@PathVariable Long id, @ModelAttribute Job updatedJob) {
-        Job job = jobService.getJobById(id).orElseThrow();
-
-        job.setTitle(updatedJob.getTitle());
-        job.setCompany(updatedJob.getCompany());
-        job.setLocation(updatedJob.getLocation());
-        job.setSalaryRange(updatedJob.getSalaryRange());
-        job.setDescription(updatedJob.getDescription());
-        job.setCategory(updatedJob.getCategory());
-        job.setWorkType(updatedJob.getWorkType());
-
-        jobService.save(job);
-
-        return "redirect:/jobs";
-    }
+//    @PostMapping("/update/{id}")
+//    public String updateJob(@PathVariable Long id, @ModelAttribute Job updatedJob) {
+//        Job job = jobService.getJobById(id).orElseThrow();
+//
+//        job.setTitle(updatedJob.getTitle());
+//        job.setCompany(updatedJob.getCompany());
+//        job.setLocation(updatedJob.getLocation());
+//        job.setSalaryRange(updatedJob.getSalaryRange());
+//        job.setDescription(updatedJob.getDescription());
+//        job.setCategory(updatedJob.getCategory());
+//        job.setWorkType(updatedJob.getWorkType());
+//
+//        jobService.save(job);
+//
+//        return "redirect:/jobs";
+//    }
 
     // Delete job
-    @PostMapping("/{id}/delete")
-    public String deleteJob(@PathVariable Long id) {
-        jobService.deleteById(id);
-        return "redirect:/jobs";
-    }
+//    @PostMapping("/{id}/delete")
+//    public String deleteJob(@PathVariable Long id) {
+//        jobService.deleteById(id);
+//        return "redirect:/jobs";
+//    }
 }

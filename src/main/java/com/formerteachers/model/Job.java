@@ -29,6 +29,9 @@ public class Job {
 
     private String workType;
 
+    private String applyInfo;  // e.g. URL, email, or instructions
+
+
     // created timestamp
     private LocalDateTime createdAt;
 
@@ -74,4 +77,12 @@ public class Job {
     public void setWorkType(String workType) { this.workType = workType; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public String getApplyInfo() {
+        return applyInfo;
+    }
+
+    public void setApplyInfo(String applyInfo) {
+        this.applyInfo = applyInfo;
+    }
 }

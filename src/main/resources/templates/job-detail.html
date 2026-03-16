@@ -24,6 +24,31 @@
     <h2>Description</h2>
     <div th:utext="${job.description ?: '(No description provided)'}"></div>
 
+    <!-- Apply section -->
+    <div th:if="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}"
+         style="margin-top:40px; padding:20px; background:#f0f9ff; border-radius:8px; border:1px solid #b3d4fc;">
+        <h2 style="margin-top:0; color:#1a3c5e;">How to Apply</h2>
+
+        <p th:if="${#strings.startsWith(job.applyInfo, 'http')}">
+            <strong>Apply online:</strong><br>
+            <a th:href="${job.applyInfo}" target="_blank" rel="noopener noreferrer"
+               style="color:#4CAF50; font-weight:bold; font-size:18px;">
+                Go to Application Page →
+            </a>
+        </p>
+
+        <p th:unless="${#strings.startsWith(job.applyInfo, 'http')}">
+            <strong>Application instructions:</strong><br>
+            <span th:utext="${job.applyInfo}"></span>
+        </p>
+    </div>
+
+    <div th:unless="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}">
+        <p style="color:#777; font-style:italic; margin-top:40px;">
+            Application instructions not provided — contact the company directly.
+        </p>
+    </div>
+
     <div style="margin-top:40px; text-align:center;">
         <a href="/jobs">← Back to Browse Jobs</a>
     </div>

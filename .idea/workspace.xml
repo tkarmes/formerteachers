@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial working landing page with HomeController, index template, and local domain setup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/HomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobRestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/service/JobAggregatorService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Job.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Job.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Subscriber.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/repository/SubscriberRepository.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/create-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/create-job.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/edit-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/edit-job.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />

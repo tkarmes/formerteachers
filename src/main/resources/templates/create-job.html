@@ -86,6 +86,15 @@
       <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
     </div>
 
+    <div>
+      <label for="applyInfo">How to Apply:</label>
+      <input type="text" id="applyInfo" th:field="*{applyInfo}"
+             placeholder="e.g. https://company.com/apply or email: jobs@company.com" />
+      <small style="color:#666; display:block; margin-top:5px;">
+        Link to application page, email address, or instructions
+      </small>
+    </div>
+
     <button type="submit">Post Job</button>
   </form>
 

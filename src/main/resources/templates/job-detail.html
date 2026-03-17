@@ -3,15 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${job.title} + ' - FormerTeachers'">Job Detail</title>
-    <!-- CSS same as above -->
+
+    <style>
+        body { font-family: Arial, sans-serif; margin:0; background:#f8f9fa; }
+        .navbar { background:#1a3c5e; padding:15px 0; }
+        .nav-container { max-width:1000px; margin:auto; display:flex; justify-content:space-between; align-items:center; }
+        .logo { color:white; font-size:22px; font-weight:bold; text-decoration:none; }
+        .nav-links a { color:white; margin-left:20px; text-decoration:none; }
+        .post-job { background:#4CAF50; padding:6px 12px; border-radius:5px; }
+        .container { max-width:900px; margin:40px auto; padding:30px; background:white; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
+        h1 { color:#2c3e50; }
+        h2 { color:#1a3c5e; }
+        p { line-height:1.6; color:#444; }
+    </style>
 </head>
+
 <body>
 
-<!-- Navbar -->
-<nav class="navbar"> <!-- same --> </nav>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">FormerTeachers</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/jobs">Browse Jobs</a>
+            <a href="/jobs/new" class="post-job">Post a Job</a>
+        </div>
+    </div>
+</nav>
 
 <div class="container">
     <h1 th:text="${job.title}">Job Title</h1>
+
+    <p style="color:#666; font-size:15px; margin:10px 0 20px;">
+        <strong>Posted:</strong> <span th:text="${job.postedDate}"></span>
+    </p>
 
     <p><strong>Company:</strong> <span th:text="${job.company}"></span></p>
     <p><strong>Location:</strong> <span th:text="${job.location ?: 'Not Specified'}"></span></p>
@@ -24,7 +49,6 @@
     <h2>Description</h2>
     <div th:utext="${job.description ?: '(No description provided)'}"></div>
 
-    <!-- Apply section -->
     <div th:if="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}"
          style="margin-top:40px; padding:20px; background:#f0f9ff; border-radius:8px; border:1px solid #b3d4fc;">
         <h2 style="margin-top:0; color:#1a3c5e;">How to Apply</h2>

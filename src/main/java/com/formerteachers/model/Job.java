@@ -3,6 +3,7 @@ package com.formerteachers.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import com.formerteachers.util.DateFormatter;
 
 @Entity
 public class Job {
@@ -29,11 +30,12 @@ public class Job {
 
     private String workType;
 
-    private String applyInfo;  // e.g. URL, email, or instructions
+    private String applyInfo;
 
-
-    // created timestamp
     private LocalDateTime createdAt;
+
+    @Transient
+    private String postedDate;
 
     public Job() {}
 
@@ -53,7 +55,14 @@ public class Job {
         this.createdAt = LocalDateTime.now();
     }
 
+    @PostLoad
+    protected void calculatePostedDate() {
+        this.postedDate = DateFormatter.formatPostedDate(this.createdAt);
+    }
+
+    // Getters and Setters
     public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -76,13 +85,10 @@ public class Job {
     public String getWorkType() { return workType; }
     public void setWorkType(String workType) { this.workType = workType; }
 
+    public String getApplyInfo() { return applyInfo; }
+    public void setApplyInfo(String applyInfo) { this.applyInfo = applyInfo; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
 
-    public String getApplyInfo() {
-        return applyInfo;
-    }
-
-    public void setApplyInfo(String applyInfo) {
-        this.applyInfo = applyInfo;
-    }
+    public String getPostedDate() { return postedDate; }
 }

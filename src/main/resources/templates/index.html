@@ -12,7 +12,6 @@
             background: #f8f9fa;
         }
 
-        /* NAVBAR */
         .navbar {
             background: #1a3c5e;
             padding: 15px 0;
@@ -45,7 +44,6 @@
             border-radius: 5px;
         }
 
-        /* HERO */
         .hero {
             text-align: center;
             padding: 80px 20px;
@@ -87,7 +85,6 @@
             color: white;
         }
 
-        /* FEATURES */
         .features {
             display: flex;
             justify-content: center;
@@ -105,7 +102,6 @@
             text-align: center;
         }
 
-        /* FEATURED JOBS */
         .job-preview {
             display: flex;
             justify-content: center;
@@ -142,39 +138,11 @@
             color: #777;
             padding: 40px;
         }
-
-        /* EMAIL SECTION */
-        .subscription-section {
-            margin: 60px auto;
-            padding: 30px;
-            background: #e8f4fd;
-            border-radius: 12px;
-            max-width: 600px;
-            text-align: center;
-        }
-
-        .subscription-section input {
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            width: 250px;
-            margin-right: 10px;
-        }
-
-        .subscription-section button {
-            padding: 10px 20px;
-            background: #1a3c5e;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
     </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <div class="nav-container">
         <a href="/" class="logo">FormerTeachers</a>
@@ -186,7 +154,6 @@
     </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
     <h1>Helping Teachers Find Their Next Career</h1>
     <p>
@@ -198,7 +165,6 @@
     </div>
 </div>
 
-<!-- FEATURES -->
 <div class="features">
     <div class="feature-card">
         <h3>🎓 Built for Teachers</h3>
@@ -214,7 +180,6 @@
     </div>
 </div>
 
-<!-- FEATURED JOBS -->
 <h2 style="text-align:center; margin: 50px 0 20px;">Featured Jobs</h2>
 
 <div class="job-preview" th:if="${hasJobs}">
@@ -222,10 +187,14 @@
         <h3 th:text="${job.title}">Job Title</h3>
         <p><strong th:text="${job.company}">Company</strong></p>
         <p th:text="${job.location ?: 'Remote / Not Specified'}">Location</p>
+
+        <p style="font-size:13px; color:#777; margin-top:8px;">
+            <span th:text="${job.postedDate}"></span>
+        </p>
+
         <p th:if="${job.category}">Category: <span th:text="${job.category}"></span></p>
         <p th:if="${job.workType}">Type: <span th:text="${job.workType}"></span></p>
 
-        <!-- Short description with safe truncation -->
         <p th:if="${job.description != null and #strings.length(job.description) > 0}"
            th:utext="${#strings.abbreviate(job.description, 120)}">
             Short description...
@@ -242,8 +211,6 @@
     <p><strong>No featured jobs yet — but great opportunities are coming!</strong></p>
     <p>Employers: <a href="/jobs/new">Post your first job here</a> to help former teachers transition.</p>
 </div>
-
-
 
 </body>
 </html>

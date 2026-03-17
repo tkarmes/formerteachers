@@ -3,29 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <title>Post a Job - FormerTeachers</title>
+
   <style>
-    /* Reuse same styles as index.html – copy the <style> block from index.html here if not using external CSS */
     body { font-family: Arial, sans-serif; margin:0; background:#f8f9fa; }
     .navbar { background:#1a3c5e; padding:15px 0; }
     .nav-container { max-width:1000px; margin:auto; display:flex; justify-content:space-between; align-items:center; }
     .logo { color:white; font-size:22px; font-weight:bold; text-decoration:none; }
     .nav-links a { color:white; margin-left:20px; text-decoration:none; }
     .post-job { background:#4CAF50; padding:6px 12px; border-radius:5px; }
-    .container { max-width:800px; margin:40px auto; padding:20px; background:white; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
+    .container { max-width:800px; margin:40px auto; padding:30px; background:white; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
     h1 { text-align:center; color:#2c3e50; }
     form { display:flex; flex-direction:column; gap:20px; }
     label { font-weight:bold; color:#444; }
-    input, textarea, select { padding:12px; border:1px solid #ccc; border-radius:6px; font-size:16px; }
+    input, textarea, select { padding:12px; border:1px solid #ccc; border-radius:6px; font-size:16px; width:100%; box-sizing:border-box; }
     textarea { min-height:200px; resize:vertical; }
     .error { color:red; font-size:14px; margin-top:5px; }
-    button { background:#4CAF50; color:white; padding:12px; border:none; border-radius:6px; cursor:pointer; font-size:16px; }
+    button { background:#4CAF50; color:white; padding:14px; border:none; border-radius:6px; cursor:pointer; font-size:16px; }
     button:hover { background:#45a049; }
     .back { text-align:center; margin-top:20px; }
   </style>
 </head>
 <body>
 
-<!-- Navbar (same as index) -->
 <nav class="navbar">
   <div class="nav-container">
     <a href="/" class="logo">FormerTeachers</a>
@@ -41,58 +40,69 @@
   <h1>Post a New Job</h1>
 
   <form th:action="@{/jobs}" th:object="${job}" method="post">
+
     <div>
-      <label for="title">Job Title *:</label>
-      <input type="text" id="title" th:field="*{title}" placeholder="e.g. Remote Instructional Designer" required />
-      <span class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+      <label for="title">Job Title *</label>
+      <input type="text" id="title" th:field="*{title}" required />
+      <span class="error" th:errors="*{title}"></span>
     </div>
 
     <div>
-      <label for="company">Company *:</label>
-      <input type="text" id="company" th:field="*{company}" placeholder="e.g. Acme EdTech" required />
-      <span class="error" th:if="${#fields.hasErrors('company')}" th:errors="*{company}"></span>
+      <label for="company">Company *</label>
+      <input type="text" id="company" th:field="*{company}" required />
+      <span class="error" th:errors="*{company}"></span>
     </div>
 
     <div>
-      <label for="location">Location:</label>
-      <input type="text" id="location" th:field="*{location}" placeholder="e.g. Remote, New York, NY" />
+      <label for="location">Location</label>
+      <input type="text" id="location" th:field="*{location}" placeholder="e.g. Remote, Hybrid, New York" />
     </div>
 
     <div>
-      <label for="salaryRange">Salary Range:</label>
-      <input type="text" id="salaryRange" th:field="*{salaryRange}" placeholder="e.g. $80,000 - $110,000" />
+      <label for="salaryRange">Salary Range</label>
+      <input type="text" id="salaryRange" th:field="*{salaryRange}" placeholder="e.g. $80k - $110k" />
+    </div>
+
+    <!-- CATEGORY DROPDOWN -->
+    <div>
+      <label for="category">Category *</label>
+      <select id="category" th:field="*{category}" required>
+        <option value="">Select a category...</option>
+        <option value="Instructional Design">Instructional Design</option>
+        <option value="Learning & Development">Learning & Development</option>
+        <option value="Corporate Training">Corporate Training</option>
+        <option value="Curriculum Development">Curriculum Development</option>
+        <option value="Customer Education">Customer Education / Success</option>
+        <option value="EdTech">EdTech (Sales, Support, Product)</option>
+        <option value="Talent Development">Talent Development</option>
+        <option value="eLearning">eLearning Specialist</option>
+        <option value="Other">Other (please specify in description)</option>
+      </select>
     </div>
 
     <div>
-      <label for="category">Category:</label>
-      <input type="text" id="category" th:field="*{category}" placeholder="e.g. Instructional Design, Learning & Development" />
-    </div>
-
-    <div>
-      <label for="workType">Work Type:</label>
+      <label for="workType">Work Type</label>
       <select id="workType" th:field="*{workType}">
         <option value="">Select...</option>
         <option value="Full Time">Full Time</option>
         <option value="Part Time">Part Time</option>
         <option value="Contract">Contract</option>
-        <option value="Remote">Remote</option>
+        <option value="Remote">Remote Only</option>
         <option value="Hybrid">Hybrid</option>
       </select>
     </div>
 
     <div>
-      <label for="description">Description *:</label>
-      <textarea id="description" th:field="*{description}" placeholder="Describe the role, responsibilities, requirements, and why it's great for former teachers..." required></textarea>
-      <span class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+      <label for="applyInfo">How to Apply</label>
+      <input type="text" id="applyInfo" th:field="*{applyInfo}"
+             placeholder="https://company.com/apply or email: jobs@company.com" />
     </div>
 
     <div>
-      <label for="applyInfo">How to Apply:</label>
-      <input type="text" id="applyInfo" th:field="*{applyInfo}"
-             placeholder="e.g. https://company.com/apply or email: jobs@company.com" />
-      <small style="color:#666; display:block; margin-top:5px;">
-        Link to application page, email address, or instructions
-      </small>
+      <label for="description">Description *</label>
+      <textarea id="description" th:field="*{description}" required
+                placeholder="Describe the role, what makes it great for former teachers, responsibilities, requirements..."></textarea>
+      <span class="error" th:errors="*{description}"></span>
     </div>
 
     <button type="submit">Post Job</button>

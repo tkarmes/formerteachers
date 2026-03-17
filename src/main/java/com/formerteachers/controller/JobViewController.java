@@ -20,7 +20,7 @@ public class JobViewController {
         this.jobService = jobService;
     }
 
-    // Show all jobs with optional search/filter
+    // Public: Browse jobs
     @GetMapping
     public String listJobs(
             @RequestParam(required = false) String keyword,
@@ -29,13 +29,11 @@ public class JobViewController {
             @RequestParam(required = false) String workType,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            Model model
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
+            Model model) {
 
+        Pageable pageable = PageRequest.of(page, size);
         Page<Job> jobs = jobService.searchJobs(keyword, location, category, workType, pageable);
 
-        // ✅ Pass the Page object, not just content
         model.addAttribute("jobs", jobs);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", jobs.getTotalPages());
@@ -46,32 +44,8 @@ public class JobViewController {
 
         return "jobs";
     }
-    // Show create form
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
-        model.addAttribute("job", new Job());
-        return "create-job";
-    }
 
-    // Save new job
-    @PostMapping
-    public String createJob(@ModelAttribute Job job, RedirectAttributes redirectAttributes) {
-        jobService.save(job);
-
-        // Add success message that survives the redirect
-        redirectAttributes.addFlashAttribute("successMessage", "Job posted successfully! It now appears in the listings.");
-
-        return "redirect:/jobs";
-    }
-
-    // Show edit form
-//    @GetMapping("/{id}/edit")
-//    public String showEditForm(@PathVariable Long id, Model model) {
-//        Job job = jobService.getJobById(id).orElseThrow();
-//        model.addAttribute("job", job);
-//        return "edit-job";
-//    }
-
+    // Public: View single job
     @GetMapping("/{id}")
     public String viewJob(@PathVariable Long id, Model model) {
         Job job = jobService.getJobById(id).orElseThrow();
@@ -79,28 +53,71 @@ public class JobViewController {
         return "job-detail";
     }
 
-    // Update job
-//    @PostMapping("/update/{id}")
-//    public String updateJob(@PathVariable Long id, @ModelAttribute Job updatedJob) {
-//        Job job = jobService.getJobById(id).orElseThrow();
-//
-//        job.setTitle(updatedJob.getTitle());
-//        job.setCompany(updatedJob.getCompany());
-//        job.setLocation(updatedJob.getLocation());
-//        job.setSalaryRange(updatedJob.getSalaryRange());
-//        job.setDescription(updatedJob.getDescription());
-//        job.setCategory(updatedJob.getCategory());
-//        job.setWorkType(updatedJob.getWorkType());
-//
-//        jobService.save(job);
-//
-//        return "redirect:/jobs";
-//    }
+    // Public: Show create form
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("job", new Job());
+        return "create-job";
+    }
 
-    // Delete job
-//    @PostMapping("/{id}/delete")
-//    public String deleteJob(@PathVariable Long id) {
-//        jobService.deleteById(id);
-//        return "redirect:/jobs";
-//    }
+    // Public: Save new job
+    @PostMapping
+    public String createJob(@ModelAttribute Job job, RedirectAttributes redirect) {
+        jobService.save(job);
+        redirect.addFlashAttribute("successMessage", "Job posted successfully!");
+        return "redirect:/jobs";
+    }
+
+    // ====================== ADMIN SECTION ======================
+
+    // Admin login page (simple password for now)
+    @GetMapping("/admin")
+    public String adminLogin() {
+        return "admin-login";
+    }
+
+    // Admin: List all jobs with edit/delete
+    @GetMapping("/admin/jobs")
+    public String adminJobs(@RequestParam(required = false) String password, Model model) {
+
+        // Simple password protection (change this to whatever you want)
+        if (password == null || !password.equals("admin123")) {
+            return "admin-login";   // send back to login if wrong/no password
+        }
+
+        model.addAttribute("jobs", jobService.getAllJobs());
+        return "admin-jobs";
+    }
+
+    // Admin: Show edit form
+    @GetMapping("/admin/jobs/{id}/edit")
+    public String adminShowEditForm(@PathVariable Long id, Model model) {
+        Job job = jobService.getJobById(id).orElseThrow();
+        model.addAttribute("job", job);
+        return "edit-job";
+    }
+
+    // Admin: Save edited job
+    @PostMapping("/admin/jobs/update/{id}")
+    public String adminUpdateJob(@PathVariable Long id, @ModelAttribute Job updatedJob) {
+        Job job = jobService.getJobById(id).orElseThrow();
+        job.setTitle(updatedJob.getTitle());
+        job.setCompany(updatedJob.getCompany());
+        job.setLocation(updatedJob.getLocation());
+        job.setSalaryRange(updatedJob.getSalaryRange());
+        job.setDescription(updatedJob.getDescription());
+        job.setCategory(updatedJob.getCategory());
+        job.setWorkType(updatedJob.getWorkType());
+        job.setApplyInfo(updatedJob.getApplyInfo());
+
+        jobService.save(job);
+        return "redirect:/jobs/admin/jobs";
+    }
+
+    // Admin: Delete job
+    @PostMapping("/admin/jobs/{id}/delete")
+    public String adminDeleteJob(@PathVariable Long id) {
+        jobService.deleteById(id);
+        return "redirect:/jobs/admin/jobs";
+    }
 }

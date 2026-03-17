@@ -21,8 +21,9 @@
     .job-card:hover { transform:translateY(-3px); box-shadow:0 6px 14px rgba(0,0,0,0.15); }
     .job-title { font-size:20px; margin-bottom:6px; }
     .company { font-weight:bold; color:#444; margin-bottom:10px; }
-    .job-meta { display:flex; flex-wrap:wrap; gap:15px; font-size:14px; color:#555; }
+    .job-meta { display:flex; flex-wrap:wrap; gap:15px; font-size:14px; color:#555; align-items:center; }
     .tag { background:#eef3ff; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold; }
+    .new-badge { background:#ff4d4d; color:white; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:bold; }
     .pagination { text-align:center; margin-top:30px; font-size:16px; }
     .pagination a { margin:0 10px; text-decoration:none; color:#1a3c5e; font-weight:bold; }
     .create-job { text-align:center; margin-top:20px; }
@@ -31,6 +32,7 @@
 
 <body>
 
+<!-- NAVBAR -->
 <nav class="navbar">
   <div class="nav-container">
     <a href="/" class="logo">FormerTeachers</a>
@@ -44,7 +46,9 @@
 
 <h1>Browse Jobs for Former Teachers</h1>
 
-<div th:if="${successMessage}" style="background:#d4edda; color:#155724; padding:15px; border-radius:6px; margin:20px auto; max-width:900px; text-align:center; border:1px solid #c3e6cb;">
+<!-- Success message -->
+<div th:if="${successMessage}"
+     style="background:#d4edda; color:#155724; padding:15px; border-radius:6px; margin:20px auto; max-width:900px; text-align:center; border:1px solid #c3e6cb;">
   <strong th:text="${successMessage}"></strong>
 </div>
 
@@ -52,6 +56,7 @@
   <span th:text="${jobs.totalElements}"></span> jobs found
 </p>
 
+<!-- SEARCH -->
 <form class="search-bar" th:action="@{/jobs}" method="get">
   <input type="text" name="keyword" placeholder="Keyword" th:value="${keyword}">
   <input type="text" name="location" placeholder="Location" th:value="${location}">
@@ -66,15 +71,23 @@
   <button type="submit">Search</button>
 </form>
 
+<!-- JOBS -->
 <div class="job-container">
-  <a class="job-card" th:each="job : ${jobs.content}" th:href="@{/jobs/{id}(id=${job.id})}">
+  <a class="job-card"
+     th:each="job : ${jobs.content}"
+     th:href="@{/jobs/{id}(id=${job.id})}">
+
     <div class="job-title" th:text="${job.title}"></div>
     <div class="company" th:text="${job.company}"></div>
 
     <div class="job-meta">
-      <div style="font-size:13px; color:#777; margin-bottom:8px;">
+      <!-- Posted date -->
+      <div style="font-size:13px; color:#777;">
         <span th:text="${job.postedDate}"></span>
       </div>
+
+      <!-- New badge -->
+      <span th:if="${job.postedDate.contains('today')}" class="new-badge">New!</span>
 
       <span><strong>Location:</strong> <span th:text="${job.location}"></span></span>
 
@@ -85,11 +98,19 @@
       <span class="tag" th:text="${job.workType}"></span>
       <span class="tag" th:text="${job.category}"></span>
     </div>
+
+    <!-- Truncated description -->
+    <div style="color:#555; font-size:14px; margin-top:12px; line-height:1.4;">
+      <span th:utext="${job.description != null ? #strings.abbreviate(job.description, 150) : '(No description)'}"></span>
+    </div>
+
   </a>
 </div>
 
+<!-- PAGINATION -->
 <div class="pagination">
-  <a th:if="${jobs.hasPrevious()}" th:href="@{/jobs(page=${jobs.number - 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">
+  <a th:if="${jobs.hasPrevious()}"
+     th:href="@{/jobs(page=${jobs.number - 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">
     ← Previous
   </a>
 
@@ -97,7 +118,8 @@
     Page <span th:text="${jobs.number + 1}"></span> of <span th:text="${jobs.totalPages}"></span>
   </span>
 
-  <a th:if="${jobs.hasNext()}" th:href="@{/jobs(page=${jobs.number + 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">
+  <a th:if="${jobs.hasNext()}"
+     th:href="@{/jobs(page=${jobs.number + 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">
     Next →
   </a>
 </div>

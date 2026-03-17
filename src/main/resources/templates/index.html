@@ -102,34 +102,52 @@
             text-align: center;
         }
 
+        /* FEATURED JOBS */
         .job-preview {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
             flex-wrap: wrap;
             margin: 40px auto;
-            max-width: 900px;
+            max-width: 1100px;
         }
 
         .job-card {
             background: white;
-            padding: 20px;
-            width: 280px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 25px;
+            width: 320px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
         .job-card h3 {
             margin: 0;
             color: #2c3e50;
+            font-size: 1.25rem;
         }
 
         .job-card p {
             margin: 5px 0;
             color: #555;
+        }
+
+        .new-badge {
+            background: #ff4d4d;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            align-self: flex-start;
         }
 
         .no-jobs {
@@ -143,6 +161,7 @@
 
 <body>
 
+<!-- NAVBAR -->
 <nav class="navbar">
     <div class="nav-container">
         <a href="/" class="logo">FormerTeachers</a>
@@ -154,6 +173,7 @@
     </div>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
     <h1>Helping Teachers Find Their Next Career</h1>
     <p>
@@ -165,6 +185,7 @@
     </div>
 </div>
 
+<!-- FEATURES -->
 <div class="features">
     <div class="feature-card">
         <h3>🎓 Built for Teachers</h3>
@@ -180,30 +201,38 @@
     </div>
 </div>
 
+<!-- FEATURED JOBS -->
 <h2 style="text-align:center; margin: 50px 0 20px;">Featured Jobs</h2>
 
 <div class="job-preview" th:if="${hasJobs}">
     <div th:each="job : ${featuredJobs}" class="job-card">
+        <!-- New badge -->
+        <span th:if="${job.postedDate.contains('today')}" class="new-badge">New!</span>
+
         <h3 th:text="${job.title}">Job Title</h3>
         <p><strong th:text="${job.company}">Company</strong></p>
         <p th:text="${job.location ?: 'Remote / Not Specified'}">Location</p>
 
-        <p style="font-size:13px; color:#777; margin-top:8px;">
+        <p style="font-size:13px; color:#777;">
             <span th:text="${job.postedDate}"></span>
         </p>
 
         <p th:if="${job.category}">Category: <span th:text="${job.category}"></span></p>
         <p th:if="${job.workType}">Type: <span th:text="${job.workType}"></span></p>
 
+        <!-- Truncated description -->
         <p th:if="${job.description != null and #strings.length(job.description) > 0}"
-           th:utext="${#strings.abbreviate(job.description, 120)}">
-            Short description...
+           th:utext="${#strings.abbreviate(job.description, 140)}"
+           style="color:#555; line-height:1.5;">
         </p>
         <p th:unless="${job.description != null and #strings.length(job.description) > 0}">
             (No description provided)
         </p>
 
-        <a th:href="@{/jobs/{id}(id=${job.id})}">View Details →</a>
+        <a th:href="@{/jobs/{id}(id=${job.id})}"
+           style="margin-top:auto; color:#1a3c5e; font-weight:bold;">
+            View Details →
+        </a>
     </div>
 </div>
 

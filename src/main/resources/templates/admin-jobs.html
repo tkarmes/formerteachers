@@ -3,45 +3,217 @@
 <head>
   <meta charset="UTF-8">
   <title>Admin - Manage Jobs</title>
+
   <style>
-    body { font-family: Arial; margin:0; background:#f8f9fa; }
-    .container { max-width:1000px; margin:40px auto; padding:20px; background:white; border-radius:10px; }
-    table { width:100%; border-collapse:collapse; }
-    th, td { padding:12px; text-align:left; border-bottom:1px solid #ddd; }
-    th { background:#1a3c5e; color:white; }
-    .btn { padding:6px 12px; border:none; border-radius:4px; cursor:pointer; text-decoration:none; }
-    .btn-edit { background:#2196F3; color:white; }
-    .btn-delete { background:#f44336; color:white; }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f8f9fa;
+    }
+
+    .navbar {
+        background: #1a3c5e;
+        padding: 15px 0;
+    }
+
+    .nav-container {
+        max-width: 1100px;
+        margin: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 25px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        color: #2c3e50;
+        margin: 0;
+    }
+
+    .search-box {
+        width: 380px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th, td {
+        padding: 14px 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background: #1a3c5e;
+        color: white;
+    }
+
+    tr:hover {
+        background: #f8f9fa;
+    }
+
+    .btn {
+        padding: 8px 14px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 14px;
+        margin-right: 6px;
+    }
+
+    .btn-edit { background: #2196F3; color: white; }
+    .btn-delete { background: #f44336; color: white; }
+    .btn-back { background: #4CAF50; color: white; padding: 10px 18px; }
+
+    .new-badge {
+        background: #ff4d4d;
+        color: white;
+        padding: 3px 9px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .pagination {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 16px;
+    }
+
+    .pagination a, .pagination span {
+        margin: 0 8px;
+        padding: 8px 12px;
+        text-decoration: none;
+        color: #1a3c5e;
+    }
+
+    .pagination a:hover {
+        background: #e0e0e0;
+        border-radius: 4px;
+    }
+
+    .no-jobs {
+        text-align: center;
+        padding: 60px;
+        color: #777;
+        font-size: 18px;
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>Admin - Manage Jobs</h1>
-  <a href="/jobs" class="btn" style="background:#4CAF50; color:white; padding:8px 16px;">← Back to Public Site</a>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="logo">FormerTeachers</a>
+    <div class="nav-links">
+      <a href="/">Public Site</a>
+    </div>
+  </div>
+</nav>
 
-  <table>
+<div class="container">
+  <div class="header">
+    <h1>Admin - Manage Jobs (<span th:text="${jobs.size()}"></span> total)</h1>
+    <a href="/jobs" class="btn btn-back">← Back to Public Site</a>
+  </div>
+
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" id="adminSearch" placeholder="Search by title, company, or category..."
+           onkeyup="filterTable()">
+  </div>
+
+  <table id="jobsTable">
+    <thead>
     <tr>
       <th>Title</th>
       <th>Company</th>
       <th>Category</th>
+      <th>Location</th>
       <th>Posted</th>
       <th>Actions</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="job : ${jobs}">
       <td th:text="${job.title}"></td>
       <td th:text="${job.company}"></td>
       <td th:text="${job.category}"></td>
-      <td th:text="${job.postedDate}"></td>
+      <td th:text="${job.location ?: 'Remote'}"></td>
+      <td>
+        <span th:text="${job.postedDate}"></span>
+        <span th:if="${job.postedDate.contains('today')}" class="new-badge">New</span>
+      </td>
       <td>
         <a th:href="@{/jobs/admin/jobs/{id}/edit(id=${job.id})}" class="btn btn-edit">Edit</a>
         <form th:action="@{/jobs/admin/jobs/{id}/delete(id=${job.id})}" method="post" style="display:inline;">
-          <button type="submit" class="btn btn-delete" onclick="return confirm('Delete this job?')">Delete</button>
+          <button type="submit" class="btn btn-delete"
+                  onclick="return confirm('Are you sure you want to permanently delete this job?')">
+            Delete
+          </button>
         </form>
       </td>
     </tr>
+    </tbody>
   </table>
+
+  <div th:if="${jobs.isEmpty()}" class="no-jobs">
+    <p>No jobs found.</p>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" th:if="${jobs.size() > 0}">
+    <a th:if="${currentPage > 0}" th:href="@{/jobs/admin/jobs(page=${currentPage - 1})}">← Previous</a>
+    <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
+    <a th:if="${currentPage < totalPages - 1}" th:href="@{/jobs/admin/jobs(page=${currentPage + 1})}">Next →</a>
+  </div>
 </div>
+
+<script>
+  function filterTable() {
+      const input = document.getElementById("adminSearch").value.toLowerCase();
+      const rows = document.querySelectorAll("#jobsTable tbody tr");
+
+      rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(input) ? "" : "none";
+      });
+  }
+</script>
 
 </body>
 </html>

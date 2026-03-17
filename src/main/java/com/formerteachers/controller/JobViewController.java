@@ -76,16 +76,23 @@ public class JobViewController {
         return "admin-login";
     }
 
-    // Admin: List all jobs with edit/delete
     @GetMapping("/admin/jobs")
-    public String adminJobs(@RequestParam(required = false) String password, Model model) {
+    public String adminJobs(@RequestParam(required = false) String password,
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "20") int size,
+                            Model model) {
 
-        // Simple password protection (change this to whatever you want)
         if (password == null || !password.equals("admin123")) {
-            return "admin-login";   // send back to login if wrong/no password
+            return "admin-login";
         }
 
-        model.addAttribute("jobs", jobService.getAllJobs());
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Job> jobsPage = jobService.getAllJobs(pageable);
+
+        model.addAttribute("jobs", jobsPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", jobsPage.getTotalPages());
+
         return "admin-jobs";
     }
 

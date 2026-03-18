@@ -49,21 +49,31 @@
     <h2>Description</h2>
     <div th:utext="${job.description ?: '(No description provided)'}"></div>
 
+    <!-- Improved Apply Section -->
     <div th:if="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}"
-         style="margin-top:40px; padding:20px; background:#f0f9ff; border-radius:8px; border:1px solid #b3d4fc;">
-        <h2 style="margin-top:0; color:#1a3c5e;">How to Apply</h2>
+         style="margin-top:40px; padding:25px; background:#f0f9ff; border-radius:10px; border:2px solid #b3d4fc; text-align:center;">
 
-        <p th:if="${#strings.startsWith(job.applyInfo, 'http')}">
-            <strong>Apply online:</strong><br>
-            <a th:href="${job.applyInfo}" target="_blank" rel="noopener noreferrer"
-               style="color:#4CAF50; font-weight:bold; font-size:18px;">
-                Go to Application Page →
+        <h2 style="margin-top:0; color:#1a3c5e;">Ready to Apply?</h2>
+
+        <p th:if="${#strings.startsWith(job.applyInfo, 'http')}" style="font-size:18px; margin:15px 0;">
+            <a th:href="${job.applyInfo}"
+               target="_blank"
+               rel="noopener noreferrer"
+               style="display:inline-block; background:#4CAF50; color:white; padding:16px 32px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:18px;">
+                Apply Now →
             </a>
         </p>
 
-        <p th:unless="${#strings.startsWith(job.applyInfo, 'http')}">
-            <strong>Application instructions:</strong><br>
+        <p th:unless="${#strings.startsWith(job.applyInfo, 'http')}"
+           style="font-size:17px; background:white; padding:15px; border-radius:6px;">
+            <strong>Application Instructions:</strong><br>
             <span th:utext="${job.applyInfo}"></span>
+        </p>
+    </div>
+
+    <div th:unless="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}">
+        <p style="color:#777; font-style:italic; margin-top:40px; text-align:center;">
+            Application instructions not provided — contact the company directly.
         </p>
     </div>
 
@@ -77,6 +87,29 @@
         <a href="/jobs">← Back to Browse Jobs</a>
     </div>
 </div>
+
+<!-- Footer -->
+<footer style="background:#1a3c5e; color:#e0e0e0; padding:50px 20px; margin-top:80px; text-align:center; line-height:1.6;">
+    <div style="max-width:1000px; margin:auto;">
+        <p style="font-size:24px; margin-bottom:8px; color:white; font-weight:bold;">FormerTeachers</p>
+
+        <p style="color:#e0e0e0; max-width:620px; margin:0 auto 25px;">
+            Connecting former teachers with meaningful careers in edtech, instructional design,
+            corporate training, customer education, and beyond.
+        </p>
+
+        <div style="margin:30px 0;">
+            <a href="/" style="color:white; margin:0 15px; text-decoration:none;">Home</a>
+            <a href="/jobs" style="color:white; margin:0 15px; text-decoration:none;">Browse Jobs</a>
+            <a href="/jobs/new" style="color:white; margin:0 15px; text-decoration:none;">Post a Job</a>
+            <a href="/jobs/admin" style="color:white; margin:0 15px; text-decoration:none;">Admin</a>
+        </div>
+
+        <p style="color:#b0b0b0; font-size:14px; margin-top:30px;">
+            © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
+        </p>
+    </div>
+</footer>
 
 </body>
 </html>

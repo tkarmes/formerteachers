@@ -2,18 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - Manage Jobs</title>
 
   <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        background: #f8f9fa;
-    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: Arial, sans-serif; background: #f8f9fa; line-height:1.6; }
 
     .navbar {
         background: #1a3c5e;
-        padding: 15px 0;
+        padding: 15px 20px;
     }
 
     .nav-container {
@@ -22,13 +20,41 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
     }
 
     .logo {
         color: white;
-        font-size: 22px;
+        font-size: 24px;
         font-weight: bold;
         text-decoration: none;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 20px;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+    .post-job {
+        background: #4CAF50;
+        padding: 8px 16px;
+        border-radius: 6px;
+    }
+
+    @media (max-width:768px) {
+        .nav-links {
+            flex-direction: column;
+            width: 100%;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .nav-links a { font-size: 18px; padding: 10px; }
     }
 
     .container {
@@ -45,15 +71,19 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
     h1 {
         color: #2c3e50;
         margin: 0;
+        font-size: 1.8rem;
     }
 
     .search-box {
-        width: 380px;
+        width: 100%;
+        max-width: 380px;
     }
 
     .search-box input {
@@ -134,13 +164,17 @@
     }
   </style>
 </head>
+
 <body>
 
 <nav class="navbar">
   <div class="nav-container">
     <a href="/" class="logo">FormerTeachers</a>
     <div class="nav-links">
-      <a href="/">Public Site</a>
+      <a href="/">Home</a>
+      <a href="/jobs">Browse Jobs</a>
+      <a href="/jobs/for-employers">For Employers</a>
+      <a href="/jobs/new" class="post-job">Post a Job</a>
     </div>
   </div>
 </nav>
@@ -197,11 +231,14 @@
 
   <!-- Pagination -->
   <div class="pagination" th:if="${jobs.size() > 0}">
-    <a th:if="${currentPage > 0}" th:href="@{/jobs/admin/jobs(page=${currentPage - 1})}">← Previous</a>
+    <a th:if="${currentPage > 0}"
+       th:href="@{/jobs/admin/jobs(page=${currentPage - 1}, password=${param.password})}">← Previous</a>
+
     <span>Page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span></span>
-    <a th:if="${currentPage < totalPages - 1}" th:href="@{/jobs/admin/jobs(page=${currentPage + 1})}">Next →</a>
-  </div>
-</div>
+
+    <a th:if="${currentPage < totalPages - 1}"
+       th:href="@{/jobs/admin/jobs(page=${currentPage + 1}, password=${param.password})}">Next →</a>
+  </div></div>
 
 <script>
   function filterTable() {

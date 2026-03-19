@@ -2,19 +2,68 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${job.title} + ' - FormerTeachers'">Job Detail</title>
 
     <style>
-        body { font-family: Arial, sans-serif; margin:0; background:#f8f9fa; }
-        .navbar { background:#1a3c5e; padding:15px 0; }
-        .nav-container { max-width:1000px; margin:auto; display:flex; justify-content:space-between; align-items:center; }
-        .logo { color:white; font-size:22px; font-weight:bold; text-decoration:none; }
-        .nav-links a { color:white; margin-left:20px; text-decoration:none; }
-        .post-job { background:#4CAF50; padding:6px 12px; border-radius:5px; }
-        .container { max-width:900px; margin:40px auto; padding:30px; background:white; border-radius:10px; box-shadow:0 3px 10px rgba(0,0,0,0.1); }
-        h1 { color:#2c3e50; }
-        h2 { color:#1a3c5e; }
-        p { line-height:1.6; color:#444; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { font-family:Arial; background:#f8f9fa; line-height:1.6; }
+
+        .navbar { background:#1a3c5e; padding:15px 20px; }
+        .nav-container { max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+        .logo { color:white; font-size:24px; font-weight:bold; text-decoration:none; }
+        .nav-links { display:flex; gap:20px; }
+        .nav-links a { color:white; text-decoration:none; font-size:16px; }
+        .post-job { background:#4CAF50; padding:8px 16px; border-radius:6px; }
+
+        @media (max-width:768px) {
+          .nav-links { flex-direction:column; width:100%; text-align:center; margin-top:15px; }
+          .nav-links a { font-size:18px; padding:10px; }
+        }
+
+        .container {
+            max-width:900px;
+            margin:40px auto;
+            padding:25px;
+            background:white;
+            border-radius:10px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 { color:#2c3e50; margin-bottom:15px; }
+        h2 { color:#1a3c5e; margin:30px 0 15px; }
+
+        .meta p { margin:10px 0; font-size:16px; }
+        .meta strong { color:#444; }
+
+        .apply-section {
+            margin-top:40px;
+            padding:25px;
+            background:#f0f9ff;
+            border-radius:10px;
+            border:2px solid #b3d4fc;
+            text-align:center;
+        }
+
+        .apply-section h2 { margin-top:0; color:#1a3c5e; }
+        .apply-btn {
+            display:inline-block;
+            background:#4CAF50;
+            color:white;
+            padding:16px 32px;
+            border-radius:8px;
+            text-decoration:none;
+            font-weight:bold;
+            font-size:18px;
+            margin:15px 0;
+        }
+
+        footer { background:#1a3c5e; color:#e0e0e0; padding:50px 20px; margin-top:80px; text-align:center; }
+
+        @media (max-width:768px) {
+            .container { padding:20px; margin:20px 10px; }
+            .apply-btn { padding:14px 28px; font-size:16px; }
+        }
     </style>
 </head>
 
@@ -34,38 +83,31 @@
 <div class="container">
     <h1 th:text="${job.title}">Job Title</h1>
 
-    <p style="color:#666; font-size:15px; margin:10px 0 20px;">
-        <strong>Posted:</strong> <span th:text="${job.postedDate}"></span>
-    </p>
+    <div class="meta">
+        <p><strong>Posted:</strong> <span th:text="${job.postedDate}"></span></p>
+        <p><strong>Company:</strong> <span th:text="${job.company}"></span></p>
+        <p><strong>Location:</strong> <span th:text="${job.location ?: 'Not Specified'}"></span></p>
+        <p><strong>Salary Range:</strong> <span th:text="${job.salaryRange ?: 'Not Specified'}"></span></p>
+        <p><strong>Category:</strong> <span th:text="${job.category ?: 'Not Specified'}"></span></p>
+        <p><strong>Work Type:</strong> <span th:text="${job.workType ?: 'Not Specified'}"></span></p>
+    </div>
 
-    <p><strong>Company:</strong> <span th:text="${job.company}"></span></p>
-    <p><strong>Location:</strong> <span th:text="${job.location ?: 'Not Specified'}"></span></p>
-    <p><strong>Salary Range:</strong> <span th:text="${job.salaryRange ?: 'Not Specified'}"></span></p>
-    <p><strong>Category:</strong> <span th:text="${job.category ?: 'Not Specified'}"></span></p>
-    <p><strong>Work Type:</strong> <span th:text="${job.workType ?: 'Not Specified'}"></span></p>
-
-    <hr>
+    <hr style="margin:30px 0;">
 
     <h2>Description</h2>
     <div th:utext="${job.description ?: '(No description provided)'}"></div>
 
-    <!-- Improved Apply Section -->
-    <div th:if="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}"
-         style="margin-top:40px; padding:25px; background:#f0f9ff; border-radius:10px; border:2px solid #b3d4fc; text-align:center;">
+    <!-- Apply section -->
+    <div th:if="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}" class="apply-section">
+        <h2>Ready to Apply?</h2>
 
-        <h2 style="margin-top:0; color:#1a3c5e;">Ready to Apply?</h2>
-
-        <p th:if="${#strings.startsWith(job.applyInfo, 'http')}" style="font-size:18px; margin:15px 0;">
-            <a th:href="${job.applyInfo}"
-               target="_blank"
-               rel="noopener noreferrer"
-               style="display:inline-block; background:#4CAF50; color:white; padding:16px 32px; border-radius:8px; text-decoration:none; font-weight:bold; font-size:18px;">
+        <p th:if="${#strings.startsWith(job.applyInfo, 'http')}">
+            <a th:href="${job.applyInfo}" target="_blank" rel="noopener noreferrer" class="apply-btn">
                 Apply Now →
             </a>
         </p>
 
-        <p th:unless="${#strings.startsWith(job.applyInfo, 'http')}"
-           style="font-size:17px; background:white; padding:15px; border-radius:6px;">
+        <p th:unless="${#strings.startsWith(job.applyInfo, 'http')}" style="font-size:17px; background:white; padding:15px; border-radius:6px;">
             <strong>Application Instructions:</strong><br>
             <span th:utext="${job.applyInfo}"></span>
         </p>
@@ -77,34 +119,24 @@
         </p>
     </div>
 
-    <div th:unless="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}">
-        <p style="color:#777; font-style:italic; margin-top:40px;">
-            Application instructions not provided — contact the company directly.
-        </p>
-    </div>
-
     <div style="margin-top:40px; text-align:center;">
-        <a href="/jobs">← Back to Browse Jobs</a>
+        <a href="/jobs" style="color:#1a3c5e; font-weight:bold;">← Back to Browse Jobs</a>
     </div>
 </div>
 
-<!-- Footer -->
 <footer style="background:#1a3c5e; color:#e0e0e0; padding:50px 20px; margin-top:80px; text-align:center; line-height:1.6;">
     <div style="max-width:1000px; margin:auto;">
         <p style="font-size:24px; margin-bottom:8px; color:white; font-weight:bold;">FormerTeachers</p>
-
         <p style="color:#e0e0e0; max-width:620px; margin:0 auto 25px;">
             Connecting former teachers with meaningful careers in edtech, instructional design,
             corporate training, customer education, and beyond.
         </p>
-
         <div style="margin:30px 0;">
             <a href="/" style="color:white; margin:0 15px; text-decoration:none;">Home</a>
             <a href="/jobs" style="color:white; margin:0 15px; text-decoration:none;">Browse Jobs</a>
             <a href="/jobs/new" style="color:white; margin:0 15px; text-decoration:none;">Post a Job</a>
             <a href="/jobs/admin" style="color:white; margin:0 15px; text-decoration:none;">Admin</a>
         </div>
-
         <p style="color:#b0b0b0; font-size:14px; margin-top:30px;">
             © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
         </p>

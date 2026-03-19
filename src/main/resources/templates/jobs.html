@@ -2,37 +2,106 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Job Listings</title>
 
   <style>
-    body { font-family:Arial; margin:0; background:#f5f7fb; }
-    .navbar { background:#1a3c5e; padding:15px 0; margin-bottom:30px; }
-    .nav-container { max-width:1000px; margin:auto; display:flex; justify-content:space-between; align-items:center; }
-    .logo { color:white; font-size:22px; font-weight:bold; text-decoration:none; }
-    .nav-links a { color:white; margin-left:20px; text-decoration:none; }
-    .post-job { background:#4CAF50; padding:6px 12px; border-radius:5px; }
-    h1 { text-align:center; margin-bottom:5px; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:Arial, sans-serif; background:#f5f7fb; line-height:1.6; }
+
+    .navbar { background:#1a3c5e; padding:15px 20px; }
+    .nav-container { max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+    .logo { color:white; font-size:24px; font-weight:bold; text-decoration:none; }
+    .nav-links { display:flex; gap:20px; }
+    .nav-links a { color:white; text-decoration:none; font-size:16px; }
+    .post-job { background:#4CAF50; padding:8px 16px; border-radius:6px; }
+
+    @media (max-width:768px) {
+      .nav-links { flex-direction:column; width:100%; text-align:center; margin-top:15px; }
+      .nav-links a { font-size:18px; padding:10px; }
+    }
+
+    h1 { text-align:center; margin:30px 0 10px; }
     .job-count { text-align:center; color:#666; margin-bottom:20px; }
-    .search-bar { max-width:900px; margin:20px auto; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
-    .search-bar input, .search-bar select { padding:10px; border-radius:6px; border:1px solid #ccc; }
-    .search-bar button { background:#4CAF50; color:white; border:none; padding:10px 18px; border-radius:6px; cursor:pointer; }
-    .job-container { max-width:900px; margin:auto; }
-    .job-card { display:block; background:white; padding:20px; margin-bottom:15px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); text-decoration:none; color:black; transition:all .15s ease; }
-    .job-card:hover { transform:translateY(-3px); box-shadow:0 6px 14px rgba(0,0,0,0.15); }
-    .job-title { font-size:20px; margin-bottom:6px; }
+
+    .search-bar {
+      max-width:1100px;
+      margin:20px auto;
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+      gap:12px;
+      padding:0 20px;
+    }
+
+    .search-bar input, .search-bar select {
+      padding:12px;
+      border:1px solid #ccc;
+      border-radius:6px;
+      font-size:16px;
+    }
+
+    .search-bar button {
+      background:#4CAF50;
+      color:white;
+      border:none;
+      padding:12px;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:16px;
+    }
+
+    .job-container {
+      max-width:1100px;
+      margin:auto;
+      padding:0 20px;
+    }
+
+    .job-card {
+      background:white;
+      padding:20px;
+      margin-bottom:20px;
+      border-radius:10px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      text-decoration:none;
+      color:black;
+      transition:transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;  /* Explicit pointer cursor */
+      display: block;   /* Ensures proper block behavior */
+    }
+
+    .job-card:hover {
+      transform:translateY(-5px);
+      box-shadow:0 6px 16px rgba(0,0,0,0.15);
+    }
+
+    .job-title { font-size:1.4rem; margin-bottom:8px; }
     .company { font-weight:bold; color:#444; margin-bottom:10px; }
-    .job-meta { display:flex; flex-wrap:wrap; gap:15px; font-size:14px; color:#555; align-items:center; }
-    .tag { background:#eef3ff; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold; }
-    .new-badge { background:#ff4d4d; color:white; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:bold; }
-    .pagination { text-align:center; margin-top:30px; font-size:16px; }
-    .pagination a { margin:0 10px; text-decoration:none; color:#1a3c5e; font-weight:bold; }
-    .create-job { text-align:center; margin-top:20px; }
+    .job-meta { display:flex; flex-wrap:wrap; gap:12px; font-size:14px; color:#555; align-items:center; }
+    .tag { background:#eef3ff; padding:4px 10px; border-radius:5px; font-size:13px; font-weight:bold; }
+    .new-badge { background:#ff4d4d; color:white; padding:4px 10px; border-radius:5px; font-size:13px; font-weight:bold; }
+
+    .pagination {
+      text-align:center;
+      margin:30px 0;
+      font-size:16px;
+    }
+
+    .pagination a, .pagination span {
+      margin:0 8px;
+      padding:8px 12px;
+      color:#1a3c5e;
+      text-decoration:none;
+    }
+
+    .create-job { text-align:center; margin:30px 0; }
+
+    footer { background:#1a3c5e; color:#e0e0e0; padding:50px 20px; margin-top:60px; text-align:center; }
   </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
   <div class="nav-container">
     <a href="/" class="logo">FormerTeachers</a>
@@ -46,7 +115,6 @@
 
 <h1>Browse Jobs for Former Teachers</h1>
 
-<!-- Success message -->
 <div th:if="${successMessage}"
      style="background:#d4edda; color:#155724; padding:15px; border-radius:6px; margin:20px auto; max-width:900px; text-align:center; border:1px solid #c3e6cb;">
   <strong th:text="${successMessage}"></strong>
@@ -56,7 +124,6 @@
   <span th:text="${jobs.totalElements}"></span> jobs found
 </p>
 
-<!-- SEARCH -->
 <form class="search-bar" th:action="@{/jobs}" method="get">
   <input type="text" name="keyword" placeholder="Keyword" th:value="${keyword}">
   <input type="text" name="location" placeholder="Location" th:value="${location}">
@@ -71,22 +138,16 @@
   <button type="submit">Search</button>
 </form>
 
-<!-- JOBS -->
 <div class="job-container">
-  <a class="job-card"
-     th:each="job : ${jobs.content}"
-     th:href="@{/jobs/{id}(id=${job.id})}">
-
+  <a class="job-card" th:each="job : ${jobs.content}" th:href="@{/jobs/{id}(id=${job.id})}">
     <div class="job-title" th:text="${job.title}"></div>
     <div class="company" th:text="${job.company}"></div>
 
     <div class="job-meta">
-      <!-- Posted date -->
-      <div style="font-size:13px; color:#777;">
+      <div style="font-size:14px; color:#777;">
         <span th:text="${job.postedDate}"></span>
       </div>
 
-      <!-- New badge -->
       <span th:if="${job.postedDate.contains('today')}" class="new-badge">New!</span>
 
       <span><strong>Location:</strong> <span th:text="${job.location}"></span></span>
@@ -99,52 +160,35 @@
       <span class="tag" th:text="${job.category}"></span>
     </div>
 
-    <!-- Truncated description -->
-    <div style="color:#555; font-size:14px; margin-top:12px; line-height:1.4;">
+    <div style="color:#555; font-size:14px; margin-top:12px; line-height:1.5;">
       <span th:utext="${job.description != null ? #strings.abbreviate(job.description, 150) : '(No description)'}"></span>
     </div>
-
   </a>
 </div>
 
-<!-- PAGINATION -->
 <div class="pagination">
-  <a th:if="${jobs.hasPrevious()}"
-     th:href="@{/jobs(page=${jobs.number - 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">
-    ← Previous
-  </a>
-
-  <span style="margin:0 10px;">
-    Page <span th:text="${jobs.number + 1}"></span> of <span th:text="${jobs.totalPages}"></span>
-  </span>
-
-  <a th:if="${jobs.hasNext()}"
-     th:href="@{/jobs(page=${jobs.number + 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">
-    Next →
-  </a>
+  <a th:if="${jobs.hasPrevious()}" th:href="@{/jobs(page=${jobs.number - 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">← Previous</a>
+  <span>Page <span th:text="${jobs.number + 1}"></span> of <span th:text="${jobs.totalPages}"></span></span>
+  <a th:if="${jobs.hasNext()}" th:href="@{/jobs(page=${jobs.number + 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">Next →</a>
 </div>
 
 <div class="create-job">
   <a href="/jobs/new">Create New Job</a>
 </div>
 
-<!-- Footer -->
 <footer style="background:#1a3c5e; color:#e0e0e0; padding:50px 20px; margin-top:80px; text-align:center; line-height:1.6;">
   <div style="max-width:1000px; margin:auto;">
     <p style="font-size:24px; margin-bottom:8px; color:white; font-weight:bold;">FormerTeachers</p>
-
     <p style="color:#e0e0e0; max-width:620px; margin:0 auto 25px;">
       Connecting former teachers with meaningful careers in edtech, instructional design,
       corporate training, customer education, and beyond.
     </p>
-
     <div style="margin:30px 0;">
       <a href="/" style="color:white; margin:0 15px; text-decoration:none;">Home</a>
       <a href="/jobs" style="color:white; margin:0 15px; text-decoration:none;">Browse Jobs</a>
       <a href="/jobs/new" style="color:white; margin:0 15px; text-decoration:none;">Post a Job</a>
       <a href="/jobs/admin" style="color:white; margin:0 15px; text-decoration:none;">Admin</a>
     </div>
-
     <p style="color:#b0b0b0; font-size:14px; margin-top:30px;">
       © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
     </p>

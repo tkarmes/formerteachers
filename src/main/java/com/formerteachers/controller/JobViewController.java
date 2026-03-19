@@ -127,4 +127,9 @@ public class JobViewController {
         jobService.deleteById(id);
         return "redirect:/jobs/admin/jobs";
     }
+
+    @GetMapping("/for-employers")
+    public String forEmployers() {
+        return "for-employers";    }
+
 }

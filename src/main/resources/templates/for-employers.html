@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="'For Employers - FormerTeachers'">For Employers - FormerTeachers</title>
+
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:Arial, sans-serif; background:#f8f9fa; line-height:1.6; }
+
+    .navbar { background:#1a3c5e; padding:15px 20px; }
+    .nav-container { max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+    .logo { color:white; font-size:24px; font-weight:bold; text-decoration:none; }
+    .nav-links { display:flex; gap:20px; }
+    .nav-links a { color:white; text-decoration:none; font-size:16px; }
+    .post-job { background:#4CAF50; padding:8px 16px; border-radius:6px; }
+
+    @media (max-width:768px) {
+        .nav-links { flex-direction:column; width:100%; text-align:center; margin-top:15px; }
+        .nav-links a { font-size:18px; padding:10px; }
+    }
+
+    .hero {
+        background:#ffffff;
+        text-align:center;
+        padding:80px 20px;
+    }
+
+    .hero h1 {
+        font-size:clamp(36px, 8vw, 52px);
+        color:#2c3e50;
+        margin-bottom:20px;
+    }
+
+    .hero p {
+        font-size:clamp(18px, 4vw, 22px);
+        max-width:800px;
+        margin:0 auto 30px;
+        color:#555;
+    }
+
+    .cta-btn {
+        display:inline-block;
+        background:#4CAF50;
+        color:white;
+        padding:16px 32px;
+        border-radius:8px;
+        text-decoration:none;
+        font-size:20px;
+        font-weight:bold;
+    }
+
+    .benefits {
+        max-width:1100px;
+        margin:60px auto;
+        padding:0 20px;
+        display:grid;
+        grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+        gap:30px;
+    }
+
+    .benefit-card {
+        background:white;
+        padding:30px;
+        border-radius:10px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        text-align:center;
+    }
+
+    .benefit-card h3 {
+        color:#1a3c5e;
+        margin-bottom:15px;
+        font-size:1.4rem;
+    }
+
+    footer {
+        background:#1a3c5e;
+        color:#e0e0e0;
+        padding:50px 20px;
+        margin-top:80px;
+        text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="/" class="logo">FormerTeachers</a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/jobs">Browse Jobs</a>
+      <a href="/jobs/for-employers">For Employers</a>
+      <a href="/jobs/new" class="post-job">Post a Job</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>Reach Former Teachers Looking for Their Next Career</h1>
+  <p>Post your job on FormerTeachers and connect directly with talented educators transitioning into edtech, instructional design, corporate training, customer success, and more.</p>
+  <a href="/jobs/new" class="cta-btn">Post a Job Now →</a>
+</div>
+
+<div class="benefits">
+  <div class="benefit-card">
+    <h3>Targeted Talent Pool</h3>
+    <p>Reach professionals with proven teaching skills: communication, facilitation, curriculum design, patience, and the ability to explain complex ideas simply.</p>
+  </div>
+  <div class="benefit-card">
+    <h3>Easy & Free Posting</h3>
+    <p>No fees, no complicated forms. Post in minutes and get applications from motivated candidates ready for their next chapter.</p>
+  </div>
+  <div class="benefit-card">
+    <h3>High-Quality Candidates</h3>
+    <p>Former teachers bring discipline, adaptability, empathy, and strong work ethic — qualities that shine in training, L&D, and customer education roles.</p>
+  </div>
+</div>
+
+<footer style="background:#1a3c5e; color:#e0e0e0; padding:50px 20px; margin-top:80px; text-align:center; line-height:1.6;">
+  <div style="max-width:1000px; margin:auto;">
+    <p style="font-size:24px; margin-bottom:8px; color:white; font-weight:bold;">FormerTeachers</p>
+    <p style="color:#e0e0e0; max-width:620px; margin:0 auto 25px;">
+      Connecting former teachers with meaningful careers in edtech, instructional design,
+      corporate training, customer education, and beyond.
+    </p>
+    <div style="margin:30px 0;">
+      <a href="/" style="color:white; margin:0 15px; text-decoration:none;">Home</a>
+      <a href="/jobs" style="color:white; margin:0 15px; text-decoration:none;">Browse Jobs</a>
+      <a href="/for-employers" style="color:white; margin:0 15px; text-decoration:none;">For Employers</a>
+      <a href="/jobs/new" style="color:white; margin:0 15px; text-decoration:none;">Post a Job</a>
+      <a href="/jobs/admin" style="color:white; margin:0 15px; text-decoration:none;">Admin</a>
+    </div>
+    <p style="color:#b0b0b0; font-size:14px; margin-top:30px;">
+      © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

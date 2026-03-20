@@ -1,13 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${job.title} + ' - FormerTeachers'">Job Detail</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-
-
-
 </head>
 
 <body>
@@ -18,69 +15,75 @@
         <div class="nav-links">
             <a href="/">Home</a>
             <a href="/jobs">Browse Jobs</a>
+            <a href="/jobs/for-employers">For Employers</a>
             <a href="/jobs/new" class="post-job">Post a Job</a>
+            
+            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
+            <a href="/login" sec:authorize="isAnonymous()">Login</a>
+            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </div>
 </nav>
 
 <div class="container">
-    <h1 th:text="${job.title}">Job Title</h1>
+    <div class="job-detail-card">
+        <div class="job-detail-header">
+            <h1 th:text="${job.title}">Job Title</h1>
+            <h3 style="color:var(--text-muted); margin-bottom:15px;" th:text="${job.company}">Company Name</h3>
+            
+            <div class="job-detail-meta">
+                <span>📍 <span th:text="${job.location ?: 'Remote'}"></span></span>
+                <span>💰 <span th:text="${job.salaryRange ?: 'Competitive'}"></span></span>
+                <span>🏷️ <span th:text="${job.category}"></span></span>
+                <span>⏰ <span th:text="${job.workType}"></span></span>
+                <span>📅 Posted <span th:text="${job.postedDate}"></span></span>
+            </div>
+        </div>
 
-    <div class="meta">
-        <p><strong>Posted:</strong> <span th:text="${job.postedDate}"></span></p>
-        <p><strong>Company:</strong> <span th:text="${job.company}"></span></p>
-        <p><strong>Location:</strong> <span th:text="${job.location ?: 'Not Specified'}"></span></p>
-        <p><strong>Salary Range:</strong> <span th:text="${job.salaryRange ?: 'Not Specified'}"></span></p>
-        <p><strong>Category:</strong> <span th:text="${job.category ?: 'Not Specified'}"></span></p>
-        <p><strong>Work Type:</strong> <span th:text="${job.workType ?: 'Not Specified'}"></span></p>
+        <div class="job-detail-body">
+            <h3>Job Description</h3>
+            <div th:utext="${job.description ?: '(No description provided)'}"></div>
+        </div>
+
+        <!-- Apply Section -->
+        <div class="apply-section">
+            <div th:if="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}">
+                <div th:if="${#strings.startsWith(job.applyInfo, 'http')}">
+                    <a th:href="${job.applyInfo}" target="_blank" rel="noopener noreferrer" class="cta-btn">
+                        Apply Now
+                    </a>
+                    <p style="margin-top:15px; font-size:14px; color:#666;">You will be redirected to the company's application page.</p>
+                </div>
+            </div>
+
+            <div th:if="${!(job.applyInfo != null and #strings.startsWith(job.applyInfo, 'http'))}" style="background:#f0f7f4; padding:20px; border-radius:6px; border:1px solid #d1e7dd; display:inline-block; text-align:left;">
+                <h4 style="margin-top:0; color:var(--chalkboard-green);">How to Apply:</h4>
+                <span th:utext="${job.applyInfo ?: 'Contact company directly.'}"></span>
+            </div>
+        </div>
     </div>
 
-    <hr style="margin:30px 0;">
-
-    <h2>Description</h2>
-    <div th:utext="${job.description ?: '(No description provided)'}"></div>
-
-    <!-- Apply section -->
-    <div th:if="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}" class="apply-section">
-        <h2>Ready to Apply?</h2>
-
-        <p th:if="${#strings.startsWith(job.applyInfo, 'http')}">
-            <a th:href="${job.applyInfo}" target="_blank" rel="noopener noreferrer" class="apply-btn">
-                Apply Now →
-            </a>
-        </p>
-
-        <p th:unless="${#strings.startsWith(job.applyInfo, 'http')}" style="font-size:17px; background:white; padding:15px; border-radius:6px;">
-            <strong>Application Instructions:</strong><br>
-            <span th:utext="${job.applyInfo}"></span>
-        </p>
-    </div>
-
-    <div th:unless="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}">
-        <p style="color:#777; font-style:italic; margin-top:40px; text-align:center;">
-            Application instructions not provided — contact the company directly.
-        </p>
-    </div>
-
-    <div style="margin-top:40px; text-align:center;">
-        <a href="/jobs" style="color:#1a3c5e; font-weight:bold;">← Back to Browse Jobs</a>
+    <div style="text-align:center; margin-bottom: 60px;">
+        <a href="/jobs" class="back-link">← Back to Job Listings</a>
     </div>
 </div>
 
-<footer style="background:#1a3c5e; color:#e0e0e0; padding:50px 20px; margin-top:80px; text-align:center; line-height:1.6;">
-    <div style="max-width:1000px; margin:auto;">
-        <p style="font-size:24px; margin-bottom:8px; color:white; font-weight:bold;">FormerTeachers</p>
-        <p style="color:#e0e0e0; max-width:620px; margin:0 auto 25px;">
+<footer>
+    <div class="container">
+        <p style="font-size:24px; margin-bottom:8px; color:var(--bus-yellow); font-weight:bold;">FormerTeachers</p>
+        <p style="max-width:620px; margin:0 auto 25px;">
             Connecting former teachers with meaningful careers in edtech, instructional design,
             corporate training, customer education, and beyond.
         </p>
-        <div style="margin:30px 0;">
-            <a href="/" style="color:white; margin:0 15px; text-decoration:none;">Home</a>
-            <a href="/jobs" style="color:white; margin:0 15px; text-decoration:none;">Browse Jobs</a>
-            <a href="/jobs/for-employers" style="color:white; margin:0 15px; text-decoration:none;">For Employers</a>
-            <a href="/jobs/new" style="color:white; margin:0 15px; text-decoration:none;">Post a Job</a>
+        <div>
+            <a href="/">Home</a>
+            <a href="/jobs">Browse Jobs</a>
+            <a href="/jobs/for-employers">For Employers</a>
+            <a href="/jobs/new">Post a Job</a>
         </div>
-        <p style="color:#b0b0b0; font-size:14px; margin-top:30px;">
+        <p style="font-size:14px; margin-top:30px;">
             © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
         </p>
     </div>

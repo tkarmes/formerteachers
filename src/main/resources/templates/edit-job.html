@@ -1,100 +1,102 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
-
-
-  <title>Edit Job - FormerTeachers</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Job - FormerTeachers</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
 <nav class="navbar">
-  <div class="nav-container">
-    <a href="/" class="logo">FormerTeachers</a>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/jobs">Browse Jobs</a>
-      <a href="/jobs/new" class="post-job">Post a Job</a>
+    <div class="nav-container">
+        <a href="/" class="logo">FormerTeachers</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/jobs">Browse Jobs</a>
+            <a href="/jobs/for-employers">For Employers</a>
+            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
+            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
     </div>
-  </div>
 </nav>
 
 <div class="container">
-  <h1>Edit Job</h1>
+    <div class="form-box">
+        <h1 style="text-align: center; margin-bottom: 30px;">Edit Job</h1>
+        
+        <form th:action="@{/jobs/update/{id}(id=${job.id})}" th:object="${job}" method="post">
 
-  <form th:action="@{/jobs/update/{id}(id=${job.id})}" th:object="${job}" method="post">
+            <div class="form-group">
+                <label for="title">Job Title *</label>
+                <input type="text" id="title" th:field="*{title}" class="form-control" required />
+                <span style="color:red;" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+            </div>
 
-    <div>
-      <label for="title">Job Title *</label>
-      <input type="text" id="title" th:field="*{title}" required />
-      <span class="error" th:errors="*{title}"></span>
+            <div class="form-group">
+                <label for="company">Company *</label>
+                <input type="text" id="company" th:field="*{company}" class="form-control" required />
+                <span style="color:red;" th:if="${#fields.hasErrors('company')}" th:errors="*{company}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" th:field="*{location}" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="salaryRange">Salary Range</label>
+                <input type="text" id="salaryRange" th:field="*{salaryRange}" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category *</label>
+                <select id="category" th:field="*{category}" class="form-control" required>
+                    <option value="">Select a category...</option>
+                    <option value="Instructional Design">Instructional Design</option>
+                    <option value="Learning & Development">Learning & Development</option>
+                    <option value="Corporate Training">Corporate Training</option>
+                    <option value="Curriculum Development">Curriculum Development</option>
+                    <option value="Customer Education">Customer Education / Success</option>
+                    <option value="EdTech">EdTech (Sales, Support, Product)</option>
+                    <option value="Talent Development">Talent Development</option>
+                    <option value="eLearning">eLearning Specialist</option>
+                    <option value="Other">Other (please specify in description)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="workType">Work Type</label>
+                <select id="workType" th:field="*{workType}" class="form-control">
+                    <option value="">Select...</option>
+                    <option value="Full Time">Full Time</option>
+                    <option value="Part Time">Part Time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Remote">Remote Only</option>
+                    <option value="Hybrid">Hybrid</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="applyInfo">How to Apply</label>
+                <input type="text" id="applyInfo" th:field="*{applyInfo}" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description *</label>
+                <textarea id="description" th:field="*{description}" class="form-control" required style="min-height: 150px;"></textarea>
+                <span style="color:red;" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            </div>
+
+            <button type="submit" class="cta-btn btn-submit">Save Changes</button>
+        </form>
+        
+        <div style="text-align: center;">
+            <a href="/jobs/admin" class="back-link">← Cancel</a>
+        </div>
     </div>
-
-    <div>
-      <label for="company">Company *</label>
-      <input type="text" id="company" th:field="*{company}" required />
-      <span class="error" th:errors="*{company}"></span>
-    </div>
-
-    <div>
-      <label for="location">Location</label>
-      <input type="text" id="location" th:field="*{location}" placeholder="e.g. Remote, Hybrid, New York" />
-    </div>
-
-    <div>
-      <label for="salaryRange">Salary Range</label>
-      <input type="text" id="salaryRange" th:field="*{salaryRange}" placeholder="e.g. $80k - $110k" />
-    </div>
-
-    <!-- CATEGORY DROPDOWN -->
-    <div>
-      <label for="category">Category *</label>
-      <select id="category" th:field="*{category}" required>
-        <option value="">Select a category...</option>
-        <option value="Instructional Design">Instructional Design</option>
-        <option value="Learning & Development">Learning & Development</option>
-        <option value="Corporate Training">Corporate Training</option>
-        <option value="Curriculum Development">Curriculum Development</option>
-        <option value="Customer Education">Customer Education / Success</option>
-        <option value="EdTech">EdTech (Sales, Support, Product)</option>
-        <option value="Talent Development">Talent Development</option>
-        <option value="eLearning">eLearning Specialist</option>
-        <option value="Other">Other (please specify in description)</option>
-      </select>
-    </div>
-
-    <div>
-      <label for="workType">Work Type</label>
-      <select id="workType" th:field="*{workType}">
-        <option value="">Select...</option>
-        <option value="Full Time">Full Time</option>
-        <option value="Part Time">Part Time</option>
-        <option value="Contract">Contract</option>
-        <option value="Remote">Remote Only</option>
-        <option value="Hybrid">Hybrid</option>
-      </select>
-    </div>
-
-    <div>
-      <label for="applyInfo">How to Apply</label>
-      <input type="text" id="applyInfo" th:field="*{applyInfo}"
-             placeholder="https://company.com/apply or email: jobs@company.com" />
-    </div>
-
-    <div>
-      <label for="description">Description *</label>
-      <textarea id="description" th:field="*{description}" required></textarea>
-      <span class="error" th:errors="*{description}"></span>
-    </div>
-
-    <button type="submit">Save Changes</button>
-  </form>
-
-  <div class="back">
-    <a href="/jobs">← Back to Job Listings</a>
-  </div>
 </div>
 
 </body>

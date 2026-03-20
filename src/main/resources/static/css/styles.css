@@ -1,213 +1,453 @@
-/* =====================
-   ROOT COLORS
-===================== */
 :root {
-    --yellow: #FFCC00;
-    --green: #4CAF50;
-    --black: #111111;
+    --bus-yellow: #FFD100;
+    --bus-black: #1A1A1A;
+    --chalkboard-green: #2F5C3E;
     --white: #FFFFFF;
-    --gray: #E0E0E0;
+    --light-gray: #F5F5F5;
+    --dark-stripe: #000000;
 }
 
-/* =====================
-   BODY / TEXT
-===================== */
 body {
-    font-family: 'Arial', Helvetica, sans-serif;
-    background: var(--white);
-    color: var(--black);
-    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
+    padding: 0;
+    background-color: var(--light-gray);
+    color: var(--bus-black);
+    line-height: 1.6;
 }
 
-/* HEADINGS */
-h1, h2, h3 {
-    color: var(--black);
-    font-weight: bold;
-}
-
-/* LINKS */
-a {
-    color: var(--yellow);
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* =====================
-   NAVBAR
-===================== */
+/* Navbar */
 .navbar {
-    background: var(--black);
-    padding: 15px 20px;
+    background-color: var(--bus-black);
+    padding: 1rem 0;
+    border-bottom: 5px solid var(--bus-yellow);
 }
 
 .nav-container {
-    max-width: 1100px;
-    margin: auto;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    padding: 0 20px;
 }
 
 .logo {
-    color: var(--yellow);
-    font-size: 24px;
+    color: var(--bus-yellow);
+    font-size: 1.8rem;
     font-weight: bold;
     text-decoration: none;
-}
-
-.nav-links {
-    display: flex;
-    gap: 20px;
+    letter-spacing: 1px;
 }
 
 .nav-links a {
     color: var(--white);
-    font-size: 16px;
-}
-
-.post-job {
-    background: var(--green);
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: bold;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: 500;
+    transition: color 0.3s;
 }
 
 .nav-links a:hover {
-    color: var(--yellow);
+    color: var(--bus-yellow);
 }
 
-/* =====================
-   HERO SECTION
-===================== */
+.nav-links .post-job {
+    background-color: var(--bus-yellow);
+    color: var(--bus-black);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.nav-links .post-job:hover {
+    background-color: #E6BC00;
+    color: var(--bus-black);
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-left: 20px;
+    padding: 0;
+    font-family: inherit;
+    transition: color 0.3s;
+}
+
+.logout-btn:hover {
+    color: var(--bus-yellow);
+    text-decoration: underline;
+}
+
+/* Hero Section */
 .hero {
-    background: var(--yellow);
-    color: var(--black);
+    background-color: var(--bus-yellow);
+    color: var(--bus-black);
     text-align: center;
-    padding: 80px 20px;
+    padding: 60px 20px;
+    border-bottom: 5px solid var(--bus-black);
+    /* Pattern for school bus texture */
+    background-image: repeating-linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.05) 0px,
+        rgba(0, 0, 0, 0.05) 10px,
+        transparent 10px,
+        transparent 20px
+    );
 }
 
 .hero h1 {
-    font-size: clamp(36px, 8vw, 52px);
-    margin-bottom: 20px;
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .hero p {
-    font-size: clamp(18px, 4vw, 22px);
-    max-width: 800px;
-    margin: 0 auto 30px;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
+/* Buttons */
 .cta-btn {
-    background: var(--green);
-    color: var(--white);
-    padding: 16px 32px;
-    border-radius: 8px;
-    font-size: 20px;
-    font-weight: bold;
+    background-color: var(--bus-black);
+    color: var(--bus-yellow);
+    padding: 12px 24px;
     text-decoration: none;
-    cursor: pointer;
-    transition: background 0.2s;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: transform 0.2s, background-color 0.3s;
+    display: inline-block;
 }
 
 .cta-btn:hover {
-    background: #45a049;
+    transform: translateY(-2px);
+    background-color: #000;
 }
 
-/* =====================
-   FEATURES / BENEFITS
-===================== */
-.features, .benefits {
-    max-width: 1100px;
-    margin: 60px auto;
-    padding: 0 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+.btn-secondary {
+    background-color: transparent;
+    color: var(--bus-black);
+    border: 2px solid var(--bus-black);
+    padding: 10px 22px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-left: 10px;
+    display: inline-block;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--bus-black);
+    color: var(--bus-yellow);
+}
+
+.btn-submit {
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* Features */
+.features {
+    display: flex;
+    justify-content: center;
     gap: 30px;
+    padding: 40px 20px;
+    background-color: var(--white);
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
 }
 
-.feature-card, .benefit-card {
-    background: var(--white);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.feature-card {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
     text-align: center;
+    flex: 1;
+    min-width: 250px;
+    border-bottom: 4px solid var(--chalkboard-green);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-.feature-card h3, .benefit-card h3 {
-    color: var(--black);
-    margin-bottom: 15px;
-    font-size: 1.4rem;
+/* Job List */
+.section-title {
+    text-align: center;
+    margin: 40px 0 20px;
+    font-size: 2rem;
+    color: var(--bus-black);
 }
 
-/* =====================
-   JOB CARDS
-===================== */
-.job-preview {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    margin: 40px auto;
-    max-width: 1100px;
+.job-list {
+    max-width: 1000px;
+    margin: 0 auto 60px;
     padding: 0 20px;
+    display: grid;
+    gap: 20px;
 }
 
 .job-card {
-    background: var(--white);
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: var(--white);
+    border: 1px solid #ddd;
+    border-left: 5px solid var(--bus-yellow);
+    padding: 20px;
+    border-radius: 5px;
     text-decoration: none;
-    color: var(--black);
+    color: inherit;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .job-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-left-color: var(--chalkboard-green);
+}
+
+.job-info h3 {
+    margin: 0 0 5px;
+    color: var(--chalkboard-green);
+    font-size: 1.4rem;
+}
+
+.job-info .company {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.job-meta {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 5px;
+}
+
+.tag {
+    background-color: #eee;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #666;
 }
 
 .new-badge {
-    background: #FF4444;
-    color: var(--white);
-    padding: 4px 10px;
-    border-radius: 5px;
-    font-size: 13px;
+    background-color: var(--bus-yellow);
+    color: var(--bus-black);
+    padding: 4px 8px;
+    border-radius: 4px;
     font-weight: bold;
-    align-self: flex-start;
+    font-size: 0.8rem;
+    text-transform: uppercase;
 }
 
-.no-jobs {
-    text-align: center;
-    font-size: 18px;
-    color: var(--black);
-    padding: 60px 20px;
+/* Job Detail Card */
+.job-detail-card {
+    max-width: 900px;
+    margin: 40px auto;
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
 }
 
-/* =====================
-   FOOTER
-===================== */
-footer {
-    background: var(--black);
+.job-detail-header {
+    background-color: var(--bus-black);
     color: var(--white);
-    padding: 50px 20px;
+    padding: 30px;
+    border-bottom: 5px solid var(--bus-yellow);
+}
+
+.job-detail-header h1 {
+    margin: 0 0 10px;
+    color: var(--bus-yellow);
+}
+
+.job-detail-body {
+    padding: 30px;
+}
+
+.meta-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    color: #ccc;
+    font-size: 0.95rem;
+}
+
+.description-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.apply-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
     text-align: center;
-    line-height: 1.6;
+    border: 1px dashed #ccc;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: var(--chalkboard-green);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Forms */
+.form-box {
+    max-width: 600px;
+    margin: 40px auto;
+    background: var(--white);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-top: 5px solid var(--bus-yellow);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--bus-black);
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Important for padding */
+}
+
+.form-control:focus {
+    border-color: var(--bus-yellow);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 209, 0, 0.2);
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Search Bar */
+.search-bar {
+    max-width: 800px;
+    margin: -30px auto 30px; /* Pull up into hero slightly or just below */
+    background: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 10px;
+    position: relative;
+    z-index: 10;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.search-bar button {
+    background-color: var(--chalkboard-green);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.search-bar button:hover {
+    background-color: #1e3b28;
+}
+
+/* Pagination */
+.pagination {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.pagination a, .pagination span {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--bus-black);
+}
+
+.pagination .current {
+    background-color: var(--bus-yellow);
+    border-color: var(--bus-yellow);
+    font-weight: bold;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Footer */
+footer {
+    background-color: var(--bus-black);
+    color: #ccc;
+    padding: 40px 20px;
+    text-align: center;
+    margin-top: auto; /* Push to bottom */
 }
 
 footer a {
-    color: var(--yellow);
+    color: var(--white);
     text-decoration: none;
-    margin: 0 15px;
+    margin: 0 10px;
 }
 
 footer a:hover {
-    text-decoration: underline;
+    color: var(--bus-yellow);
+}
+
+/* Error */
+.error {
+    color: #D32F2F;
+    font-weight: bold;
+    margin-top: 5px;
 }

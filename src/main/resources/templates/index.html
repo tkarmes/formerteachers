@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-
-
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title}">FormerTeachers.com</title>
@@ -21,6 +17,12 @@
             <a href="/jobs">Browse Jobs</a>
             <a href="/jobs/for-employers">For Employers</a>
             <a href="/jobs/new" class="post-job">Post a Job</a>
+            
+            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
+            <a href="/login" sec:authorize="isAnonymous()">Login</a>
+            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
         </div>
     </div>
 </nav>
@@ -29,8 +31,8 @@
     <h1>Helping Teachers Find Their Next Career</h1>
     <p>FormerTeachers connects educators with opportunities in edtech, instructional design, training, corporate learning, customer success, and more.</p>
     <div class="hero-buttons">
-        <a href="/jobs"><button class="primary-btn">Browse Jobs</button></a>
-        <a href="/jobs/new"><button class="secondary-btn">Post a Job</button></a>
+        <a href="/jobs" class="cta-btn">Browse Jobs</a>
+        <a href="/jobs/new" class="btn-secondary">Post a Job</a>
     </div>
 </div>
 
@@ -49,40 +51,44 @@
     </div>
 </div>
 
-<h2 style="text-align:center; margin:50px 0 20px;">Featured Jobs</h2>
+<h2 class="section-title">Featured Jobs</h2>
 
-<div class="job-preview" th:if="${hasJobs}">
+<div class="job-list" th:if="${hasJobs}">
     <a th:each="job : ${featuredJobs}" th:href="@{/jobs/{id}(id=${job.id})}" class="job-card">
-        <span th:if="${job.postedDate.contains('today')}" class="new-badge">New!</span>
-        <h3 th:text="${job.title}">Job Title</h3>
-        <p><strong th:text="${job.company}">Company</strong></p>
-        <p th:text="${job.location ?: 'Remote / Not Specified'}">Location</p>
-        <p style="font-size:14px; color:#777;"><span th:text="${job.postedDate}"></span></p>
-        <p th:if="${job.category}">Category: <span th:text="${job.category}"></span></p>
-        <p th:if="${job.workType}">Type: <span th:text="${job.workType}"></span></p>
-        <p th:utext="${#strings.abbreviate(job.description, 140)}" style="color:#555;"></p>
+        <div class="job-info">
+            <h3 th:text="${job.title}">Job Title</h3>
+            <span class="company" th:text="${job.company}">Company</span>
+            <p th:text="${job.location ?: 'Remote / Not Specified'}">Location</p>
+            <p th:utext="${#strings.abbreviate(job.description, 140)}" style="color:#555; margin-top: 10px;"></p>
+        </div>
+        <div class="job-meta">
+            <span th:if="${job.postedDate.contains('today')}" class="new-badge">New!</span>
+            <span style="font-size:14px; color:#777;" th:text="${job.postedDate}"></span>
+            <span class="tag" th:if="${job.category}" th:text="${job.category}"></span>
+            <span class="tag" th:if="${job.workType}" th:text="${job.workType}"></span>
+        </div>
     </a>
 </div>
 
-<div class="no-jobs" th:unless="${hasJobs}">
+<div class="no-jobs" th:unless="${hasJobs}" style="text-align: center; margin: 40px;">
     <p><strong>No featured jobs yet — but great opportunities are coming!</strong></p>
     <p>Employers: <a href="/jobs/new">Post your first job here</a> to help former teachers transition.</p>
 </div>
 
-<footer style="background:#1a3c5e; color:#e0e0e0; padding:50px 20px; margin-top:80px; text-align:center; line-height:1.6;">
-    <div style="max-width:1000px; margin:auto;">
-        <p style="font-size:24px; margin-bottom:8px; color:white; font-weight:bold;">FormerTeachers</p>
-        <p style="color:#e0e0e0; max-width:620px; margin:0 auto 25px;">
+<footer>
+    <div class="container">
+        <p style="font-size:24px; margin-bottom:8px; color:var(--bus-yellow); font-weight:bold;">FormerTeachers</p>
+        <p style="max-width:620px; margin:0 auto 25px;">
             Connecting former teachers with meaningful careers in edtech, instructional design,
             corporate training, customer education, and beyond.
         </p>
-        <div style="margin:30px 0;">
-            <a href="/" style="color:white; margin:0 15px; text-decoration:none;">Home</a>
-            <a href="/jobs" style="color:white; margin:0 15px; text-decoration:none;">Browse Jobs</a>
-            <a href="/jobs/for-employers" style="color:white; margin:0 15px; text-decoration:none;">For Employers</a>
-            <a href="/jobs/new" style="color:white; margin:0 15px; text-decoration:none;">Post a Job</a>
+        <div>
+            <a href="/">Home</a>
+            <a href="/jobs">Browse Jobs</a>
+            <a href="/jobs/for-employers">For Employers</a>
+            <a href="/jobs/new">Post a Job</a>
         </div>
-        <p style="color:#b0b0b0; font-size:14px; margin-top:30px;">
+        <p style="font-size:14px; margin-top:30px;">
             © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
         </p>
     </div>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FormerTeachers</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">FormerTeachers</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/jobs">Browse Jobs</a>
+            <a href="/jobs/for-employers">For Employers</a>
+            <a href="/jobs/new" class="post-job">Post a Job</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="max-width: 500px; margin: 50px auto;">
+    <div class="form-box">
+        <h2 style="text-align: center; margin-bottom: 20px;">Admin Login</h2>
+
+        <div th:if="${param.error}" class="error" style="color: red; margin-bottom: 15px; text-align: center;">
+            Invalid username or password.
+        </div>
+        <div th:if="${param.logout}" class="success" style="color: green; margin-bottom: 15px; text-align: center;">
+            You have been logged out.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="cta-btn btn-submit" style="width: 100%;">Sign In</button>
+        </form>
+        <p style="text-align: center; margin-top: 15px;">
+            <a href="/" style="color: var(--chalkboard-green);">Back to Home</a>
+        </p>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <p style="font-size:24px; margin-bottom:8px; color:var(--bus-yellow); font-weight:bold;">FormerTeachers</p>
+        <p style="max-width:620px; margin:0 auto 25px;">
+            Connecting former teachers with meaningful careers in edtech, instructional design,
+            corporate training, customer education, and beyond.
+        </p>
+        <div>
+            <a href="/">Home</a>
+            <a href="/jobs">Browse Jobs</a>
+            <a href="/jobs/for-employers">For Employers</a>
+            <a href="/jobs/new">Post a Job</a>
+        </div>
+        <p style="font-size:14px; margin-top:30px;">
+            © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

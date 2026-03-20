@@ -19,20 +19,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/", "/jobs", "/jobs/new", "/jobs/{id}", "/for-employers", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/jobs/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .formLogin((form) -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/jobs/admin", true)
-                .permitAll()
-            )
-            .logout((logout) -> logout
-                .logoutSuccessUrl("/")
-                .permitAll()
-            );
+                .authorizeHttpRequests((requests) -> requests
+                        // 1. SECURE RULES FIRST: Check for Admin URLs before checking generic public URLs
+                        .requestMatchers("/jobs/admin/**").hasRole("ADMIN")
+
+                        // 2. PUBLIC RULES SECOND: Now it's safe to allow /jobs/{id} because we know it's not /jobs/admin
+                        .requestMatchers("/", "/jobs", "/jobs/new", "/jobs/{id}", "/for-employers", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+
+                        // 3. CATCH-ALL: Everything else requires login
+                        .anyRequest().authenticated()
+                )
+                .formLogin((form) -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/jobs/admin", true)
+                        .permitAll()
+                )
+                .logout((logout) -> logout
+                        .logoutSuccessUrl("/")
+                        .permitAll()
+                );
 
         return http.build();
     }

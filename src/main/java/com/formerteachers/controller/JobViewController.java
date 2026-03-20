@@ -68,32 +68,28 @@ public class JobViewController {
         return "redirect:/jobs";
     }
 
-    // ====================== ADMIN SECTION ======================
 
-    // Admin login page (simple password for now)
+// ====================== ADMIN SECTION (Managed by Spring Security) ======================
+
+    // This method now handles the page you see *after* a successful login.
+// The URL matches the defaultSuccessUrl in your SecurityConfig.
     @GetMapping("/admin")
-    public String adminLogin() {
-        return "admin-login";
-    }
-
-    @GetMapping("/admin/jobs")
-    public String adminJobs(@RequestParam(required = false) String password,
-                            @RequestParam(defaultValue = "0") int page,
+    public String adminJobs(@RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "20") int size,
                             Model model) {
 
-        if (password == null || !password.equals("admin123")) {
-            return "admin-login";
-        }
+        // No more password check! Spring Security has already done it.
+        // If the user's code reaches this point, they are authenticated and have the ADMIN role.
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Job> jobsPage = jobService.getAllJobs(pageable);
 
+        // The model attributes for your admin-jobs.html page
         model.addAttribute("jobs", jobsPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", jobsPage.getTotalPages());
 
-        return "admin-jobs";
+        return "admin-jobs"; // Renders the admin-jobs.html template
     }
 
     // Admin: Show edit form
@@ -118,15 +114,16 @@ public class JobViewController {
         job.setApplyInfo(updatedJob.getApplyInfo());
 
         jobService.save(job);
-        return "redirect:/jobs/admin/jobs";
+        return "redirect:/jobs/admin"; // Redirect back to the main admin page
     }
 
     // Admin: Delete job
     @PostMapping("/admin/jobs/{id}/delete")
     public String adminDeleteJob(@PathVariable Long id) {
         jobService.deleteById(id);
-        return "redirect:/jobs/admin/jobs";
+        return "redirect:/jobs/admin"; // Redirect back to the main admin page
     }
+
 
     @GetMapping("/for-employers")
     public String forEmployers() {

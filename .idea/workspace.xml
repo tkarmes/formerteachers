@@ -5,16 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial working landing page with HomeController, index template, and local domain setup">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin-jobs.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin-jobs.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/create-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/create-job.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/JobViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin-login.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/edit-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/edit-job.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/for-employers.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/for-employers.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/job-detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/job-detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/jobs.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/jobs.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +21,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>

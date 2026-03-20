@@ -26,9 +26,9 @@
 <div class="container">
     <div class="form-box">
         <h1 style="text-align: center; margin-bottom: 30px;">Edit Job</h1>
-        
-        <form th:action="@{/jobs/update/{id}(id=${job.id})}" th:object="${job}" method="post">
 
+
+        <form th:action="@{/jobs/admin/jobs/update/{id}(id=${job.id})}" th:object="${job}" method="post">
             <div class="form-group">
                 <label for="title">Job Title *</label>
                 <input type="text" id="title" th:field="*{title}" class="form-control" required />

@@ -1,5 +1,6 @@
 package com.formerteachers.config;
 
+import org.springframework.beans.factory.annotation.Value; // Import this
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,17 +17,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // 1. Inject values from application.properties
+    @Value("${admin.username}")
+    private String adminUsername;
+
+    @Value("${admin.password}")
+    private String adminPassword;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // ... (Keep your existing chain logic exactly the same) ...
         http
                 .authorizeHttpRequests((requests) -> requests
-                        // 1. SECURE RULES FIRST: Check for Admin URLs before checking generic public URLs
                         .requestMatchers("/jobs/admin/**").hasRole("ADMIN")
-
-                        // 2. PUBLIC RULES SECOND: Now it's safe to allow /jobs/{id} because we know it's not /jobs/admin
                         .requestMatchers("/", "/jobs", "/jobs/new", "/jobs/{id}", "/for-employers", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-
-                        // 3. CATCH-ALL: Everything else requires login
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -49,9 +53,10 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+        // 2. Use the injected variables here
         UserDetails user = User.builder()
-                .username("admin")
-                .password(passwordEncoder.encode("admin123"))
+                .username(adminUsername)
+                .password(passwordEncoder.encode(adminPassword))
                 .roles("ADMIN")
                 .build();
 

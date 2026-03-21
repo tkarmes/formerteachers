@@ -74,19 +74,8 @@
 
 <body>
 
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="/" class="logo">FormerTeachers</a>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
+<!-- IMPORT NAVBAR -->
+<div th:replace="~{fragments/common :: navbar}"></div>
 
 <div class="admin-container">
     <div class="admin-header">
@@ -100,30 +89,30 @@
 
     <table id="jobsTable">
         <thead>
-            <tr>
-                <th>Title</th>
-                <th>Company</th>
-                <th>Category</th>
-                <th>Posted</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>Category</th>
+            <th>Posted</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="job : ${jobs}">
-                <td th:text="${job.title}"></td>
-                <td th:text="${job.company}"></td>
-                <td th:text="${job.category}"></td>
-                <td>
-                    <span th:text="${job.postedDate}"></span>
-                    <span th:if="${job.postedDate.contains('today')}" class="new-badge">New</span>
-                </td>
-                <td>
-                    <a th:href="@{/jobs/admin/jobs/{id}/edit(id=${job.id})}" class="btn btn-edit">Edit</a>
-                    <form th:action="@{/jobs/admin/jobs/{id}/delete(id=${job.id})}" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure?')">Delete</button>
-                    </form>
-                </td>
-            </tr>
+        <tr th:each="job : ${jobs}">
+            <td th:text="${job.title}"></td>
+            <td th:text="${job.company}"></td>
+            <td th:text="${job.category}"></td>
+            <td>
+                <span th:text="${job.postedDate}"></span>
+                <span th:if="${job.postedDate.contains('today')}" class="new-badge">New</span>
+            </td>
+            <td>
+                <a th:href="@{/jobs/admin/jobs/{id}/edit(id=${job.id})}" class="btn btn-edit">Edit</a>
+                <form th:action="@{/jobs/admin/jobs/{id}/delete(id=${job.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -132,6 +121,9 @@
     </div>
 
 </div>
+
+<!-- IMPORT FOOTER (Optional for admin, but good for consistency) -->
+<div th:replace="~{fragments/common :: footer}"></div>
 
 <script>
     function filterTable() {

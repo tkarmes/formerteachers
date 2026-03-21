@@ -9,23 +9,8 @@
 
 <body>
 
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="/" class="logo">FormerTeachers</a>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new" class="post-job">Post a Job</a>
-            
-            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
-            <a href="/login" sec:authorize="isAnonymous()">Login</a>
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
+<!-- IMPORT NAVBAR -->
+<div th:replace="~{fragments/common :: navbar}"></div>
 
 <h1 class="section-title">Browse Jobs</h1>
 
@@ -33,10 +18,7 @@
     <strong th:text="${successMessage}"></strong>
 </div>
 
-<p style="text-align: center; margin-bottom: 20px;">
-    <span th:text="${jobs.totalElements}"></span> jobs found
-</p>
-
+<!-- Search Bar -->
 <form class="search-bar" th:action="@{/jobs}" method="get">
     <input type="text" name="keyword" placeholder="Keyword" th:value="${keyword}">
     <input type="text" name="location" placeholder="Location" th:value="${location}">
@@ -51,13 +33,18 @@
     <button type="submit">Search</button>
 </form>
 
+<!-- Results Count -->
+<p style="text-align: center; margin-bottom: 20px; color: #666;">
+    Found <strong th:text="${jobs.totalElements}">0</strong> jobs matching your criteria
+</p>
+
 <div class="job-list">
     <a class="job-card" th:each="job : ${jobs.content}" th:href="@{/jobs/{id}(id=${job.id})}">
         <div class="job-info">
             <h3 th:text="${job.title}">Job Title</h3>
             <span class="company" th:text="${job.company}">Company</span>
             <div style="font-size:14px; color:#555;">
-                <span th:text="${job.location}"></span> • 
+                <span th:text="${job.location}"></span> •
                 <span th:if="${job.salaryRange != null}" th:text="${job.salaryRange}"></span>
             </div>
             <div style="color:#555; font-size:14px; margin-top:12px; line-height:1.5;">
@@ -83,24 +70,8 @@
     <a href="/jobs/new" class="cta-btn">Create New Job</a>
 </div>
 
-<footer>
-    <div class="container">
-        <p style="font-size:24px; margin-bottom:8px; color:var(--bus-yellow); font-weight:bold;">FormerTeachers</p>
-        <p style="max-width:620px; margin:0 auto 25px;">
-            Connecting former teachers with meaningful careers in edtech, instructional design,
-            corporate training, customer education, and beyond.
-        </p>
-        <div>
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new">Post a Job</a>
-        </div>
-        <p style="font-size:14px; margin-top:30px;">
-            © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
-        </p>
-    </div>
-</footer>
+<!-- IMPORT FOOTER -->
+<div th:replace="~{fragments/common :: footer}"></div>
 
 </body>
 </html>

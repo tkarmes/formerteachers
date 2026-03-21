@@ -9,28 +9,13 @@
 
 <body>
 
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="/" class="logo">FormerTeachers</a>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new" class="post-job">Post a Job</a>
-            
-            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
-            <a href="/login" sec:authorize="isAnonymous()">Login</a>
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
+<!-- IMPORT NAVBAR -->
+<div th:replace="~{fragments/common :: navbar}"></div>
 
 <div class="container">
     <div class="form-box">
         <h1 style="text-align: center; margin-bottom: 30px;">Post a New Job</h1>
-        
+
         <form th:action="@{/jobs}" th:object="${job}" method="post">
 
             <div class="form-group">
@@ -99,31 +84,15 @@
 
             <button type="submit" class="cta-btn btn-submit">Post Job</button>
         </form>
-        
+
         <div style="text-align: center;">
             <a href="/jobs" class="back-link">← Cancel and Back to Listings</a>
         </div>
     </div>
 </div>
 
-<footer>
-    <div class="container">
-        <p style="font-size:24px; margin-bottom:8px; color:var(--bus-yellow); font-weight:bold;">FormerTeachers</p>
-        <p style="max-width:620px; margin:0 auto 25px;">
-            Connecting former teachers with meaningful careers in edtech, instructional design,
-            corporate training, customer education, and beyond.
-        </p>
-        <div>
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new">Post a Job</a>
-        </div>
-        <p style="font-size:14px; margin-top:30px;">
-            © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
-        </p>
-    </div>
-</footer>
+<!-- IMPORT FOOTER -->
+<div th:replace="~{fragments/common :: footer}"></div>
 
 </body>
 </html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Common Fragments</title>
+</head>
+<body>
+
+<!--
+  This is the reusable Navbar.
+  Notice the attribute: th:fragment="navbar"
+-->
+<nav class="navbar" th:fragment="navbar">
+    <div class="nav-container">
+        <a href="/" class="logo">FormerTeachers</a>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/jobs">Browse Jobs</a>
+            <a href="/jobs/for-employers">For Employers</a>
+            <a href="/jobs/new" class="post-job">Post a Job</a>
+
+            <!-- Admin Link (Only visible to ADMIN) -->
+            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
+
+            <!-- Login Link (Only visible if NOT logged in) -->
+            <a href="/login" sec:authorize="isAnonymous()">Login</a>
+
+            <!-- Logout Button (Only visible if logged in) -->
+            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!--
+  This is the reusable Footer.
+  Notice the attribute: th:fragment="footer"
+-->
+<footer th:fragment="footer">
+    <div class="container">
+        <p style="font-size:24px; margin-bottom:8px; color:var(--bus-yellow); font-weight:bold;">FormerTeachers</p>
+        <p style="max-width:620px; margin:0 auto 25px;">
+            Connecting former teachers with meaningful careers in edtech, instructional design,
+            corporate training, customer education, and beyond.
+        </p>
+        <div>
+            <a href="/">Home</a>
+            <a href="/jobs">Browse Jobs</a>
+            <a href="/jobs/for-employers">For Employers</a>
+            <a href="/jobs/new">Post a Job</a>
+        </div>
+        <p style="font-size:14px; margin-top:30px;">
+            © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
+        </p>
+    </div>
+</footer>
+
+</body>
+</html>

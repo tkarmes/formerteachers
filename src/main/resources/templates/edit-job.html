@@ -8,20 +8,8 @@
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="/" class="logo">FormerTeachers</a>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
+<!-- IMPORT NAVBAR -->
+<div th:replace="~{fragments/common :: navbar}"></div>
 
 <div class="container">
     <div class="form-box">
@@ -92,12 +80,15 @@
 
             <button type="submit" class="cta-btn btn-submit">Save Changes</button>
         </form>
-        
+
         <div style="text-align: center;">
             <a href="/jobs/admin" class="back-link">← Cancel</a>
         </div>
     </div>
 </div>
+
+<!-- IMPORT FOOTER -->
+<div th:replace="~{fragments/common :: footer}"></div>
 
 </body>
 </html>

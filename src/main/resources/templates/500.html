@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Server Error - FormerTeachers</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .error-code {
+            font-size: 150px;
+            font-weight: 900;
+            color: #d32f2f; /* Red for Error */
+            line-height: 1;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 0 var(--bus-black);
+        }
+        .error-message {
+            font-size: 24px;
+            color: var(--bus-black);
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+        .bus-animation {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: shake 0.5s infinite;
+        }
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/common :: navbar}"></div>
+
+<div class="error-container">
+    <div class="bus-animation">🚍🔧</div>
+    
+    <div class="error-code">500</div>
+    
+    <div class="error-message">
+        <h2>Bus Breakdown!</h2>
+        <p>
+            Something went wrong under the hood. Our mechanics are already working on it.
+            Please try again in a few minutes.
+        </p>
+    </div>
+
+    <a href="/" class="cta-btn">Back to Main Route</a>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/common :: footer}"></div>
+
+</body>
+</html>

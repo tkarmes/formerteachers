@@ -1,6 +1,6 @@
 package com.formerteachers.config;
 
-import org.springframework.beans.factory.annotation.Value; // Import this
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,31 +17,32 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // 1. Inject values from application.properties
-    @Value("${admin.username}")
+    @Value("${admin.username:admin}")
     private String adminUsername;
 
-    @Value("${admin.password}")
+    @Value("${admin.password:admin123}")
     private String adminPassword;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // ... (Keep your existing chain logic exactly the same) ...
         http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/jobs/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/", "/jobs", "/jobs/new", "/jobs/{id}", "/for-employers", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin((form) -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/jobs/admin", true)
-                        .permitAll()
-                )
-                .logout((logout) -> logout
-                        .logoutSuccessUrl("/")
-                        .permitAll()
-                );
+            .authorizeHttpRequests((requests) -> requests
+                // 1. SECURE ADMIN PATHS: Only logged-in ADMINs can access /jobs/admin
+                .requestMatchers("/jobs/admin/**").hasRole("ADMIN")
+                
+                // 2. PUBLIC BY DEFAULT: Allow everything else (home, jobs, errors, static resources)
+                // This ensures /this-does-not-exist shows a 404 instead of redirecting to login
+                .anyRequest().permitAll()
+            )
+            .formLogin((form) -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/jobs/admin", true)
+                .permitAll()
+            )
+            .logout((logout) -> logout
+                .logoutSuccessUrl("/")
+                .permitAll()
+            );
 
         return http.build();
     }
@@ -53,7 +54,6 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        // 2. Use the injected variables here
         UserDetails user = User.builder()
                 .username(adminUsername)
                 .password(passwordEncoder.encode(adminPassword))

@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial working landing page with HomeController, index template, and local domain setup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/create-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/create-job.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/edit-job.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/edit-job.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/job-detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/job-detail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,12 +52,30 @@
   }
 }</component>
   <component name="RunManager">
+    <configuration name="FormerteachersApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.formerteachers.FormerteachersApplication" />
+      <module name="formerteachers" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.formerteachers.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="FormerTeachers" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.FormerteachersApplication" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">

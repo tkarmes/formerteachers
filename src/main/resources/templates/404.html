@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Page Not Found - FormerTeachers</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .error-code {
+            font-size: 150px;
+            font-weight: 900;
+            color: var(--bus-yellow);
+            line-height: 1;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 0 var(--bus-black);
+        }
+        .error-message {
+            font-size: 24px;
+            color: var(--bus-black);
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+        .bus-animation {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: drive 3s infinite linear;
+        }
+        @keyframes drive {
+            0% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            100% { transform: translateX(-10px); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/common :: navbar}"></div>
+
+<div class="error-container">
+    <div class="bus-animation">🚌💨</div>
+    
+    <div class="error-code">404</div>
+    
+    <div class="error-message">
+        <h2>Wrong Turn!</h2>
+        <p>
+            It looks like this bus stop doesn't exist. Maybe the route changed or the page was moved.
+        </p>
+    </div>
+
+    <a href="/" class="cta-btn">Back to Main Route</a>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/common :: footer}"></div>
+
+</body>
+</html>

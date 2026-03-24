@@ -13,20 +13,21 @@ import java.util.List;
 @Repository
 public interface JobRepository extends JpaRepository<Job, Long> {
 
-    // Paginated filters
+    // --- UPDATED: These specific finders are okay, but if you use them publicly,
+    // you might want to add 'AndApprovedTrue' to them later.
+    // For now, your controller primarily uses searchJobs, which we are fixing below. ---
+
     Page<Job> findByCategoryIgnoreCase(String category, Pageable pageable);
-
     Page<Job> findByLocationIgnoreCase(String location, Pageable pageable);
-
     Page<Job> findByCompanyIgnoreCase(String company, Pageable pageable);
-
     Page<Job> findByWorkTypeIgnoreCase(String workType, Pageable pageable);
 
-    // Cleaner search query for job board using COALESCE for null/empty handling
+    // --- UPDATED: Added "j.approved = true" to the query ---
     @Query("""
         SELECT j FROM Job j
         WHERE
-            (LOWER(j.title) LIKE LOWER(CONCAT('%', COALESCE(:keyword, ''), '%'))
+            j.approved = true
+            AND (LOWER(j.title) LIKE LOWER(CONCAT('%', COALESCE(:keyword, ''), '%'))
              OR LOWER(j.description) LIKE LOWER(CONCAT('%', COALESCE(:keyword, ''), '%')))
             AND LOWER(j.location) LIKE LOWER(CONCAT('%', COALESCE(:location, ''), '%'))
             AND LOWER(j.category) LIKE LOWER(CONCAT('%', COALESCE(:category, ''), '%'))
@@ -44,5 +45,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     // ✅ Check for duplicate jobs
     boolean existsByTitleAndCompanyAndLocation(String title, String company, String location);
 
-    List<Job> findTop3ByOrderByCreatedAtDesc();
+    // --- UPDATED: Changed method name to include 'ByApprovedTrue' ---
+    List<Job> findTop3ByApprovedTrueOrderByCreatedAtDesc();
 }

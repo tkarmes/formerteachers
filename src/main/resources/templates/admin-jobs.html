@@ -98,16 +98,27 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="job : ${jobs}">
+        <tr th:each="job : ${jobs}" th:style="${!job.approved} ? 'background-color: #fff3cd;' : ''">
             <td th:text="${job.title}"></td>
             <td th:text="${job.company}"></td>
-            <td th:text="${job.category}"></td>
             <td>
-                <span th:text="${job.postedDate}"></span>
-                <span th:if="${job.postedDate.contains('today')}" class="new-badge">New</span>
+                <span th:text="${job.category}"></span>
+                <!-- Show Pending Badge if not approved -->
+                <div th:if="${!job.approved}" style="color: #856404; font-weight:bold; font-size: 0.8rem; margin-top:5px;">
+                    ⚠️ PENDING
+                </div>
             </td>
             <td>
+                <span th:text="${job.postedDate}"></span>
+            </td>
+            <td>
+                <!-- APPROVE BUTTON (Only shows if not approved) -->
+                <form th:if="${!job.approved}" th:action="@{/jobs/admin/jobs/{id}/approve(id=${job.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn" style="background-color: #28a745; color: white;">Approve</button>
+                </form>
+
                 <a th:href="@{/jobs/admin/jobs/{id}/edit(id=${job.id})}" class="btn btn-edit">Edit</a>
+
                 <form th:action="@{/jobs/admin/jobs/{id}/delete(id=${job.id})}" method="post" style="display:inline;">
                     <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure?')">Delete</button>
                 </form>

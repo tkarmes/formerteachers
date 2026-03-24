@@ -5,34 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${job.title} + ' - FormerTeachers'">Job Detail</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <!-- ================================================== -->
+    <!-- START: Google for Jobs Structured Data (JSON-LD)   -->
+    <!-- ================================================== -->
+    <script type="application/ld+json" th:inline="javascript">
+        {
+            "@context" : "https://schema.org/",
+            "@type" : "JobPosting",
+            "title" : /*[[${job.title}]]*/ "Job Title",
+            "description" : /*[[${job.description ?: ''}]]*/ "Job description here.",
+
+            /* SAFE DATE HANDLING */
+            "datePosted" : /*[[${job.createdAt != null ? #temporals.formatISO(job.createdAt) : ''}]]*/ "2026-03-23",
+            "validThrough" : /*[[${job.createdAt != null ? #temporals.formatISO(job.createdAt.plusDays(60)) : ''}]]*/ "2026-05-22",
+
+            "hiringOrganization" : {
+                "@type" : "Organization",
+                "name" : /*[[${job.company}]]*/ "Company Name",
+                "url" : "https://www.formerteachers.com"
+            },
+            "jobLocation": {
+                "@type": "Place",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": /*[[${job.location ?: 'Remote'}]]*/ "Remote"
+                }
+            },
+            "employmentType": /*[[${job.workType == 'Full Time' ? 'FULL_TIME' : (job.workType == 'Part Time' ? 'PART_TIME' : (job.workType == 'Contract' ? 'CONTRACTOR' : 'OTHER'))}]]*/ "FULL_TIME"
+        }
+    </script>
+    <!-- ================================================== -->
+    <!-- END: Google for Jobs Structured Data               -->
+    <!-- ================================================== -->
+
 </head>
 
 <body>
 
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="/" class="logo">FormerTeachers</a>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new" class="post-job">Post a Job</a>
-            
-            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
-            <a href="/login" sec:authorize="isAnonymous()">Login</a>
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
+<!-- IMPORT NAVBAR -->
+<div th:replace="~{fragments/common :: navbar}"></div>
 
 <div class="container">
     <div class="job-detail-card">
         <div class="job-detail-header">
             <h1 th:text="${job.title}">Job Title</h1>
-            <h3 style="color:var(--text-muted); margin-bottom:15px;" th:text="${job.company}">Company Name</h3>
-            
+            <h3 style="color:var(--text-muted, #666); margin-bottom:15px;" th:text="${job.company}">Company Name</h3>
+
             <div class="job-detail-meta">
                 <span>📍 <span th:text="${job.location ?: 'Remote'}"></span></span>
                 <span>💰 <span th:text="${job.salaryRange ?: 'Competitive'}"></span></span>
@@ -44,23 +63,29 @@
 
         <div class="job-detail-body">
             <h3>Job Description</h3>
-            <div th:utext="${job.description ?: '(No description provided)'}"></div>
+            <div th:utext="${job.description != null ? #strings.replace(job.description, '\n', '<br>') : '(No description provided)'}"></div>
         </div>
 
         <!-- Apply Section -->
-        <div class="apply-section">
+        <div class="apply-section" style="padding: 30px; background-color: #fcfcfc;">
             <div th:if="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}">
+                <!-- Case 1: It's a URL -->
                 <div th:if="${#strings.startsWith(job.applyInfo, 'http')}">
                     <a th:href="${job.applyInfo}" target="_blank" rel="noopener noreferrer" class="cta-btn">
                         Apply Now
                     </a>
                     <p style="margin-top:15px; font-size:14px; color:#666;">You will be redirected to the company's application page.</p>
                 </div>
+                <!-- Case 2: It's text (like an email) -->
+                <div th:unless="${#strings.startsWith(job.applyInfo, 'http')}">
+                    <h4 style="margin-top:0; color:var(--chalkboard-green);">How to Apply:</h4>
+                    <p th:text="${job.applyInfo}" style="font-size: 1.1rem;"></p>
+                </div>
             </div>
-
-            <div th:if="${!(job.applyInfo != null and #strings.startsWith(job.applyInfo, 'http'))}" style="background:#f0f7f4; padding:20px; border-radius:6px; border:1px solid #d1e7dd; display:inline-block; text-align:left;">
+            <!-- Case 3: No apply info provided -->
+            <div th:if="${job.applyInfo == null or #strings.isEmpty(job.applyInfo)}">
                 <h4 style="margin-top:0; color:var(--chalkboard-green);">How to Apply:</h4>
-                <span th:utext="${job.applyInfo ?: 'Contact company directly.'}"></span>
+                <p>Contact the company directly for application instructions.</p>
             </div>
         </div>
     </div>
@@ -70,24 +95,8 @@
     </div>
 </div>
 
-<footer>
-    <div class="container">
-        <p style="font-size:24px; margin-bottom:8px; color:var(--bus-yellow); font-weight:bold;">FormerTeachers</p>
-        <p style="max-width:620px; margin:0 auto 25px;">
-            Connecting former teachers with meaningful careers in edtech, instructional design,
-            corporate training, customer education, and beyond.
-        </p>
-        <div>
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new">Post a Job</a>
-        </div>
-        <p style="font-size:14px; margin-top:30px;">
-            © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
-        </p>
-    </div>
-</footer>
+<!-- IMPORT FOOTER -->
+<div th:replace="~{fragments/common :: footer}"></div>
 
 </body>
 </html>

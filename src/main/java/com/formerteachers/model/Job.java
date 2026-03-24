@@ -23,9 +23,15 @@ public class Job {
     private String salaryRange;
 
     @NotBlank(message = "Description is required")
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(nullable = false)
+    private boolean approved = false;
+
+    // --- UPDATED: Added validation here ---
+    @NotBlank(message = "Category is required")
     private String category;
 
     private String workType;
@@ -91,4 +97,13 @@ public class Job {
     public LocalDateTime getCreatedAt() { return createdAt; }
 
     public String getPostedDate() { return postedDate; }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
 }

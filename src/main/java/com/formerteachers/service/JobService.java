@@ -45,46 +45,6 @@ public class JobService {
         return jobRepository.findById(id);
     }
 
-    // GET jobs by company
-    public Page<Job> getJobsByCompany(String company, Pageable pageable) {
-        Pageable sortedPageable = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                Sort.by("createdAt").descending()
-        );
-        return jobRepository.findByCompanyIgnoreCase(company, sortedPageable);
-    }
-
-    // GET jobs by category
-    public Page<Job> getJobsByCategory(String category, Pageable pageable) {
-        Pageable sortedPageable = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                Sort.by("createdAt").descending()
-        );
-        return jobRepository.findByCategoryIgnoreCase(category, sortedPageable);
-    }
-
-    // GET jobs by location
-    public Page<Job> getJobsByLocation(String location, Pageable pageable) {
-        Pageable sortedPageable = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                Sort.by("createdAt").descending()
-        );
-        return jobRepository.findByLocationIgnoreCase(location, sortedPageable);
-    }
-
-    // GET jobs by work type
-    public Page<Job> getJobsByWorkType(String workType, Pageable pageable) {
-        Pageable sortedPageable = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                Sort.by("createdAt").descending()
-        );
-        return jobRepository.findByWorkTypeIgnoreCase(workType, sortedPageable);
-    }
-
     // SEARCH jobs with combined filters
     public Page<Job> searchJobs(String keyword, String location, String category, String workType, Pageable pageable) {
         Pageable sortedPageable = PageRequest.of(
@@ -105,21 +65,12 @@ public class JobService {
         jobRepository.delete(job);
     }
 
-    // GET featured jobs (top 3 newest)
+    // GET featured jobs (top 3 newest APPROVED jobs)
     public List<Job> getFeaturedJobs() {
-        return jobRepository.findTop3ByOrderByCreatedAtDesc();
+        return jobRepository.findTop3ByApprovedTrueOrderByCreatedAtDesc();
     }
 
     public List<Job> saveAll(List<Job> jobs) {
         return jobRepository.saveAll(jobs);
-    }
-
-    // CHECK if job exists by title/company/location
-    public boolean jobExists(Job job) {
-        return jobRepository.existsByTitleAndCompanyAndLocation(
-                job.getTitle(),
-                job.getCompany(),
-                job.getLocation()
-        );
     }
 }

@@ -63,7 +63,11 @@
 
         <div class="job-detail-body">
             <h3>Job Description</h3>
-            <div th:utext="${job.description != null ? #strings.replace(job.description, '\n', '<br>') : '(No description provided)'}"></div>
+            <!-- UPDATED: Removed the #strings.replace logic.
+                 We trust the HTML because Admins approve it. -->
+            <div class="description-content"
+                 th:utext="${job.description != null ? job.description : '(No description provided)'}">
+            </div>
         </div>
 
         <!-- Apply Section -->

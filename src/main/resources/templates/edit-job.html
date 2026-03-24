@@ -5,83 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Job - FormerTeachers</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <!-- Use Cloudflare CDN (Open Source version) instead of Tiny Cloud -->
+    <!-- This removes the need for an API key and fixes the unclickable issue -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <style>
+        /* Mirroring the modern grid layout from create-job */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .full-width {
+            grid-column: span 2;
+        }
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+        }
+    </style>
 </head>
+
 <body>
 
 <!-- IMPORT NAVBAR -->
 <div th:replace="~{fragments/common :: navbar}"></div>
 
 <div class="container">
-    <div class="form-box">
-        <h1 style="text-align: center; margin-bottom: 30px;">Edit Job</h1>
+    <div class="form-box" style="max-width: 800px;">
+        <h1 style="text-align: center; margin-bottom: 20px;">Edit Job</h1>
 
+        <form th:action="@{/jobs/admin/jobs/update/{id}(id=${job.id})}" th:object="${job}" method="post" class="form-grid">
 
-        <form th:action="@{/jobs/admin/jobs/update/{id}(id=${job.id})}" th:object="${job}" method="post">
-            <div class="form-group">
+            <!-- 1. Job Title -->
+            <div class="form-group full-width">
                 <label for="title">Job Title *</label>
                 <input type="text" id="title" th:field="*{title}" class="form-control" required />
-                <span style="color:red;" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
             </div>
 
+            <!-- 2. Company -->
             <div class="form-group">
-                <label for="company">Company *</label>
+                <label for="company">Company Name *</label>
                 <input type="text" id="company" th:field="*{company}" class="form-control" required />
-                <span style="color:red;" th:if="${#fields.hasErrors('company')}" th:errors="*{company}"></span>
             </div>
 
+            <!-- 3. Location -->
             <div class="form-group">
                 <label for="location">Location</label>
                 <input type="text" id="location" th:field="*{location}" class="form-control" />
             </div>
 
-            <div class="form-group">
-                <label for="salaryRange">Salary Range</label>
-                <input type="text" id="salaryRange" th:field="*{salaryRange}" class="form-control" />
-            </div>
-
+            <!-- 4. Category -->
             <div class="form-group">
                 <label for="category">Category *</label>
                 <select id="category" th:field="*{category}" class="form-control" required>
-                    <option value="">Select a category...</option>
+                    <option value="" disabled>Select a Category</option>
                     <option value="Instructional Design">Instructional Design</option>
-                    <option value="Learning & Development">Learning & Development</option>
                     <option value="Corporate Training">Corporate Training</option>
-                    <option value="Curriculum Development">Curriculum Development</option>
-                    <option value="Customer Education">Customer Education / Success</option>
-                    <option value="EdTech">EdTech (Sales, Support, Product)</option>
-                    <option value="Talent Development">Talent Development</option>
-                    <option value="eLearning">eLearning Specialist</option>
-                    <option value="Other">Other (please specify in description)</option>
+                    <option value="Customer Success">Customer Success</option>
+                    <option value="EdTech Sales">EdTech Sales</option>
+                    <option value="Project Management">Project Management</option>
+                    <option value="Software Engineering">Software Engineering</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
 
+            <!-- 5. Work Type -->
             <div class="form-group">
                 <label for="workType">Work Type</label>
                 <select id="workType" th:field="*{workType}" class="form-control">
-                    <option value="">Select...</option>
                     <option value="Full Time">Full Time</option>
                     <option value="Part Time">Part Time</option>
                     <option value="Contract">Contract</option>
-                    <option value="Remote">Remote Only</option>
-                    <option value="Hybrid">Hybrid</option>
+                    <option value="Remote">Remote</option>
                 </select>
             </div>
 
+            <!-- 6. Salary -->
             <div class="form-group">
-                <label for="applyInfo">How to Apply</label>
+                <label for="salaryRange">Salary Range (Optional)</label>
+                <input type="text" id="salaryRange" th:field="*{salaryRange}" class="form-control" />
+            </div>
+
+            <!-- 7. Application Info -->
+            <div class="form-group full-width">
+                <label for="applyInfo">How to Apply (URL or Email)</label>
                 <input type="text" id="applyInfo" th:field="*{applyInfo}" class="form-control" />
             </div>
 
-            <div class="form-group">
-                <label for="description">Description *</label>
-                <textarea id="description" th:field="*{description}" class="form-control" required style="min-height: 150px;"></textarea>
-                <span style="color:red;" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            <!-- 8. Description (Rich Text) -->
+            <div class="form-group full-width">
+                <label for="description">Job Description *</label>
+                <textarea id="description" th:field="*{description}" class="form-control" style="min-height: 300px;"></textarea>
             </div>
 
-            <button type="submit" class="cta-btn btn-submit">Save Changes</button>
+            <!-- Submit Button -->
+            <div class="full-width" style="margin-top: 10px;">
+                <button type="submit" class="cta-btn btn-submit">Update Job</button>
+            </div>
+
         </form>
 
-        <div style="text-align: center;">
+        <div style="text-align: center; margin-top: 20px;">
             <a href="/jobs/admin" class="back-link">← Cancel</a>
         </div>
     </div>
@@ -89,6 +115,19 @@
 
 <!-- IMPORT FOOTER -->
 <div th:replace="~{fragments/common :: footer}"></div>
+
+<!-- Initialize TinyMCE -->
+<script>
+    tinymce.init({
+        selector: '#description',
+        plugins: 'lists link image preview',
+        toolbar: 'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright | bullist numlist | link',
+        menubar: false,
+        branding: false,
+        promotion: false, /* Hides the 'Upgrade' button */
+        height: 300
+    });
+</script>
 
 </body>
 </html>

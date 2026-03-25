@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.formerteachers.util.DateFormatter;
 
 @Entity
+@Table(name = "jobs")
 public class Job {
 
     @Id
@@ -23,14 +24,12 @@ public class Job {
     private String salaryRange;
 
     @NotBlank(message = "Description is required")
-
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
     private boolean approved = false;
 
-    // --- UPDATED: Added validation here ---
     @NotBlank(message = "Category is required")
     private String category;
 
@@ -42,6 +41,10 @@ public class Job {
 
     @Transient
     private String postedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "employer_id")
+    private EmployerProfile employer;
 
     public Job() {}
 
@@ -106,4 +109,11 @@ public class Job {
         this.approved = approved;
     }
 
+    public EmployerProfile getEmployer() {
+        return employer;
+    }
+
+    public void setEmployer(EmployerProfile employer) {
+        this.employer = employer;
+    }
 }

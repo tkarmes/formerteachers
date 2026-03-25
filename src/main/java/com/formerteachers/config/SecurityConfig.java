@@ -3,9 +3,7 @@ package com.formerteachers.config;
 import com.formerteachers.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +22,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/", "/login", "/employer-signup", "/jobs", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/jobs/create").hasAnyRole("ADMIN", "EMPLOYER")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

@@ -6,14 +6,10 @@ import com.formerteachers.dto.JobPageDTO;
 import com.formerteachers.service.JobService;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -28,10 +24,6 @@ public class JobRestController {
         this.jobService = jobService;
     }
 
-
-    // ===============================
-    // HELPER: Job → DTO
-    // ===============================
     private JobDTO toDTO(Job job) {
         return new JobDTO(
                 job.getId(),
@@ -61,20 +53,21 @@ public class JobRestController {
         );
     }
 
-    // ===============================
-    // API ENDPOINTS
-    // ===============================
-
     @GetMapping
-    public JobPageDTO getAllJobs(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        return toJobPageDTO(jobService.getAllJobs(pageable));
+    public JobPageDTO getAllJobs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return toJobPageDTO(jobService.getApprovedJobs(null, null, null, null, page, size));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<JobDTO> getJobById(@PathVariable Long id) {
-        return jobService.getJobById(id)
-                .map(job -> ResponseEntity.ok(toDTO(job)))
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            Job job = jobService.getJobById(id);
+            return ResponseEntity.ok(toDTO(job));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/search")
@@ -83,14 +76,15 @@ public class JobRestController {
             @RequestParam(required = false) String location,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String workType,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        return toJobPageDTO(jobService.searchJobs(keyword, location, category, workType, pageable));
+        return toJobPageDTO(jobService.getApprovedJobs(keyword, location, category, workType, page, size));
     }
 
     @PostMapping
     public ResponseEntity<JobDTO> createJob(@Valid @RequestBody Job job) {
-        Job savedJob = jobService.save(job);
+        Job savedJob = jobService.saveJob(job);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -99,30 +93,9 @@ public class JobRestController {
         return ResponseEntity.created(location).body(toDTO(savedJob));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<JobDTO> updateJob(@PathVariable Long id, @Valid @RequestBody Job updatedJob) {
-        return jobService.getJobById(id)
-                .map(job -> {
-                    job.setTitle(updatedJob.getTitle());
-                    job.setCompany(updatedJob.getCompany());
-                    job.setLocation(updatedJob.getLocation());
-                    job.setSalaryRange(updatedJob.getSalaryRange());
-                    job.setDescription(updatedJob.getDescription());
-                    job.setCategory(updatedJob.getCategory());
-                    job.setWorkType(updatedJob.getWorkType());
-                    Job savedJob = jobService.save(job);
-                    return ResponseEntity.ok(toDTO(savedJob));
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteJob(@PathVariable Long id) {
-        return jobService.getJobById(id)
-                .map(job -> {
-                    jobService.delete(job);
-                    return ResponseEntity.noContent().<Void>build();
-                })
-                .orElse(ResponseEntity.notFound().build());
+        jobService.deleteJobById(id);
+        return ResponseEntity.noContent().build();
     }
 }

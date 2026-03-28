@@ -6,49 +6,52 @@
     <title>Login - FormerTeachers</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
 
 <div th:replace="~{fragments/common :: navbar}"></div>
 
-<div class="container" style="max-width: 500px; margin: 50px auto;">
-    <div class="form-box shadow-sm p-4 rounded bg-white">
-        <h2 style="text-align: center; margin-bottom: 20px;">Login</h2>
+<div class="form-box shadow-sm" style="margin: 60px auto; max-width: 450px; padding: 40px;">
+    <h2 style="text-align: center; margin-bottom: 30px; color: var(--bus-black); text-transform: uppercase; letter-spacing: 1px;">Login</h2>
 
-        <div th:if="${param.error}" class="error" style="color: red; margin-bottom: 15px; text-align: center;">
-            Invalid username or password.
-        </div>
-        <div th:if="${param.logout}" class="success" style="color: green; margin-bottom: 15px; text-align: center;">
-            You have been logged out.
-        </div>
-        <div th:if="${param.employerRegistered}" class="success" style="color: var(--chalkboard-green); font-weight: bold; margin-bottom: 15px; text-align: center;">
-            Registration successful! Please log in below.
-        </div>
-
-        <form th:action="@{/login}" method="post">
-            <div class="form-group mb-3">
-                <label for="username">Email Address</label>
-                <input type="text" id="username" name="username" class="form-control" required autofocus>
-            </div>
-
-            <div class="form-group mb-4">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" required>
-            </div>
-
-            <button type="submit" class="cta-btn btn-submit" style="width: 100%;">Sign In</button>
-        </form>
-
-        <hr class="my-4">
-        
-        <div class="text-center">
-            <p class="mb-2">Are you an employer?</p>
-            <a th:href="@{/employer-signup}" class="cta-btn secondary-btn" style="text-decoration: none; padding: 10px 20px; font-weight: bold; font-size: 0.9em;">Create Employer Account</a>
-        </div>
-
-        <p style="text-align: center; margin-top: 25px;">
-            <a href="/" style="color: var(--chalkboard-green); text-decoration: none;">&larr; Back to Home</a>
-        </p>
+    <!-- Success and Error Messages -->
+    <div th:if="${param.error}" class="error" style="text-align: center; margin-bottom: 20px; padding: 10px; border: 1px solid var(--error-red); border-radius: 4px;">
+        Invalid username or password.
     </div>
+    
+    <div th:if="${param.logout}" class="success">
+        You have been logged out.
+    </div>
+    
+    <div th:if="${param.employerRegistered}" class="success">
+        Registration successful! Please log in below.
+    </div>
+
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label for="username">Username or Email</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required autofocus autocomplete="username">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="cta-btn btn-submit" style="width: 100%; border: none; cursor: pointer; margin-top: 10px;">Sign In</button>
+    </form>
+
+    <div style="margin: 30px 0; border-top: 1px solid #eee; position: relative; text-align: center;">
+        <span style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 15px; color: #888; font-size: 0.9rem;">OR</span>
+    </div>
+    
+    <div style="text-align: center;">
+        <p style="margin-bottom: 15px; color: #666;">Are you an employer looking for talent?</p>
+        <a th:href="@{/employer-signup}" class="cta-btn btn-secondary" style="text-decoration: none; display: block; border-width: 2px;">Create Employer Account</a>
+    </div>
+
+    <p style="text-align: center; margin-top: 30px;">
+        <a href="/" style="color: var(--chalkboard-green); text-decoration: none; font-weight: bold;">&larr; Back to Home</a>
+    </p>
 </div>
 
 <div th:replace="~{fragments/common :: footer}"></div>

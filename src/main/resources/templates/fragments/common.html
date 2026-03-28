@@ -1,60 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
     <meta charset="UTF-8">
-    <title>Common Fragments</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | Former Teachers Job Board'">Former Teachers Job Board</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
-<!--
-  This is the reusable Navbar.
-  Notice the attribute: th:fragment="navbar"
--->
-<nav class="navbar" th:fragment="navbar">
-    <div class="nav-container">
-        <a href="/" class="logo">FormerTeachers</a>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new" class="post-job">Post a Job</a>
+    <nav th:fragment="navbar" class="navbar">
+        <div class="nav-container">
+            <a class="logo" href="/">🍎 FormerTeachers</a>
+            
+            <div class="nav-links">
+                <a href="/jobs">Browse Jobs</a>
+                
+                <!-- Employer specific -->
+                <a sec:authorize="hasRole('EMPLOYER')" href="/jobs/dashboard" style="color: var(--bus-yellow);">Employer Dashboard</a>
+                
+                <!-- Admin specific -->
+                <a sec:authorize="hasRole('ADMIN')" href="/admin/dashboard" style="color: #ff5722;">Admin Dashboard</a>
 
-            <!-- Admin Link (Only visible to ADMIN) -->
-            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
+                <a sec:authorize="hasAnyRole('EMPLOYER', 'ADMIN')" href="/jobs/create" class="post-job">Post a Job</a>
 
-            <!-- Login Link (Only visible if NOT logged in) -->
-            <a href="/login" sec:authorize="isAnonymous()">Login</a>
-
-            <!-- Logout Button (Only visible if logged in) -->
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
+                <!-- Auth links -->
+                <a sec:authorize="!isAuthenticated()" href="/login">Login</a>
+                
+                <span sec:authorize="isAuthenticated()" style="display: inline-flex; align-items: center;">
+                    <span style="color: white; margin-left: 20px; opacity: 0.8; font-size: 0.9rem;">
+                        Hi, <span sec:authentication="name">User</span>
+                    </span>
+                    <form th:action="@{/logout}" method="post" style="display: inline; margin: 0;">
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </span>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!--
-  This is the reusable Footer.
-  Notice the attribute: th:fragment="footer"
--->
-<footer th:fragment="footer">
-    <div class="container">
-        <p style="font-size:24px; margin-bottom:8px; color:var(--bus-yellow); font-weight:bold;">FormerTeachers</p>
-        <p style="max-width:620px; margin:0 auto 25px;">
-            Connecting former teachers with meaningful careers in edtech, instructional design,
-            corporate training, customer education, and beyond.
-        </p>
-        <div>
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new">Post a Job</a>
+    <footer th:fragment="footer">
+        <div class="container">
+            <p>&copy; 2024 Former Teachers Job Board</p>
+            <p style="font-size: 0.8rem; opacity: 0.7;">Empowering educators to find their next chapter.</p>
         </div>
-        <p style="font-size:14px; margin-top:30px;">
-            © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
-        </p>
-    </div>
-</footer>
+    </footer>
 
 </body>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard - Former Teachers</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+
+    <div th:replace="~{fragments/common :: navbar}"></div>
+
+    <div class="content-wrapper" style="padding: 40px 20px;">
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <h1 class="bus-title" style="text-align: center; margin-bottom: 30px;">Admin Dashboard</h1>
+
+            <div th:if="${param.approved}" class="success" style="text-align: center; margin-bottom: 20px;">
+                Job approved successfully! 🍎
+            </div>
+            <div th:if="${param.deleted}" class="success" style="text-align: center; margin-bottom: 20px; border-color: #f44336; color: #f44336;">
+                Job deleted.
+            </div>
+
+            <div class="form-box shadow-sm" style="width: 100%; max-width: 100%; padding: 30px;">
+                <h2 style="margin-top: 0; color: var(--bus-black);">Pending Approvals</h2>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--bus-yellow);">
+                            <th style="text-align: left; padding: 12px;">Job Title</th>
+                            <th style="text-align: left; padding: 12px;">Company</th>
+                            <th style="text-align: left; padding: 12px;">Posted Date</th>
+                            <th style="text-align: center; padding: 12px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="job : ${pendingJobs}" style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 12px;" th:text="${job.title}">Job Title</td>
+                            <td style="padding: 12px;" th:text="${job.employer != null ? job.employer.companyName : 'Self-Posted'}">Company</td>
+                            <td style="padding: 12px;" th:text="${#temporals.format(job.createdAt, 'MMM dd, yyyy')}">Date</td>
+                            <td style="padding: 12px; text-align: center; display: flex; gap: 10px; justify-content: center;">
+                                <form th:action="@{/admin/approve/{id}(id=${job.id})}" method="post">
+                                    <button type="submit" class="cta-btn" style="padding: 8px 15px; font-size: 0.9rem;">Approve</button>
+                                </form>
+                                <form th:action="@{/admin/delete/{id}(id=${job.id})}" method="post" onsubmit="return confirm('Delete this job post?')">
+                                    <button type="submit" class="cta-btn" style="padding: 8px 15px; font-size: 0.9rem; background-color: #f44336;">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(pendingJobs)}">
+                            <td colspan="4" style="text-align: center; padding: 30px; color: #777;">
+                                No pending jobs to approve. Nice work! 🚌
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

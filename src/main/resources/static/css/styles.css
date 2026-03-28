@@ -5,6 +5,8 @@
     --white: #FFFFFF;
     --light-gray: #F5F5F5;
     --dark-stripe: #000000;
+    --success-green: #2e7d32;
+    --error-red: #d32f2f;
 }
 
 body {
@@ -445,9 +447,20 @@ footer a:hover {
     color: var(--bus-yellow);
 }
 
-/* Error */
+/* Status Messages */
 .error {
-    color: #D32F2F;
+    color: var(--error-red);
     font-weight: bold;
     margin-top: 5px;
+}
+
+.success {
+    background-color: #e8f5e9;
+    color: var(--success-green);
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 5px solid var(--success-green);
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 500;
 }

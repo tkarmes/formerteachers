@@ -1,142 +1,97 @@
 package com.formerteachers.controller;
 
+import com.formerteachers.model.EmployerProfile;
 import com.formerteachers.model.Job;
+import com.formerteachers.model.User;
+import com.formerteachers.repository.EmployerProfileRepository;
+import com.formerteachers.repository.UserRepository;
 import com.formerteachers.service.JobService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import jakarta.validation.Valid;
-import org.springframework.validation.BindingResult;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/jobs")
 public class JobViewController {
 
     private final JobService jobService;
+    private final EmployerProfileRepository employerProfileRepository;
+    private final UserRepository userRepository;
 
-    public JobViewController(JobService jobService) {
+    @Autowired
+    public JobViewController(JobService jobService, 
+                             EmployerProfileRepository employerProfileRepository, 
+                             UserRepository userRepository) {
         this.jobService = jobService;
+        this.employerProfileRepository = employerProfileRepository;
+        this.userRepository = userRepository;
     }
 
-    // Public: Browse jobs
     @GetMapping
-    public String listJobs(
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) String workType,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            Model model) {
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Job> jobs = jobService.searchJobs(keyword, location, category, workType, pageable);
-
-        model.addAttribute("jobs", jobs);
+    public String listJobs(Model model,
+                           @RequestParam(required = false) String keyword,
+                           @RequestParam(required = false) String location,
+                           @RequestParam(required = false) String category,
+                           @RequestParam(required = false) String workType,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "10") int size) {
+        
+        Page<Job> jobPage = jobService.getApprovedJobs(keyword, location, category, workType, page, size);
+        
+        model.addAttribute("jobs", jobPage.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", jobs.getTotalPages());
+        model.addAttribute("totalPages", jobPage.getTotalPages());
         model.addAttribute("keyword", keyword);
         model.addAttribute("location", location);
-        model.addAttribute("category", category);
-        model.addAttribute("workType", workType);
-
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("selectedWorkType", workType);
+        
         return "jobs";
     }
 
-    // Public: View single job
     @GetMapping("/{id}")
     public String viewJob(@PathVariable Long id, Model model) {
-        Job job = jobService.getJobById(id).orElseThrow();
+        Job job = jobService.getJobById(id);
         model.addAttribute("job", job);
         return "job-detail";
     }
 
-    // Public: Show create form
-    @GetMapping("/new")
-    public String showCreateForm(Model model) {
+    @GetMapping("/create")
+    public String showCreateJobForm(Model model) {
         model.addAttribute("job", new Job());
         return "create-job";
     }
 
-    // Public: Save new job
-    @PostMapping
-    public String createJob(@Valid @ModelAttribute Job job, BindingResult result, RedirectAttributes redirect, Model model) {
-        if (result.hasErrors()) {
-            return "create-job";
-        }
-
-        // Explicitly set approved to false (just to be safe)
-        job.setApproved(false);
-        jobService.save(job);
-
-        // Success message
-        redirect.addFlashAttribute("successMessage", "Job submitted successfully! It will be visible after admin approval.");
-        return "redirect:/jobs";
+    @PostMapping("/create")
+    public String createJob(@ModelAttribute Job job) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+        
+        EmployerProfile employer = employerProfileRepository.findByUser(user).orElseThrow();
+        job.setEmployer(employer);
+        job.setApproved(false); // New jobs require approval
+        
+        jobService.saveJob(job);
+        return "redirect:/jobs/dashboard?created=true";
     }
 
-    // ====================== ADMIN SECTION ======================
-
-    @GetMapping("/admin")
-    public String adminJobs(@RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "20") int size,
-                            Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Job> jobsPage = jobService.getAllJobs(pageable);
-
-        model.addAttribute("jobs", jobsPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", jobsPage.getTotalPages());
-
-        return "admin-jobs";
-    }
-
-    // Admin: Show edit form
-    @GetMapping("/admin/jobs/{id}/edit")
-    public String adminShowEditForm(@PathVariable Long id, Model model) {
-        Job job = jobService.getJobById(id).orElseThrow();
-        model.addAttribute("job", job);
-        return "edit-job";
-    }
-
-    // Admin: Save edited job
-    @PostMapping("/admin/jobs/update/{id}")
-    public String adminUpdateJob(@PathVariable Long id, @ModelAttribute Job updatedJob) {
-        Job job = jobService.getJobById(id).orElseThrow();
-        job.setTitle(updatedJob.getTitle());
-        job.setCompany(updatedJob.getCompany());
-        job.setLocation(updatedJob.getLocation());
-        job.setSalaryRange(updatedJob.getSalaryRange());
-        job.setDescription(updatedJob.getDescription());
-        job.setCategory(updatedJob.getCategory());
-        job.setWorkType(updatedJob.getWorkType());
-        job.setApplyInfo(updatedJob.getApplyInfo());
-
-        jobService.save(job);
-        return "redirect:/jobs/admin";
-    }
-
-    // Admin: Delete job
-    @PostMapping("/admin/jobs/{id}/delete")
-    public String adminDeleteJob(@PathVariable Long id) {
-        jobService.deleteById(id);
-        return "redirect:/jobs/admin";
-    }
-
-    // Admin: Approve job
-    @PostMapping("/admin/jobs/{id}/approve")
-    public String adminApproveJob(@PathVariable Long id) {
-        Job job = jobService.getJobById(id).orElseThrow();
-        job.setApproved(true);
-        jobService.save(job);
-        return "redirect:/jobs/admin";
-    }
-
-    @GetMapping("/for-employers")
-    public String forEmployers() {
-        return "for-employers";
+    @GetMapping("/dashboard")
+    public String employerDashboard(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+        
+        EmployerProfile employer = employerProfileRepository.findByUser(user).orElseThrow();
+        List<Job> employerJobs = jobService.getJobsByEmployer(employer);
+        
+        model.addAttribute("jobs", employerJobs);
+        return "employer-dashboard";
     }
 }

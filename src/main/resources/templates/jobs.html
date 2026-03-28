@@ -1,77 +1,54 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Jobs - FormerTeachers</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head(title='Job Listings')}"></head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
 
-<body>
-
-<!-- IMPORT NAVBAR -->
-<div th:replace="~{fragments/common :: navbar}"></div>
-
-<h1 class="section-title">Browse Jobs</h1>
-
-<div th:if="${successMessage}" style="background:#d4edda; color:#155724; padding:15px; border-radius:6px; margin:20px auto; max-width:900px; text-align:center; border:1px solid #c3e6cb;">
-    <strong th:text="${successMessage}"></strong>
-</div>
-
-<!-- Search Bar -->
-<form class="search-bar" th:action="@{/jobs}" method="get">
-    <input type="text" name="keyword" placeholder="Keyword" th:value="${keyword}">
-    <input type="text" name="location" placeholder="Location" th:value="${location}">
-    <input type="text" name="category" placeholder="Category" th:value="${category}">
-    <select name="workType">
-        <option value="">All Work Types</option>
-        <option value="Full Time" th:selected="${workType == 'Full Time'}">Full Time</option>
-        <option value="Part Time" th:selected="${workType == 'Part Time'}">Part Time</option>
-        <option value="Contract" th:selected="${workType == 'Contract'}">Contract</option>
-        <option value="Remote" th:selected="${workType == 'Remote'}">Remote</option>
-    </select>
-    <button type="submit">Search</button>
-</form>
-
-<!-- Results Count -->
-<p style="text-align: center; margin-bottom: 20px; color: #666;">
-    Found <strong th:text="${jobs.totalElements}">0</strong> jobs matching your criteria
-</p>
-
-<div class="job-list">
-    <a class="job-card" th:each="job : ${jobs.content}" th:href="@{/jobs/{id}(id=${job.id})}">
-        <div class="job-info">
-            <h3 th:text="${job.title}">Job Title</h3>
-            <span class="company" th:text="${job.company}">Company</span>
-            <div style="font-size:14px; color:#555;">
-                <span th:text="${job.location}"></span> •
-                <span th:if="${job.salaryRange != null}" th:text="${job.salaryRange}"></span>
-            </div>
-            <div style="color:#555; font-size:14px; margin-top:12px; line-height:1.5;">
-                <span th:utext="${job.description != null ? #strings.abbreviate(job.description, 150) : '(No description)'}"></span>
+    <div class="container mt-5">
+        <h2 class="mb-4">Available Roles for Educators</h2>
+        
+        <div class="row">
+            <div th:each="job : ${jobs}" class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-0 job-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title fw-bold mb-0" th:text="${job.title}">Job Title</h5>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle" th:text="${job.workType}">Work Type</span>
+                        </div>
+                        <h6 class="card-subtitle mb-3 text-secondary" th:text="${job.company}">Company</h6>
+                        
+                        <div class="mb-3">
+                            <span class="me-3 text-muted small">📍 <span th:text="${job.location ?: 'Remote'}"></span></span>
+                            <span class="text-muted small">💰 <span th:text="${job.salaryRange ?: 'Competitive'}"></span></span>
+                        </div>
+                        
+                        <p class="card-text text-truncate-3" th:text="${#strings.abbreviate(job.description, 150)}"></p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <small class="text-muted" th:text="'Posted ' + ${job.postedDate}">Date</small>
+                            <a th:href="@{/jobs/{id}(id=${job.id})}" class="btn btn-outline-primary btn-sm px-4">Details</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="job-meta">
-            <span th:if="${job.postedDate.contains('today')}" class="new-badge">New!</span>
-            <span style="font-size:12px; color:#777;" th:text="${job.postedDate}"></span>
-            <span class="tag" th:text="${job.workType}"></span>
-            <span class="tag" th:text="${job.category}"></span>
-        </div>
-    </a>
-</div>
 
-<div class="pagination">
-    <a th:if="${jobs.hasPrevious()}" th:href="@{/jobs(page=${jobs.number - 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">← Previous</a>
-    <span>Page <span th:text="${jobs.number + 1}"></span> of <span th:text="${jobs.totalPages}"></span></span>
-    <a th:if="${jobs.hasNext()}" th:href="@{/jobs(page=${jobs.number + 1},keyword=${keyword},location=${location},category=${category},workType=${workType})}">Next →</a>
-</div>
+        <!-- Pagination -->
+        <nav th:if="${totalPages > 1}" class="mt-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{/jobs(page=${currentPage - 1})}">Previous</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/jobs(page=${i})}" th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/jobs(page=${currentPage + 1})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 
-<div style="text-align: center; margin: 40px;">
-    <a href="/jobs/new" class="cta-btn">Create New Job</a>
-</div>
-
-<!-- IMPORT FOOTER -->
-<div th:replace="~{fragments/common :: footer}"></div>
-
+    <footer th:replace="~{fragments/common :: footer}"></footer>
 </body>
 </html>

@@ -12,12 +12,13 @@ public class JobDTO {
     private String description;
     private String category;
     private String workType;
+    private String applyInfo;
     private LocalDateTime createdAt;
 
     // Constructor
     public JobDTO(Long id, String title, String company, String location,
                   String salaryRange, String description, String category,
-                  String workType, LocalDateTime createdAt) {
+                  String workType, String applyInfo, LocalDateTime createdAt) {
 
         this.id = id;
         this.title = title;
@@ -27,6 +28,7 @@ public class JobDTO {
         this.description = description;
         this.category = category;
         this.workType = workType;
+        this.applyInfo = applyInfo;
         this.createdAt = createdAt;
     }
 
@@ -54,6 +56,9 @@ public class JobDTO {
 
     public String getWorkType() { return workType; }
     public void setWorkType(String workType) { this.workType = workType; }
+
+    public String getApplyInfo() { return applyInfo; }
+    public void setApplyInfo(String applyInfo) { this.applyInfo = applyInfo; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

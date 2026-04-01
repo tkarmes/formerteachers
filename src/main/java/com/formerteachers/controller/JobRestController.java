@@ -34,6 +34,7 @@ public class JobRestController {
                 job.getDescription(),
                 job.getCategory(),
                 job.getWorkType(),
+                job.getApplyInfo(),
                 job.getCreatedAt()
         );
     }

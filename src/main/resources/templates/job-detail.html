@@ -1,70 +1,118 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head(title=${job.title})}"></head>
-<body class="bg-light">
+<body style="display: flex; flex-direction: column; min-height: 100vh; background-color: #f8fafc;">
 
 <nav th:replace="~{fragments/common :: navbar}"></nav>
 
-<div class="container mt-5 mb-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-5">
-                    <div class="mb-4">
-                        <h1 class="fw-bold mb-1" th:text="${job.title}">Job Title</h1>
-                        <div class="d-flex align-items-center mb-3">
-                            <h4 class="text-secondary mb-0 me-3" th:text="${job.company}">Company Name</h4>
+<main style="flex: 1; padding: 60px 0;">
+    <div class="container" style="max-width: 900px;">
+        <!-- Back Link -->
+        <div style="margin-bottom: 25px;">
+            <a href="/jobs" style="text-decoration: none; color: #64748b; font-weight: 600; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; transition: color 0.2s;" 
+               onmouseover="this.style.color='var(--bus-black)'" onmouseout="this.style.color='#64748b'">
+                &larr; Back to all opportunities
+            </a>
+        </div>
+
+        <div style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);">
+            <!-- Job Header -->
+            <div style="padding: 40px; border-bottom: 1px solid #f1f5f9; background: linear-gradient(to right, #ffffff, #f8fafc);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <div style="flex: 1;">
+                        <h1 style="color: var(--bus-black); font-size: 2.25rem; font-weight: 800; margin-bottom: 10px; line-height: 1.2;" th:text="${job.title}">Job Title</h1>
+                        <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                            <h3 style="color: #475569; font-weight: 600; font-size: 1.25rem; margin: 0;" th:text="${job.company}">Company Name</h3>
+                            
+                            <!-- Company Website Button Fix -->
                             <a th:if="${job.employer != null and job.employer.website != null}" 
-                               th:href="${job.employer.website}" 
+                               th:href="${#strings.startsWith(job.employer.website, 'http') ? job.employer.website : 'https://' + job.employer.website}"
                                target="_blank" 
-                               class="btn btn-sm btn-outline-primary py-0">Visit Website</a>
-                        </div>
-
-                        <div class="d-flex flex-wrap gap-3 text-muted">
-                            <span>📍 <span th:text="${job.location ?: 'Remote'}"></span></span>
-                            <span>💰 <span th:text="${job.salaryRange ?: 'Competitive'}"></span></span>
-                            <span>🏷️ <span th:text="${job.category}"></span></span>
-                            <span>⏰ <span th:text="${job.workType}"></span></span>
-                            <span>📅 Posted <span th:text="${job.postedDate}"></span></span>
+                               class="cta-btn secondary-btn"
+                               style="padding: 6px 12px; font-size: 0.85rem; border: 1px solid #cbd5e1; background: white; color: #475569; text-decoration: none; border-radius: 6px;">
+                               Visit Company Website
+                            </a>
                         </div>
                     </div>
+                    <span class="badge" style="background-color: #f0f4f8; color: #475569; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.9rem;" th:text="${job.workType}">Work Type</span>
+                </div>
 
-                    <hr class="my-4">
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; color: #64748b; font-weight: 500; font-size: 1.05rem;">
+                    <span th:if="${job.location}">📍 <span th:text="${job.location}">Location</span></span>
+                    <span th:if="${job.salaryRange}">💰 <span th:text="${job.salaryRange}">Salary Range</span></span>
+                    <span th:if="${job.category}">🏷️ <span th:text="${job.category}">Category</span></span>
+                    <span>📅 Posted <span th:text="${job.postedDate}">Today</span></span>
+                </div>
+            </div>
 
-                    <div class="job-description mb-5">
-                        <h4 class="fw-bold mb-3">Job Description</h4>
-                        <div class="description-content lh-lg" th:utext="${job.description}">
-                            Job description here.
+            <div style="padding: 40px;">
+                <!-- Job Description Section -->
+                <div style="margin-bottom: 50px;">
+                    <h4 style="color: var(--bus-black); font-weight: 700; font-size: 1.25rem; margin-bottom: 20px; border-left: 5px solid var(--bus-yellow); padding-left: 15px;">Role Overview</h4>
+                    <div style="color: #334155; line-height: 1.8; font-size: 1.1rem; white-space: pre-wrap;" th:text="${job.description}">
+                        Detailed job description content...
+                    </div>
+                </div>
+
+                <!-- How to Apply Section -->
+                <div style="background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; padding: 35px;">
+                    <h4 style="color: var(--bus-black); font-weight: 700; font-size: 1.25rem; margin-bottom: 20px;">Ready to Pivot?</h4>
+                    <p style="color: #475569; margin-bottom: 25px; font-size: 1.05rem;">Follow the employer's instructions below to submit your application for this position.</p>
+                    
+                    <div th:if="${job.applyInfo != null and not #strings.isEmpty(job.applyInfo)}">
+                        <!-- Smart Apply Button (Link) -->
+                        <div th:if="${#strings.contains(job.applyInfo, '.') and not #strings.contains(job.applyInfo, '@')}">
+                            <a th:href="${#strings.startsWith(job.applyInfo, 'http') ? job.applyInfo : 'https://' + job.applyInfo}" 
+                               target="_blank" 
+                               class="cta-btn" 
+                               style="display: block; width: 100%; text-align: center; text-decoration: none; padding: 15px; font-size: 1.1rem;">
+                                Apply Now via Website
+                            </a>
+                            <p style="text-align: center; color: #94a3b8; font-size: 0.85rem; margin-top: 15px; font-weight: 500;">Note: This will open the company's website in a new tab.</p>
+                        </div>
+                        
+                        <!-- Smart Apply Button (Email) -->
+                        <div th:if="${#strings.contains(job.applyInfo, '@')}">
+                            <a th:href="'mailto:' + ${job.applyInfo}" 
+                               class="cta-btn" 
+                               style="display: block; width: 100%; text-align: center; text-decoration: none; padding: 15px; font-size: 1.1rem;">
+                                Apply via Email
+                            </a>
+                            <p style="text-align: center; color: #94a3b8; font-size: 0.85rem; margin-top: 15px; font-weight: 500;">Note: This will open your default email application.</p>
+                        </div>
+                        
+                        <!-- General Text fallback -->
+                        <div th:if="${not #strings.contains(job.applyInfo, '.') and not #strings.contains(job.applyInfo, '@')}"
+                             style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 20px; color: var(--bus-black); font-weight: 600; font-size: 1.1rem; text-align: center;"
+                             th:text="${job.applyInfo}">
                         </div>
                     </div>
-
-                    <!-- Apply Section -->
-                    <div class="p-4 bg-white border rounded shadow-sm">
-                        <h4 class="fw-bold mb-3">How to Apply</h4>
-                        <div th:if="${job.applyInfo != null and #strings.length(job.applyInfo) > 0}">
-                            <div th:if="${#strings.startsWith(job.applyInfo, 'http')}">
-                                <a th:href="${job.applyInfo}" target="_blank" class="btn btn-lg btn-primary w-100 mb-2">Apply Now</a>
-                                <p class="text-center text-muted small mt-2 mb-0">You will be redirected to the company's application page.</p>
-                            </div>
-                            <div th:unless="${#strings.startsWith(job.applyInfo, 'http')}">
-                                <p class="lead mb-0" th:text="${job.applyInfo}"></p>
-                            </div>
-                        </div>
-                        <div th:if="${job.applyInfo == null or #strings.isEmpty(job.applyInfo)}">
-                            <p class="mb-0">Contact the company directly for application instructions.</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-5 text-center">
-                        <a href="/jobs" class="text-decoration-none fw-bold">← Back to Job Listings</a>
+                    
+                    <div th:if="${job.applyInfo == null or #strings.isEmpty(job.applyInfo)}" 
+                         style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 20px; color: #94a3b8; font-style: italic; text-align: center;">
+                        No specific instructions provided. Check the company website for details.
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</main>
 
 <footer th:replace="~{fragments/common :: footer}"></footer>
+
+<style>
+    .cta-btn {
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 700;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+    .cta-btn:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+</style>
 
 </body>
 </html>

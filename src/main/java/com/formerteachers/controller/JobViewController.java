@@ -65,6 +65,7 @@ public class JobViewController {
     @GetMapping("/create")
     public String showCreateJobForm(Model model) {
         model.addAttribute("job", new Job());
+        model.addAttribute("isEdit", false);
         return "create-job";
     }
 
@@ -93,5 +94,55 @@ public class JobViewController {
         
         model.addAttribute("jobs", employerJobs);
         return "employer-dashboard";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditJobForm(@PathVariable Long id, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+        EmployerProfile employer = employerProfileRepository.findByUser(user).orElseThrow();
+        
+        Job job = jobService.getJobByIdAndEmployer(id, employer);
+        model.addAttribute("job", job);
+        model.addAttribute("isEdit", true);
+        return "create-job";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String updateJob(@PathVariable Long id, @ModelAttribute Job updatedJob) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+        EmployerProfile employer = employerProfileRepository.findByUser(user).orElseThrow();
+        
+        Job existingJob = jobService.getJobByIdAndEmployer(id, employer);
+        
+        // Update fields
+        existingJob.setTitle(updatedJob.getTitle());
+        existingJob.setDescription(updatedJob.getDescription());
+        existingJob.setCategory(updatedJob.getCategory());
+        existingJob.setLocation(updatedJob.getLocation());
+        existingJob.setWorkType(updatedJob.getWorkType());
+        existingJob.setSalaryRange(updatedJob.getSalaryRange());
+        existingJob.setApplyInfo(updatedJob.getApplyInfo());
+        existingJob.setApproved(false); // Changes require re-approval
+        
+        jobService.saveJob(existingJob);
+        return "redirect:/jobs/dashboard?updated=true";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteJob(@PathVariable Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByUsername(username).orElseThrow();
+        EmployerProfile employer = employerProfileRepository.findByUser(user).orElseThrow();
+        
+        // Verify ownership before deleting
+        jobService.getJobByIdAndEmployer(id, employer);
+        jobService.deleteJobById(id);
+        
+        return "redirect:/jobs/dashboard?deleted=true";
     }
 }

@@ -58,4 +58,12 @@ public class JobService {
     public void deleteJobById(Long id) {
         jobRepository.deleteById(id);
     }
+
+    public Job getJobByIdAndEmployer(Long id, EmployerProfile employer) {
+        Job job = getJobById(id);
+        if (!job.getEmployer().getId().equals(employer.getId())) {
+            throw new RuntimeException("You do not have permission to access this job.");
+        }
+        return job;
+    }
 }

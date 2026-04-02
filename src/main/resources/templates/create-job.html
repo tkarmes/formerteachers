@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head(title='Post a Job')}"></head>
+<head th:replace="~{fragments/common :: head(title=${isEdit ? 'Edit Job' : 'Post a Job'})}"></head>
 <body class="bg-light">
     <nav th:replace="~{fragments/common :: navbar}"></nav>
 
-    <div class="container mt-5">
+    <div class="container mt-5 pb-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/jobs/dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active" th:text="${isEdit ? 'Edit Job' : 'Post a Job'}">Post a Job</li>
+                    </ol>
+                </nav>
+
                 <div class="card shadow border-0">
                     <div class="card-body p-5">
-                        <h2 class="fw-bold mb-4">Post a New Job</h2>
-                        <p class="text-muted mb-4">Share an opportunity with our community of talented former educators.</p>
+                        <h2 class="fw-bold mb-4" th:text="${isEdit ? 'Edit Job Posting' : 'Post a New Job'}">Post a New Job</h2>
+                        <p class="text-muted mb-4" th:if="${!isEdit}">Share an opportunity with our community of talented former educators.</p>
+                        <p class="text-muted mb-4" th:if="${isEdit}">Update the details of your job posting below. Note: edited jobs will be set to pending for re-approval.</p>
                         
-                        <form th:action="@{/jobs/create}" th:object="${job}" method="post">
+                        <form th:action="${isEdit ? '/jobs/edit/' + job.id : '/jobs/create'}" th:object="${job}" method="post">
                             <div class="row g-3">
                                 <div class="col-md-12">
                                     <label class="form-label fw-semibold">Job Title</label>
-                                    <input type="text" th:field="*{title}" class="form-control" placeholder="e.g. Learning Experience Designer" required>
+                                    <input type="text" th:field="*{title}" class="form-control form-control-lg" placeholder="e.g. Learning Experience Designer" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Company Name</label>
@@ -56,11 +64,16 @@
                                     <textarea th:field="*{description}" class="form-control" rows="6" placeholder="Describe the role, responsibilities, and why a former teacher would be a great fit..." required></textarea>
                                 </div>
                                 <div class="col-md-12">
-                                    <label class="form-label fw-semibold">How to Apply</label>
-                                    <input type="text" th:field="*{applyInfo}" class="form-control" placeholder="Email address or link to application page" required>
+                                    <label class="form-label fw-semibold">How to Apply (Website or Email)</label>
+                                    <input type="text" th:field="*{applyInfo}" class="form-control" placeholder="e.g. https://careers.company.com/apply or jobs@company.com" required>
+                                    <div class="form-text">Direct links or email addresses work best!</div>
                                 </div>
                                 <div class="col-md-12 mt-4">
-                                    <button type="submit" class="btn btn-primary btn-lg w-100">Submit Job for Approval</button>
+                                    <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">
+                                        <i class="fas fa-paper-plane me-1"></i>
+                                        <span th:text="${isEdit ? 'Update Job Posting' : 'Submit Job for Approval'}">Submit Job for Approval</span>
+                                    </button>
+                                    <a href="/jobs/dashboard" class="btn btn-link w-100 mt-2 text-decoration-none text-muted">Cancel and Return</a>
                                 </div>
                             </div>
                         </form>

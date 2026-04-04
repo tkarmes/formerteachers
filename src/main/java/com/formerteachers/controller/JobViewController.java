@@ -73,9 +73,17 @@ public class JobViewController {
     public String createJob(@ModelAttribute Job job) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
         
-        EmployerProfile employer = employerProfileRepository.findByUser(user).orElseThrow();
+        EmployerProfile employer = employerProfileRepository.findByUser(user)
+                .orElseGet(() -> {
+                    EmployerProfile newProfile = new EmployerProfile();
+                    newProfile.setUser(user);
+                    newProfile.setCompanyName(job.getCompany());
+                    return employerProfileRepository.save(newProfile);
+                });
+        
         job.setEmployer(employer);
         job.setApproved(false); // New jobs require approval
         
@@ -87,12 +95,21 @@ public class JobViewController {
     public String employerDashboard(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
         
-        EmployerProfile employer = employerProfileRepository.findByUser(user).orElseThrow();
+        EmployerProfile employer = employerProfileRepository.findByUser(user)
+                .orElseGet(() -> {
+                    EmployerProfile newProfile = new EmployerProfile();
+                    newProfile.setUser(user);
+                    newProfile.setCompanyName(user.getUsername());
+                    return employerProfileRepository.save(newProfile);
+                });
+        
         List<Job> employerJobs = jobService.getJobsByEmployer(employer);
         
         model.addAttribute("jobs", employerJobs);
+        model.addAttribute("profile", employer);
         return "employer-dashboard";
     }
 

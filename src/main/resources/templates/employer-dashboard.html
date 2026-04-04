@@ -5,71 +5,146 @@
     <nav th:replace="~{fragments/common :: navbar}"></nav>
 
     <div class="container mt-5 pb-5">
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0">Company Profile</h5>
+                            <a href="/employer/profile/edit" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                <i class="fas fa-edit me-1"></i> Edit
+                            </a>
+                        </div>
+                        <div class="text-center mb-4">
+                            <!-- Show logo if exists, otherwise show icon -->
+                            <div th:if="${profile.logoUrl != null && !profile.logoUrl.isEmpty()}" class="mb-3 d-inline-block">
+                                <img th:src="${profile.logoUrl}" th:alt="${profile.companyName}" 
+                                     class="img-fluid rounded shadow-sm border p-2 bg-white" 
+                                     style="max-height: 80px; width: auto; max-width: 100%;">
+                            </div>
+                            <div th:unless="${profile.logoUrl != null && !profile.logoUrl.isEmpty()}" class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fas fa-building fa-2x"></i>
+                            </div>
+                            <h4 class="fw-bold mb-1" th:text="${profile.companyName}">Company Name</h4>
+                            <p class="text-muted small mb-0" th:if="${profile.website}">
+                                <a th:href="${profile.website.startsWith('http') ? profile.website : 'https://' + profile.website}" 
+                                   target="_blank" class="text-decoration-none" th:text="${profile.website}">www.company.com</a>
+                            </p>
+                        </div>
+                        <hr class="opacity-10">
+                        <h6 class="fw-bold text-uppercase small text-muted mb-2">About Us</h6>
+                        <p class="small text-secondary mb-0" th:text="${profile.companyDescription != null ? profile.companyDescription : 'Tell us about your company and why teachers should join your team! Click the Edit button above to get started.'}">
+                            No company description provided yet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-4">Quick Stats</h5>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="p-3 bg-success-subtle rounded-3 border border-success-subtle h-100">
+                                    <div class="text-success small fw-bold text-uppercase">Active Jobs</div>
+                                    <div class="h3 fw-bold mb-0" th:text="${#lists.size(jobs.?[approved])}">0</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 bg-warning-subtle rounded-3 border border-warning-subtle h-100">
+                                    <div class="text-warning-emphasis small fw-bold text-uppercase">Pending Approval</div>
+                                    <div class="h3 fw-bold mb-0" th:text="${#lists.size(jobs.?[!approved])}">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 class="fw-bold"><i class="fas fa-chalkboard-teacher me-2 text-primary"></i>Employer Dashboard</h2>
-                    <a href="/jobs/create" class="btn btn-primary shadow-sm">
+                    <h2 class="fw-bold"><i class="fas fa-list me-2 text-primary"></i>Your Job Postings</h2>
+                    <a href="/jobs/create" class="btn btn-primary shadow-sm px-4 rounded-pill">
                         <i class="fas fa-plus me-1"></i> Post a New Job
                     </a>
                 </div>
 
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="bg-dark text-white">
-                                    <tr>
-                                        <th class="ps-4">Job Title</th>
-                                        <th>Status</th>
-                                        <th>Posted Date</th>
-                                        <th class="text-end pe-4">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr th:each="job : ${jobs}">
-                                        <td class="ps-4">
-                                            <div class="fw-bold text-dark" th:text="${job.title}">Job Title</div>
-                                            <small class="text-muted" th:text="${job.category}">Category</small>
-                                        </td>
-                                        <td>
-                                            <span th:if="${job.approved}" class="badge rounded-pill bg-success-subtle text-success border border-success px-3">
-                                                <i class="fas fa-check-circle me-1"></i> Active
-                                            </span>
-                                            <span th:unless="${job.approved}" class="badge rounded-pill bg-warning-subtle text-warning-emphasis border border-warning px-3">
-                                                <i class="fas fa-clock me-1"></i> Pending Approval
-                                            </span>
-                                        </td>
-                                        <td th:text="${job.postedDate}">Date</td>
-                                        <td class="text-end pe-4">
-                                            <div class="btn-group shadow-sm">
-                                                <a th:href="@{/jobs/{id}(id=${job.id})}" class="btn btn-sm btn-outline-primary" title="View Details">
-                                                    <i class="fas fa-eye"></i> View
-                                                </a>
-                                                <a th:href="@{/jobs/edit/{id}(id=${job.id})}" class="btn btn-sm btn-outline-secondary" title="Edit Job">
-                                                    <i class="fas fa-edit"></i> Edit
-                                                </a>
-                                                <a th:href="@{/jobs/delete/{id}(id=${job.id})}" 
-                                                   class="btn btn-sm btn-outline-danger" 
-                                                   onclick="return confirm('Are you sure you want to delete this job posting? This cannot be undone.')"
-                                                   title="Delete Job">
-                                                    <i class="fas fa-trash-alt"></i> Delete
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr th:if="${#lists.isEmpty(jobs)}">
-                                        <td colspan="4" class="text-center py-5">
-                                            <div class="mb-3">
-                                                <i class="fas fa-clipboard-list fa-3x text-muted opacity-25"></i>
-                                            </div>
-                                            <h5 class="text-muted">You haven't posted any jobs yet.</h5>
-                                            <p class="text-secondary small">Start by clicking the "Post a New Job" button above.</p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <div th:if="${param.created}" class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                    <i class="fas fa-check-circle me-2"></i><strong>Job Posted!</strong> Your job is now pending admin approval.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div th:if="${param.updated}" class="alert alert-info alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                    <i class="fas fa-info-circle me-2"></i><strong>Job Updated!</strong> Your changes have been saved.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div th:if="${param.deleted}" class="alert alert-danger alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                    <i class="fas fa-trash-alt me-2"></i><strong>Job Deleted!</strong> The posting has been removed.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div th:if="${param.profileUpdated}" class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                    <i class="fas fa-check-circle me-2"></i><strong>Profile Updated!</strong> Your company information has been saved.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="card border-0 shadow-sm overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-dark text-white">
+                                <tr>
+                                    <th class="ps-4 py-3">Job Title</th>
+                                    <th class="py-3">Status</th>
+                                    <th class="py-3">Posted Date</th>
+                                    <th class="text-end pe-4 py-3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="job : ${jobs}">
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark" th:text="${job.title}">Job Title</div>
+                                        <small class="text-muted" th:text="${job.category}">Category</small>
+                                    </td>
+                                    <td>
+                                        <span th:if="${job.approved}" class="badge rounded-pill bg-success-subtle text-success border border-success px-3">
+                                            <i class="fas fa-check-circle me-1"></i> Active
+                                        </span>
+                                        <span th:unless="${job.approved}" class="badge rounded-pill bg-warning-subtle text-warning-emphasis border border-warning px-3">
+                                            <i class="fas fa-clock me-1"></i> Pending Approval
+                                        </span>
+                                    </td>
+                                    <td class="text-secondary" th:text="${job.postedDate}">Date</td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group btn-group-sm shadow-sm rounded">
+                                            <a th:href="@{/jobs/{id}(id=${job.id})}" class="btn btn-outline-primary border-end-0" title="View Details">
+                                                <i class="fas fa-eye me-1"></i>View
+                                            </a>
+                                            <a th:href="@{/jobs/edit/{id}(id=${job.id})}" class="btn btn-outline-secondary border-end-0" title="Edit Job">
+                                                <i class="fas fa-edit me-1"></i>Edit
+                                            </a>
+                                            <a th:href="@{/jobs/delete/{id}(id=${job.id})}" 
+                                               class="btn btn-outline-danger" 
+                                               onclick="return confirm('Are you sure you want to delete this job posting? This cannot be undone.')"
+                                               title="Delete Job">
+                                                <i class="fas fa-trash-alt me-1"></i>Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(jobs)}">
+                                    <td colspan="4" class="text-center py-5 bg-white">
+                                        <div class="mb-3">
+                                            <i class="fas fa-clipboard-list fa-3x text-muted opacity-25"></i>
+                                        </div>
+                                        <h5 class="text-muted">You haven't posted any jobs yet.</h5>
+                                        <p class="text-secondary small">Start by clicking the "Post a New Job" button above.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

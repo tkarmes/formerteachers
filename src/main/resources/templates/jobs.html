@@ -4,18 +4,54 @@
 <body style="display: flex; flex-direction: column; min-height: 100vh;">
 <nav th:replace="~{fragments/common :: navbar}"></nav>
 
-<main style="flex: 1; padding: 40px 0;">
+<main style="flex: 1; padding: 40px 0; background-color: #f8fafc;">
     <div class="container">
-        <header style="margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end;">
-            <div>
-                <h1 style="color: var(--bus-black); margin-bottom: 10px;">Find Your Next Role</h1>
-                <p style="color: #666; font-size: 1.1rem;">Opportunities for educators pivoting into EdTech and beyond.</p>
-            </div>
-            <div th:if="${totalElements > 0}" style="color: #888; font-weight: 500;">
-                <span th:text="${totalElements}">0</span> jobs found
-            </div>
+        <!-- Header -->
+        <header style="margin-bottom: 40px;">
+            <h1 style="color: var(--bus-black); margin-bottom: 10px; font-weight: 800;">Find Your Next Role</h1>
+            <p style="color: #64748b; font-size: 1.1rem;">Opportunities for educators pivoting into EdTech and beyond.</p>
         </header>
 
+        <!-- Search Bar -->
+        <div class="search-container shadow-sm" style="background: white; padding: 25px; border-radius: 16px; margin-bottom: 40px; border: 1px solid #e2e8f0;">
+            <form action="/jobs" method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label" style="font-weight: 600; color: #475569;">Keyword</label>
+                    <div class="input-group">
+                        <span class="input-group-text" style="background: white; border-right: none;"><i class="bi bi-search"></i></span>
+                        <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="Job title or company..." style="border-left: none;">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" style="font-weight: 600; color: #475569;">Location</label>
+                    <div class="input-group">
+                        <span class="input-group-text" style="background: white; border-right: none;"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" name="location" th:value="${location}" class="form-control" placeholder="City or Remote..." style="border-left: none;">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" style="font-weight: 600; color: #475569;">Category</label>
+                    <select name="category" class="form-select">
+                        <option value="">All Categories</option>
+                        <option value="Teaching" th:selected="${selectedCategory == 'Teaching'}">Teaching</option>
+                        <option value="Curriculum" th:selected="${selectedCategory == 'Curriculum'}">Curriculum Design</option>
+                        <option value="EdTech" th:selected="${selectedCategory == 'EdTech'}">EdTech</option>
+                        <option value="Admin" th:selected="${selectedCategory == 'Admin'}">Administration</option>
+                        <option value="Sales" th:selected="${selectedCategory == 'Sales'}">Sales/Customer Success</option>
+                        <option value="Other" th:selected="${selectedCategory == 'Other'}">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="cta-btn w-100" style="border: none; background: var(--bus-yellow); color: var(--bus-black); height: 42px;">Search Jobs</button>
+                </div>
+            </form>
+        </div>
+
+        <div th:if="${totalElements > 0}" style="margin-bottom: 20px; color: #64748b; font-weight: 500;">
+            Found <span th:text="${totalElements}" style="color: var(--bus-black); font-weight: 700;">0</span> positions
+        </div>
+
+        <!-- Job Cards -->
         <div class="row" th:if="${not #lists.isEmpty(jobs)}">
             <div th:each="job : ${jobs}" class="col-md-6 mb-4">
                 <div class="job-card shadow-sm" style="background: white; border-radius: 12px; border: 1px solid #eee; transition: transform 0.2s, box-shadow 0.2s; height: 100%; position: relative; overflow: hidden; cursor: pointer;"
@@ -42,7 +78,6 @@
                         <div style="display: flex; gap: 12px; align-items: center; margin-top: auto;">
                             <!-- Apply Button Logic -->
                             <div th:if="${job.applyInfo != null and not #strings.isEmpty(job.applyInfo)}" style="flex: 1;">
-                                <!-- Link -->
                                 <a th:if="${#strings.contains(job.applyInfo, '.') and not #strings.contains(job.applyInfo, '@')}"
                                    th:href="${#strings.startsWith(job.applyInfo, 'http') ? job.applyInfo : 'https://' + job.applyInfo}"
                                    target="_blank" 
@@ -50,14 +85,12 @@
                                    style="display: block; width: 100%; text-align: center; text-decoration: none;"
                                    onclick="event.stopPropagation();">Apply Now</a>
                                 
-                                <!-- Email -->
                                 <a th:if="${#strings.contains(job.applyInfo, '@')}"
                                    th:href="'mailto:' + ${job.applyInfo}"
                                    class="cta-btn" 
                                    style="display: block; width: 100%; text-align: center; text-decoration: none;"
                                    onclick="event.stopPropagation();">Email to Apply</a>
                                 
-                                <!-- General Text -->
                                 <span th:if="${not #strings.contains(job.applyInfo, '.') and not #strings.contains(job.applyInfo, '@')}"
                                       class="cta-btn secondary-btn"
                                       style="display: block; width: 100%; text-align: center; cursor: default; background: #e2e8f0; color: #475569; border: none;"
@@ -75,17 +108,19 @@
             </div>
         </div>
 
-        <div th:if="${#lists.isEmpty(jobs)}" style="text-align: center; padding: 100px 0; background: white; border-radius: 12px; border: 2px dashed #e2e8f0;">
-            <h3 style="color: #94a3b8; margin-bottom: 10px;">No jobs found matching your search.</h3>
-            <p style="color: #cbd5e1;">Try adjusting your filters or check back later!</p>
-            <a href="/jobs" class="cta-btn" style="display: inline-block; margin-top: 20px; text-decoration: none;">View All Jobs</a>
+        <!-- No Jobs Found -->
+        <div th:if="${#lists.isEmpty(jobs)}" style="text-align: center; padding: 80px 0; background: white; border-radius: 16px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 3rem; margin-bottom: 20px;">🔍</div>
+            <h3 style="color: var(--bus-black); font-weight: 700;">No jobs match your search</h3>
+            <p style="color: #64748b; max-width: 400px; margin: 0 auto 25px auto;">Try broadening your keywords or changing your location filters!</p>
+            <a href="/jobs" class="cta-btn" style="display: inline-block; text-decoration: none; background: var(--bus-yellow); color: var(--bus-black);">Clear All Filters</a>
         </div>
 
         <!-- Pagination -->
         <div th:if="${totalPages > 1}" style="margin-top: 40px; display: flex; justify-content: center; gap: 8px;">
-            <a th:if="${currentPage > 0}" th:href="@{/jobs(page=${currentPage - 1})}" class="cta-btn secondary-btn" style="text-decoration: none;">&larr; Prev</a>
+            <a th:if="${currentPage > 0}" th:href="@{/jobs(page=${currentPage - 1}, keyword=${keyword}, location=${location}, category=${selectedCategory})}" class="cta-btn secondary-btn" style="text-decoration: none;">&larr; Prev</a>
             <span style="padding: 10px 15px; color: #64748b; font-weight: 600;">Page <span th:text="${currentPage + 1}">1</span> of <span th:text="${totalPages}">1</span></span>
-            <a th:if="${currentPage < totalPages - 1}" th:href="@{/jobs(page=${currentPage + 1})}" class="cta-btn secondary-btn" style="text-decoration: none;">Next &rarr;</a>
+            <a th:if="${currentPage < totalPages - 1}" th:href="@{/jobs(page=${currentPage + 1}, keyword=${keyword}, location=${location}, category=${selectedCategory})}" class="cta-btn secondary-btn" style="text-decoration: none;">Next &rarr;</a>
         </div>
     </div>
 </main>
@@ -98,13 +133,23 @@
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
     }
     .cta-btn {
-        padding: 12px 20px;
+        padding: 10px 20px;
         border-radius: 8px;
         font-weight: 700;
         transition: all 0.2s;
         font-size: 0.95rem;
     }
+    .secondary-btn:hover {
+        background: #f1f5f9 !important;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--bus-yellow);
+        box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+    }
 </style>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
 </body>
 </html>

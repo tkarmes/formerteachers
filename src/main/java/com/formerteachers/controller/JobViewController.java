@@ -6,6 +6,7 @@ import com.formerteachers.model.User;
 import com.formerteachers.repository.EmployerProfileRepository;
 import com.formerteachers.repository.UserRepository;
 import com.formerteachers.service.JobService;
+import com.formerteachers.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -14,7 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/jobs")
@@ -23,14 +27,17 @@ public class JobViewController {
     private final JobService jobService;
     private final EmployerProfileRepository employerProfileRepository;
     private final UserRepository userRepository;
+    private final TeacherService teacherService;
 
     @Autowired
     public JobViewController(JobService jobService, 
                              EmployerProfileRepository employerProfileRepository, 
-                             UserRepository userRepository) {
+                             UserRepository userRepository,
+                             TeacherService teacherService) {
         this.jobService = jobService;
         this.employerProfileRepository = employerProfileRepository;
         this.userRepository = userRepository;
+        this.teacherService = teacherService;
     }
 
     @GetMapping
@@ -43,6 +50,18 @@ public class JobViewController {
                            @RequestParam(defaultValue = "10") int size) {
         
         Page<Job> jobPage = jobService.getApprovedJobs(keyword, location, category, workType, page, size);
+        
+        // Add saved jobs info for teachers
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
+            boolean isTeacher = auth.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_TEACHER"));
+            if (isTeacher) {
+                Set<Long> savedJobIds = teacherService.getSavedJobs(auth.getName())
+                        .stream().map(Job::getId).collect(Collectors.toSet());
+                model.addAttribute("savedJobIds", savedJobIds);
+            }
+        }
         
         model.addAttribute("jobs", jobPage.getContent());
         model.addAttribute("currentPage", page);
@@ -59,6 +78,19 @@ public class JobViewController {
     public String viewJob(@PathVariable Long id, Model model) {
         Job job = jobService.getJobById(id);
         model.addAttribute("job", job);
+        
+        // Add saved jobs info for teachers
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
+            boolean isTeacher = auth.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_TEACHER"));
+            if (isTeacher) {
+                Set<Long> savedJobIds = teacherService.getSavedJobs(auth.getName())
+                        .stream().map(Job::getId).collect(Collectors.toSet());
+                model.addAttribute("isSaved", savedJobIds.contains(id));
+            }
+        }
+        
         return "job-detail";
     }
 

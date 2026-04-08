@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head(title='Browse Jobs')}"></head>
 <body style="display: flex; flex-direction: column; min-height: 100vh;">
 <nav th:replace="~{fragments/common :: navbar}"></nav>
@@ -63,7 +63,19 @@
                                 <h3 style="color: var(--bus-black); margin: 0 0 5px 0; font-weight: 700;" th:text="${job.title}">Job Title</h3>
                                 <div style="color: var(--bus-black); font-weight: 500; font-size: 1.1rem;" th:text="${job.company}">Company Name</div>
                             </div>
-                            <span class="badge" style="background-color: #f0f4f8; color: #475569; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.85rem;" th:text="${job.workType}">Work Type</span>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge" style="background-color: #f0f4f8; color: #475569; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.85rem;" th:text="${job.workType}">Work Type</span>
+                                
+                                <!-- Save Job Button for Teachers -->
+                                <form sec:authorize="hasRole('TEACHER')" th:action="@{/teacher/save-job}" method="post" onclick="event.stopPropagation();">
+                                    <input type="hidden" name="jobId" th:value="${job.id}"/>
+                                    <button type="submit" class="btn btn-sm rounded-circle shadow-sm" 
+                                            th:classappend="${savedJobIds != null && savedJobIds.contains(job.id) ? 'btn-danger' : 'btn-outline-danger'}"
+                                            th:title="${savedJobIds != null && savedJobIds.contains(job.id) ? 'Saved' : 'Save Job'}">
+                                        <i class="bi" th:classappend="${savedJobIds != null && savedJobIds.contains(job.id) ? 'bi-heart-fill' : 'bi-heart'}"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
 
                         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; font-size: 0.95rem; color: #64748b;">
@@ -102,7 +114,7 @@
                     </div>
                     
                     <div style="padding: 12px 30px; background: #f8fafc; border-top: 1px solid #eee; color: #94a3b8; font-size: 0.85rem;">
-                        Posted <span th:text="${job.postedDate}">Today</span>
+                        Posted <span th:text="${job.postedDate != null ? job.postedDate : 'Just now'}">Today</span>
                     </div>
                 </div>
             </div>

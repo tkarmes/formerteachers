@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: head(title='Teacher Sign Up - FormerTeachers')"></head>
+<body class="bg-light">
+    <nav th:replace="fragments/common :: navbar"></nav>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow border-0 p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold">Join Our Teacher Community</h2>
+                        <p class="text-muted">Create an account to save jobs and track your journey.</p>
+                    </div>
+
+                    <form th:action="@{/teacher-signup}" th:object="${teacherDto}" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Email Address</label>
+                            <input type="email" th:field="*{username}" class="form-control" id="username" placeholder="name@example.com">
+                            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger small mt-1"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="Min. 6 characters">
+                            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger small mt-1"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword" placeholder="Re-type password">
+                            <div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger small mt-1"></div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">Sign Up as Teacher</button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <span class="text-muted small">Already have an account? <a th:href="@{/login}" class="text-decoration-none fw-bold text-primary">Log In</a></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/common :: footer"></div>
+</body>
+</html>

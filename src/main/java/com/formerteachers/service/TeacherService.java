@@ -30,12 +30,7 @@ public class TeacherService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         
-        Teacher teacher = teacherRepository.findByUser(user)
-                .orElseGet(() -> {
-                    Teacher newTeacher = new Teacher();
-                    newTeacher.setUser(user);
-                    return teacherRepository.save(newTeacher);
-                });
+        Teacher teacher = getOrCreateTeacher(user);
 
         Job job = jobRepository.findById(jobId)
                 .orElseThrow(() -> new RuntimeException("Job not found"));
@@ -62,5 +57,37 @@ public class TeacherService {
         return teacherRepository.findByUser(user)
                 .map(Teacher::getSavedJobs)
                 .orElse(Collections.emptySet());
+    }
+
+    public Teacher getTeacherProfile(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        return getOrCreateTeacher(user);
+    }
+
+    @Transactional
+    public void updateProfile(String username, Teacher profileData) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        Teacher teacher = getOrCreateTeacher(user);
+        
+        teacher.setFullName(profileData.getFullName());
+        teacher.setBio(profileData.getBio());
+        teacher.setYearsInClassroom(profileData.getYearsInClassroom());
+        teacher.setSubjectSpecialty(profileData.getSubjectSpecialty());
+        teacher.setDesiredRole(profileData.getDesiredRole());
+        
+        teacherRepository.save(teacher);
+    }
+
+    private Teacher getOrCreateTeacher(User user) {
+        return teacherRepository.findByUser(user)
+                .orElseGet(() -> {
+                    Teacher newTeacher = new Teacher();
+                    newTeacher.setUser(user);
+                    return teacherRepository.save(newTeacher);
+                });
     }
 }

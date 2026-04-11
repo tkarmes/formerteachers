@@ -22,6 +22,7 @@
                 <a href="/jobs">Browse Jobs</a>
                 
                 <!-- Teacher specific -->
+                <a sec:authorize="hasRole('TEACHER')" href="/teacher/profile" style="color: #4db6ac;"><i class="bi bi-person-circle me-1"></i> My Profile</a>
                 <a sec:authorize="hasRole('TEACHER')" href="/teacher/saved-jobs" style="color: #ff8a80;"><i class="bi bi-heart-fill me-1"></i> My Saved Jobs</a>
                 
                 <!-- Employer specific -->

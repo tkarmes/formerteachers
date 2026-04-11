@@ -1,12 +1,14 @@
 package com.formerteachers.controller;
 
 import com.formerteachers.model.Job;
+import com.formerteachers.model.Teacher;
 import com.formerteachers.service.TeacherService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,5 +40,25 @@ public class TeacherController {
         Set<Job> savedJobs = teacherService.getSavedJobs(userDetails.getUsername());
         model.addAttribute("savedJobs", savedJobs);
         return "saved-jobs";
+    }
+
+    @GetMapping("/teacher/profile")
+    public String viewProfile(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        Teacher teacher = teacherService.getTeacherProfile(userDetails.getUsername());
+        model.addAttribute("teacher", teacher);
+        return "teacher-profile";
+    }
+
+    @GetMapping("/teacher/profile/edit")
+    public String editProfileForm(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        Teacher teacher = teacherService.getTeacherProfile(userDetails.getUsername());
+        model.addAttribute("teacher", teacher);
+        return "edit-teacher-profile";
+    }
+
+    @PostMapping("/teacher/profile/edit")
+    public String updateProfile(@ModelAttribute Teacher teacher, @AuthenticationPrincipal UserDetails userDetails) {
+        teacherService.updateProfile(userDetails.getUsername(), teacher);
+        return "redirect:/teacher/profile";
     }
 }

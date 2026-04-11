@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head(title='Your Teacher Profile')}"></head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
+
+    <div class="container mt-5 pb-5">
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0">Teacher Profile</h5>
+                            <a href="/teacher/profile/edit" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                <i class="fas fa-edit me-1"></i> Edit
+                            </a>
+                        </div>
+                        <div class="text-center mb-4">
+                            <div class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                                <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                            </div>
+                            <h4 class="fw-bold mb-1" th:text="${teacher.fullName != null && !teacher.fullName.isEmpty() ? teacher.fullName : 'Your Name'}">Your Name</h4>
+                            <p class="text-primary fw-medium mb-0" th:text="${teacher.subjectSpecialty != null ? teacher.subjectSpecialty : 'Subject Specialty'}">Subject Specialty</p>
+                            <p class="text-muted small" th:if="${teacher.yearsInClassroom != null}" th:text="${teacher.yearsInClassroom + ' years in the classroom'}">5 years in classroom</p>
+                        </div>
+                        <hr class="opacity-10">
+                        <h6 class="fw-bold text-uppercase small text-muted mb-2">My Transition Story</h6>
+                        <p class="small text-secondary mb-0" th:text="${teacher.bio != null && !teacher.bio.isEmpty() ? teacher.bio : 'Tell employers your story! Why are you transitioning from the classroom and what unique skills do you bring?'}">
+                            No bio provided yet.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="fw-bold mb-4">Profile Overview</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-white border rounded-3 h-100">
+                                    <div class="text-muted small fw-bold text-uppercase mb-1">Desired Role</div>
+                                    <div class="fw-bold text-dark" th:text="${teacher.desiredRole != null ? teacher.desiredRole : 'Not specified'}">Instructional Designer</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-white border rounded-3 h-100">
+                                    <div class="text-muted small fw-bold text-uppercase mb-1">Saved Jobs</div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="h3 fw-bold mb-0 me-2" th:text="${#lists.size(teacher.savedJobs)}">0</div>
+                                        <a href="/teacher/saved-jobs" class="btn btn-sm btn-link p-0 text-decoration-none">View All</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 p-4 bg-primary-subtle rounded-3 border border-primary-subtle">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <i class="fas fa-info-circle text-primary fa-2x"></i>
+                                </div>
+                                <div class="col">
+                                    <h6 class="fw-bold mb-1">Complete your profile to stand out!</h6>
+                                    <p class="small mb-0 text-secondary">Employers look for teachers who can clearly articulate how their classroom skills translate to the corporate world.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/common :: footer}"></footer>
+</body>
+</html>

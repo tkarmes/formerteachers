@@ -16,6 +16,17 @@ public class Teacher {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    private String fullName;
+    
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+    
+    private Integer yearsInClassroom;
+    
+    private String subjectSpecialty;
+    
+    private String desiredRole;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "teacher_saved_jobs",
@@ -44,6 +55,46 @@ public class Teacher {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public Integer getYearsInClassroom() {
+        return yearsInClassroom;
+    }
+
+    public void setYearsInClassroom(Integer yearsInClassroom) {
+        this.yearsInClassroom = yearsInClassroom;
+    }
+
+    public String getSubjectSpecialty() {
+        return subjectSpecialty;
+    }
+
+    public void setSubjectSpecialty(String subjectSpecialty) {
+        this.subjectSpecialty = subjectSpecialty;
+    }
+
+    public String getDesiredRole() {
+        return desiredRole;
+    }
+
+    public void setDesiredRole(String desiredRole) {
+        this.desiredRole = desiredRole;
     }
 
     public Set<Job> getSavedJobs() {

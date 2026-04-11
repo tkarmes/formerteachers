@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head(title='Edit Teacher Profile')}"></head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
+
+    <div class="container mt-5 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-5">
+                        <div class="d-flex align-items-center mb-4">
+                            <a href="/teacher/profile" class="btn btn-outline-secondary btn-sm rounded-pill me-3">
+                                <i class="fas fa-arrow-left"></i>
+                            </a>
+                            <h2 class="fw-bold mb-0">Edit Your Profile</h2>
+                        </div>
+                        <p class="text-muted mb-4">Complete your profile to tell your "transition story" and show employers the skills you bring from the classroom.</p>
+
+                        <form th:action="@{/teacher/profile/edit}" th:object="${teacher}" method="post">
+                            <input type="hidden" th:field="*{id}" />
+                            
+                            <div class="row g-3">
+                                <div class="col-md-12 mb-3">
+                                    <label for="fullName" class="form-label fw-bold small text-uppercase">Full Name</label>
+                                    <input type="text" th:field="*{fullName}" class="form-control rounded-3" id="fullName" placeholder="Your Name" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="yearsInClassroom" class="form-label fw-bold small text-uppercase">Years in Classroom</label>
+                                    <input type="number" th:field="*{yearsInClassroom}" class="form-control rounded-3" id="yearsInClassroom" placeholder="5" min="0">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="subjectSpecialty" class="form-label fw-bold small text-uppercase">Subject Specialty</label>
+                                    <input type="text" th:field="*{subjectSpecialty}" class="form-control rounded-3" id="subjectSpecialty" placeholder="e.g., High School Math, Elementary Literacy">
+                                </div>
+
+                                <div class="col-md-12 mb-3">
+                                    <label for="desiredRole" class="form-label fw-bold small text-uppercase">Desired Role / Industry</label>
+                                    <input type="text" th:field="*{desiredRole}" class="form-control rounded-3" id="desiredRole" placeholder="e.g., Instructional Designer, Project Manager, Customer Success">
+                                </div>
+
+                                <div class="col-md-12 mb-4">
+                                    <label for="bio" class="form-label fw-bold small text-uppercase">My Transition Story (Bio)</label>
+                                    <textarea th:field="*{bio}" class="form-control rounded-3" id="bio" rows="6" placeholder="Tell employers about your journey. What skills from the classroom translate to your desired roles? Why are you transitioning?"></textarea>
+                                    <div class="form-text mt-2 small">This is your chance to shine! Employers want to hear how your classroom experience makes you a unique asset.</div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">
+                                    <i class="fas fa-save me-2"></i> Save Profile Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/common :: footer}"></footer>
+</body>
+</html>

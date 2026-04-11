@@ -2,76 +2,86 @@ package com.formerteachers.controller;
 
 import com.formerteachers.model.Job;
 import com.formerteachers.model.Teacher;
+import com.formerteachers.model.User;
 import com.formerteachers.service.TeacherService;
+import com.formerteachers.repository.UserRepository;
 import com.formerteachers.service.FileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Set;
 
 @Controller
+@RequestMapping("/teacher")
 public class TeacherController {
 
-    private final TeacherService teacherService;
-    private final FileService fileService;
+    @Autowired
+    private TeacherService teacherService;
 
-    public TeacherController(TeacherService teacherService, FileService fileService) {
-        this.teacherService = teacherService;
-        this.fileService = fileService;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
-    @PostMapping("/teacher/save-job")
-    public String saveJob(@RequestParam Long jobId, @AuthenticationPrincipal UserDetails userDetails) {
-        teacherService.saveJob(userDetails.getUsername(), jobId);
-        return "redirect:/jobs";
-    }
+    @Autowired
+    private FileService fileService;
 
-    @PostMapping("/teacher/unsave-job")
-    public String unsaveJob(@RequestParam Long jobId, @AuthenticationPrincipal UserDetails userDetails) {
-        teacherService.unsaveJob(userDetails.getUsername(), jobId);
-        return "redirect:/teacher/saved-jobs";
-    }
-
-    @GetMapping("/teacher/saved-jobs")
-    public String getSavedJobs(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        Set<Job> savedJobs = teacherService.getSavedJobs(userDetails.getUsername());
-        model.addAttribute("savedJobs", savedJobs);
-        return "saved-jobs";
-    }
-
-    @GetMapping("/teacher/profile")
-    public String viewProfile(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        Teacher teacher = teacherService.getTeacherProfile(userDetails.getUsername());
+    @GetMapping("/profile")
+    public String viewProfile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Teacher teacher = teacherService.findByUser(user);
         model.addAttribute("teacher", teacher);
         return "teacher-profile";
     }
 
-    @GetMapping("/teacher/profile/edit")
-    public String editProfileForm(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        Teacher teacher = teacherService.getTeacherProfile(userDetails.getUsername());
+    @GetMapping("/profile/edit")
+    public String editProfileForm(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Teacher teacher = teacherService.findByUser(user);
         model.addAttribute("teacher", teacher);
         return "edit-teacher-profile";
     }
 
-    @PostMapping("/teacher/profile/update")
-    public String updateProfile(@ModelAttribute Teacher teacher, 
+    @PostMapping("/profile/update")
+    public String updateProfile(@AuthenticationPrincipal UserDetails userDetails,
+                                @ModelAttribute Teacher teacherData,
                                 @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
-                                @AuthenticationPrincipal UserDetails userDetails) throws IOException {
-        
+                                Model model) {
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Teacher existingTeacher = teacherService.findByUser(user);
+
+        // Update basic info
+        existingTeacher.setFullName(teacherData.getFullName());
+        existingTeacher.setBio(teacherData.getBio());
+        existingTeacher.setYearsInClassroom(teacherData.getYearsInClassroom());
+        existingTeacher.setSubjectSpecialty(teacherData.getSubjectSpecialty());
+        existingTeacher.setDesiredRole(teacherData.getDesiredRole());
+
+        // Handle profile image upload
         if (profileImage != null && !profileImage.isEmpty()) {
-            String imageUrl = fileService.uploadFile(profileImage);
-            teacher.setProfileImageUrl(imageUrl);
+            try {
+                String imagePath = fileService.uploadFile(profileImage);
+                existingTeacher.setProfileImageUrl(imagePath);
+            } catch (IOException e) {
+                return "redirect:/teacher/profile/edit?error=upload";
+            }
         }
-        
-        teacherService.updateProfile(userDetails.getUsername(), teacher);
-        return "redirect:/teacher/profile";
+
+        teacherService.updateProfile(existingTeacher);
+        return "redirect:/teacher/profile?updated=true";
+    }
+
+    @GetMapping("/saved-jobs")
+    public String getSavedJobs(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        Set<Job> savedJobs = teacherService.getSavedJobs(userDetails.getUsername());
+        model.addAttribute("savedJobs", savedJobs);
+        return "saved-jobs";
     }
 }

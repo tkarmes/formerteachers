@@ -13,20 +13,21 @@ import java.util.UUID;
 @Service
 public class FileService {
 
-    private final String uploadDir = "src/main/resources/static/uploads/";
+    // Move uploads out of 'src' so they are immediately visible
+    private final String uploadDir = "uploads";
 
     public String uploadFile(MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) {
             return null;
         }
 
-        // Create directory if it doesn't exist
-        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+        // Create the folder in the project root if it doesn't exist
+        Path uploadPath = Paths.get(uploadDir).toAbsolutePath();
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        // Generate unique filename
+        // Generate a random unique filename
         String originalFileName = file.getOriginalFilename();
         String extension = "";
         if (originalFileName != null && originalFileName.contains(".")) {
@@ -36,7 +37,7 @@ public class FileService {
         String fileName = UUID.randomUUID().toString() + extension;
         Path filePath = uploadPath.resolve(fileName);
 
-        // Save file
+        // Save the file
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         // Return the path for the web (starting from /uploads/)

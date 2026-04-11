@@ -67,6 +67,11 @@ public class TeacherService {
     }
 
     @Transactional
+    public void updateProfile(Teacher teacher) {
+        teacherRepository.save(teacher);
+    }
+
+    @Transactional
     public void updateProfile(String username, Teacher profileData) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -90,5 +95,9 @@ public class TeacherService {
                     newTeacher.setUser(user);
                     return teacherRepository.save(newTeacher);
                 });
+    }
+
+    public Teacher findByUser(User user) {
+        return getOrCreateTeacher(user);
     }
 }

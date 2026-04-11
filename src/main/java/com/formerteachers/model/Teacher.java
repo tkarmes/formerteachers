@@ -28,6 +28,8 @@ public class Teacher {
     private String desiredRole;
 
     private String profileImageUrl;
+    
+    private String resumeUrl;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -105,6 +107,14 @@ public class Teacher {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getResumeUrl() {
+        return resumeUrl;
+    }
+
+    public void setResumeUrl(String resumeUrl) {
+        this.resumeUrl = resumeUrl;
     }
 
     public Set<Job> getSavedJobs() {

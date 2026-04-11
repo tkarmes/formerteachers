@@ -52,6 +52,7 @@ public class TeacherController {
     public String updateProfile(@AuthenticationPrincipal UserDetails userDetails,
                                 @ModelAttribute Teacher teacherData,
                                 @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+                                @RequestParam(value = "resume", required = false) MultipartFile resume,
                                 Model model) {
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -69,6 +70,16 @@ public class TeacherController {
             try {
                 String imagePath = fileService.uploadFile(profileImage);
                 existingTeacher.setProfileImageUrl(imagePath);
+            } catch (IOException e) {
+                return "redirect:/teacher/profile/edit?error=upload";
+            }
+        }
+
+        // Handle resume upload
+        if (resume != null && !resume.isEmpty()) {
+            try {
+                String resumePath = fileService.uploadFile(resume);
+                existingTeacher.setResumeUrl(resumePath);
             } catch (IOException e) {
                 return "redirect:/teacher/profile/edit?error=upload";
             }

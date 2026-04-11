@@ -25,6 +25,7 @@
                     <form th:action="@{/teacher/profile/update}" th:object="${teacher}" method="post" enctype="multipart/form-data" id="profileForm">
                         <input type="hidden" th:field="*{id}" />
                         <input type="hidden" th:field="*{profileImageUrl}" />
+                        <input type="hidden" th:field="*{resumeUrl}" />
 
                         <!-- Photo Section -->
                         <div class="text-center mb-4">
@@ -59,6 +60,19 @@
                             <div class="col-md-12">
                                 <label for="fullName" class="form-label">Full Name</label>
                                 <input type="text" class="form-label form-control" id="fullName" th:field="*{fullName}" required>
+                            </div>
+
+                            <!-- Resume Upload Section -->
+                            <div class="col-md-12">
+                                <label for="resume" class="form-label">Resume (PDF, DOC, DOCX)</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="resume" name="resume" accept=".pdf,.doc,.docx">
+                                </div>
+                                <div th:if="${teacher.resumeUrl != null}" class="mt-2">
+                                    <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Resume already uploaded</span>
+                                    <a th:href="${teacher.resumeUrl}" target="_blank" class="ms-2 small">View current resume</a>
+                                </div>
+                                <div class="text-muted small mt-1">Max file size: 10MB.</div>
                             </div>
 
                             <div class="col-md-6">

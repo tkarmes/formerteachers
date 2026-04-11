@@ -78,6 +78,7 @@ public class TeacherService {
         teacher.setYearsInClassroom(profileData.getYearsInClassroom());
         teacher.setSubjectSpecialty(profileData.getSubjectSpecialty());
         teacher.setDesiredRole(profileData.getDesiredRole());
+        teacher.setProfileImageUrl(profileData.getProfileImageUrl());
         
         teacherRepository.save(teacher);
     }

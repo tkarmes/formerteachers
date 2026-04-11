@@ -3,6 +3,7 @@ package com.formerteachers.controller;
 import com.formerteachers.model.Job;
 import com.formerteachers.model.Teacher;
 import com.formerteachers.service.TeacherService;
+import com.formerteachers.service.FileService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -11,16 +12,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Set;
 
 @Controller
 public class TeacherController {
 
     private final TeacherService teacherService;
+    private final FileService fileService;
 
-    public TeacherController(TeacherService teacherService) {
+    public TeacherController(TeacherService teacherService, FileService fileService) {
         this.teacherService = teacherService;
+        this.fileService = fileService;
     }
 
     @PostMapping("/teacher/save-job")
@@ -56,8 +61,16 @@ public class TeacherController {
         return "edit-teacher-profile";
     }
 
-    @PostMapping("/teacher/profile/edit")
-    public String updateProfile(@ModelAttribute Teacher teacher, @AuthenticationPrincipal UserDetails userDetails) {
+    @PostMapping("/teacher/profile/update")
+    public String updateProfile(@ModelAttribute Teacher teacher, 
+                                @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+                                @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String imageUrl = fileService.uploadFile(profileImage);
+            teacher.setProfileImageUrl(imageUrl);
+        }
+        
         teacherService.updateProfile(userDetails.getUsername(), teacher);
         return "redirect:/teacher/profile";
     }

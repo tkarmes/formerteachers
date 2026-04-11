@@ -27,6 +27,8 @@ public class Teacher {
     
     private String desiredRole;
 
+    private String profileImageUrl;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "teacher_saved_jobs",
@@ -97,11 +99,27 @@ public class Teacher {
         this.desiredRole = desiredRole;
     }
 
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
     public Set<Job> getSavedJobs() {
         return savedJobs;
     }
 
     public void setSavedJobs(Set<Job> savedJobs) {
         this.savedJobs = savedJobs;
+    }
+
+    public boolean isProfileComplete() {
+        return fullName != null && !fullName.isEmpty() &&
+               bio != null && !bio.isEmpty() &&
+               yearsInClassroom != null &&
+               subjectSpecialty != null && !subjectSpecialty.isEmpty() &&
+               desiredRole != null && !desiredRole.isEmpty();
     }
 }

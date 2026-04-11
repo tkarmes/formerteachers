@@ -1,65 +1,130 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/common :: head(title='Edit Teacher Profile')}"></head>
+<head th:replace="~{fragments/common :: head('Edit My Profile - FormerTeachers')}">
+</head>
 <body class="bg-light">
-    <nav th:replace="~{fragments/common :: navbar}"></nav>
 
-    <div class="container mt-5 pb-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body p-5">
-                        <div class="d-flex align-items-center mb-4">
-                            <a href="/teacher/profile" class="btn btn-outline-secondary btn-sm rounded-pill me-3">
-                                <i class="fas fa-arrow-left"></i>
-                            </a>
-                            <h2 class="fw-bold mb-0">Edit Your Profile</h2>
-                        </div>
-                        <p class="text-muted mb-4">Complete your profile to tell your "transition story" and show employers the skills you bring from the classroom.</p>
+<nav th:replace="~{fragments/common :: navbar}"></nav>
 
-                        <form th:action="@{/teacher/profile/edit}" th:object="${teacher}" method="post">
-                            <input type="hidden" th:field="*{id}" />
-                            
-                            <div class="row g-3">
-                                <div class="col-md-12 mb-3">
-                                    <label for="fullName" class="form-label fw-bold small text-uppercase">Full Name</label>
-                                    <input type="text" th:field="*{fullName}" class="form-control rounded-3" id="fullName" placeholder="Your Name" required>
-                                </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white py-3">
+                    <h2 class="h4 mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Your Teacher Profile</h2>
+                </div>
+                <div class="card-body p-4">
 
-                                <div class="col-md-6 mb-3">
-                                    <label for="yearsInClassroom" class="form-label fw-bold small text-uppercase">Years in Classroom</label>
-                                    <input type="number" th:field="*{yearsInClassroom}" class="form-control rounded-3" id="yearsInClassroom" placeholder="5" min="0">
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="subjectSpecialty" class="form-label fw-bold small text-uppercase">Subject Specialty</label>
-                                    <input type="text" th:field="*{subjectSpecialty}" class="form-control rounded-3" id="subjectSpecialty" placeholder="e.g., High School Math, Elementary Literacy">
-                                </div>
-
-                                <div class="col-md-12 mb-3">
-                                    <label for="desiredRole" class="form-label fw-bold small text-uppercase">Desired Role / Industry</label>
-                                    <input type="text" th:field="*{desiredRole}" class="form-control rounded-3" id="desiredRole" placeholder="e.g., Instructional Designer, Project Manager, Customer Success">
-                                </div>
-
-                                <div class="col-md-12 mb-4">
-                                    <label for="bio" class="form-label fw-bold small text-uppercase">My Transition Story (Bio)</label>
-                                    <textarea th:field="*{bio}" class="form-control rounded-3" id="bio" rows="6" placeholder="Tell employers about your journey. What skills from the classroom translate to your desired roles? Why are you transitioning?"></textarea>
-                                    <div class="form-text mt-2 small">This is your chance to shine! Employers want to hear how your classroom experience makes you a unique asset.</div>
-                                </div>
-                            </div>
-
-                            <div class="d-grid mt-4">
-                                <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm">
-                                    <i class="fas fa-save me-2"></i> Save Profile Changes
-                                </button>
-                            </div>
-                        </form>
+                    <!-- Error Alert Section -->
+                    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <span th:text="${error}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
+
+                    <form th:action="@{/teacher/profile/update}" th:object="${teacher}" method="post" enctype="multipart/form-data" id="profileForm">
+                        <input type="hidden" th:field="*{id}" />
+                        <input type="hidden" th:field="*{profileImageUrl}" />
+
+                        <!-- Photo Section -->
+                        <div class="text-center mb-4">
+                            <div class="mb-3">
+                                <img th:if="${teacher.profileImageUrl != null && !teacher.profileImageUrl.empty}"
+                                     th:src="${teacher.profileImageUrl}"
+                                     class="rounded-circle shadow-sm profile-preview"
+                                     id="imagePreview"
+                                     style="width: 150px; height: 150px; object-fit: cover;">
+
+                                <img th:if="${teacher.profileImageUrl == null || teacher.profileImageUrl.empty}"
+                                     th:src="'https://api.dicebear.com/7.x/initials/svg?seed=' + ${teacher.fullName}"
+                                     class="rounded-circle shadow-sm profile-preview"
+                                     id="imagePreview"
+                                     style="width: 150px; height: 150px; object-fit: cover;">
+                            </div>
+                            <div class="mb-3">
+                                <label for="profileImage" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-camera me-1"></i> Upload New Photo
+                                    <input type="file" id="profileImage" name="profileImage" accept="image/*" class="d-none">
+                                </label>
+                                <div class="text-muted small mt-1">Recommended: Square image, max 10MB</div>
+                                <div id="fileSizeError" class="text-danger small mt-1 d-none">
+                                    <i class="bi bi-exclamation-circle me-1"></i> File is too large. Max 10MB allowed.
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label for="fullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-label form-control" id="fullName" th:field="*{fullName}" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="subjectSpecialty" class="form-label">Subject Specialty</label>
+                                <input type="text" class="form-control" id="subjectSpecialty" th:field="*{subjectSpecialty}" placeholder="e.g. 5th Grade, High School Math">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="yearsInClassroom" class="form-label">Years in Classroom</label>
+                                <input type="number" class="form-control" id="yearsInClassroom" th:field="*{yearsInClassroom}" min="0">
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="desiredRole" class="form-label">Desired Corporate Role</label>
+                                <input type="text" class="form-control" id="desiredRole" th:field="*{desiredRole}" placeholder="e.g. Instructional Designer, Project Manager">
+                            </div>
+
+                            <div class="col-md-12">
+                                <label for="bio" class="form-label">Your Transition Story (Bio)</label>
+                                <textarea class="form-control" id="bio" th:field="*{bio}" rows="6"
+                                          placeholder="Tell employers how your classroom skills (patience, organization, curriculum design) make you an asset to their team..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a th:href="@{/teacher/profile}" class="btn btn-light border px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-5" id="saveBtn">Save Profile</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <footer th:replace="~{fragments/common :: footer}"></footer>
+<footer th:replace="~{fragments/common :: footer}"></footer>
+
+<script>
+    // Live preview of the uploaded image
+    document.getElementById('profileImage').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        const errorDiv = document.getElementById('fileSizeError');
+        const saveBtn = document.getElementById('saveBtn');
+
+        if (file) {
+            // Check file size (10MB = 10 * 1024 * 1024 bytes)
+            const maxSize = 10 * 1024 * 1024;
+
+            if (file.size > maxSize) {
+                errorDiv.classList.remove('d-none');
+                saveBtn.disabled = true;
+                return;
+            } else {
+                errorDiv.classList.add('d-none');
+                saveBtn.disabled = false;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
 </body>
 </html>

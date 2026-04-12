@@ -20,6 +20,10 @@ public class JobService {
         this.jobRepository = jobRepository;
     }
 
+    public List<Job> getAllJobs() {
+        return jobRepository.findAll();
+    }
+
     public Page<Job> getApprovedJobs(String keyword, String location, String category, String workType, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         
@@ -55,8 +59,16 @@ public class JobService {
         jobRepository.save(job);
     }
 
+    public void deleteJob(Long id) {
+        jobRepository.deleteById(id);
+    }
+
     public void deleteJobById(Long id) {
         jobRepository.deleteById(id);
+    }
+
+    public List<Job> searchJobs(String query) {
+        return jobRepository.searchByKeyword(query);
     }
 
     public Job getJobByIdAndEmployer(Long id, EmployerProfile employer) {

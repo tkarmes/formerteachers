@@ -3,6 +3,8 @@ package com.formerteachers.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import com.formerteachers.util.DateFormatter;
 
 @Entity
@@ -45,6 +47,9 @@ public class Job {
     @ManyToOne
     @JoinColumn(name = "employer_id")
     private EmployerProfile employer;
+
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
+    private List<Application> applications = new ArrayList<>();
 
     public Job() {}
 
@@ -115,5 +120,13 @@ public class Job {
 
     public void setEmployer(EmployerProfile employer) {
         this.employer = employer;
+    }
+
+    public List<Application> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<Application> applications) {
+        this.applications = applications;
     }
 }

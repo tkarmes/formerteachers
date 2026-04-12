@@ -18,6 +18,12 @@ public class User {
 
     private String role;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Teacher teacherProfile;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private EmployerProfile employerProfile;
+
     public User() {}
 
     public User(String username, String password, String role) {
@@ -56,5 +62,21 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Teacher getTeacherProfile() {
+        return teacherProfile;
+    }
+
+    public void setTeacherProfile(Teacher teacherProfile) {
+        this.teacherProfile = teacherProfile;
+    }
+
+    public EmployerProfile getEmployerProfile() {
+        return employerProfile;
+    }
+
+    public void setEmployerProfile(EmployerProfile employerProfile) {
+        this.employerProfile = employerProfile;
     }
 }

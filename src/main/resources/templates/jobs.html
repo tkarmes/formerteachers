@@ -6,6 +6,16 @@
 
 <main style="flex: 1; padding: 40px 0; background-color: #f8fafc;">
     <div class="container">
+        <!-- Success/Error Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show mb-4 shadow-sm border-0 rounded-4" role="alert">
+            <i class="fas fa-check-circle me-2"></i> <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mb-4 shadow-sm border-0 rounded-4" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i> <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <!-- Header -->
         <header style="margin-bottom: 40px;">
             <h1 style="color: var(--bus-black); margin-bottom: 10px; font-weight: 800;">Find Your Next Role</h1>
@@ -14,60 +24,40 @@
 
         <!-- Search Bar -->
         <div class="search-container shadow-sm" style="background: white; padding: 25px; border-radius: 16px; margin-bottom: 40px; border: 1px solid #e2e8f0;">
-            <form action="/jobs" method="get" class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label" style="font-weight: 600; color: #475569;">Keyword</label>
+            <form action="/jobs/search" method="get" class="row g-3">
+                <div class="col-md-10">
+                    <label class="form-label" style="font-weight: 600; color: #475569;">Search Jobs</label>
                     <div class="input-group">
                         <span class="input-group-text" style="background: white; border-right: none;"><i class="bi bi-search"></i></span>
-                        <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="Job title or company..." style="border-left: none;">
+                        <input type="text" name="query" th:value="${query}" class="form-control" placeholder="Job title, company, or location..." style="border-left: none;">
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label" style="font-weight: 600; color: #475569;">Location</label>
-                    <div class="input-group">
-                        <span class="input-group-text" style="background: white; border-right: none;"><i class="bi bi-geo-alt"></i></span>
-                        <input type="text" name="location" th:value="${location}" class="form-control" placeholder="City or Remote..." style="border-left: none;">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label" style="font-weight: 600; color: #475569;">Category</label>
-                    <select name="category" class="form-select">
-                        <option value="">All Categories</option>
-                        <option value="Teaching" th:selected="${selectedCategory == 'Teaching'}">Teaching</option>
-                        <option value="Curriculum" th:selected="${selectedCategory == 'Curriculum'}">Curriculum Design</option>
-                        <option value="EdTech" th:selected="${selectedCategory == 'EdTech'}">EdTech</option>
-                        <option value="Admin" th:selected="${selectedCategory == 'Admin'}">Administration</option>
-                        <option value="Sales" th:selected="${selectedCategory == 'Sales'}">Sales/Customer Success</option>
-                        <option value="Other" th:selected="${selectedCategory == 'Other'}">Other</option>
-                    </select>
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="cta-btn w-100" style="border: none; background: var(--bus-yellow); color: var(--bus-black); height: 42px;">Search Jobs</button>
+                    <button type="submit" class="cta-btn w-100" style="border: none; background: var(--bus-yellow); color: var(--bus-black); height: 42px;">Search</button>
                 </div>
             </form>
         </div>
 
-        <div th:if="${totalElements > 0}" style="margin-bottom: 20px; color: #64748b; font-weight: 500;">
-            Found <span th:text="${totalElements}" style="color: var(--bus-black); font-weight: 700;">0</span> positions
+        <div th:if="${jobs != null && !#lists.isEmpty(jobs)}" style="margin-bottom: 20px; color: #64748b; font-weight: 500;">
+            Found <span th:text="${#lists.size(jobs)}" style="color: var(--bus-black); font-weight: 700;">0</span> positions
         </div>
 
         <!-- Job Cards -->
-        <div class="row" th:if="${not #lists.isEmpty(jobs)}">
+        <div class="row" th:if="${jobs != null && not #lists.isEmpty(jobs)}">
             <div th:each="job : ${jobs}" class="col-md-6 mb-4">
-                <div class="job-card shadow-sm" style="background: white; border-radius: 12px; border: 1px solid #eee; transition: transform 0.2s, box-shadow 0.2s; height: 100%; position: relative; overflow: hidden; cursor: pointer;"
-                     th:onclick="|window.location.href='/jobs/${job.id}'|">
+                <div class="job-card shadow-sm" style="background: white; border-radius: 12px; border: 1px solid #eee; transition: transform 0.2s, box-shadow 0.2s; height: 100%; position: relative; overflow: hidden; display: flex; flex-direction: column;">
                     
-                    <div style="padding: 30px;">
+                    <div style="padding: 30px; flex: 1; cursor: pointer;" th:onclick="|window.location.href='/jobs/${job.id}'|">
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
                             <div style="flex: 1;">
                                 <h3 style="color: var(--bus-black); margin: 0 0 5px 0; font-weight: 700;" th:text="${job.title}">Job Title</h3>
-                                <div style="color: var(--bus-black); font-weight: 500; font-size: 1.1rem;" th:text="${job.company}">Company Name</div>
+                                <div style="color: var(--bus-black); font-weight: 500; font-size: 1.1rem;" th:text="${job.employer != null ? job.employer.companyName : job.company}">Company Name</div>
                             </div>
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex align-items-center gap-2" onclick="event.stopPropagation();">
                                 <span class="badge" style="background-color: #f0f4f8; color: #475569; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 0.85rem;" th:text="${job.workType}">Work Type</span>
                                 
                                 <!-- Save Job Button for Teachers -->
-                                <form sec:authorize="hasRole('TEACHER')" th:action="@{/teacher/save-job}" method="post" onclick="event.stopPropagation();">
+                                <form sec:authorize="hasRole('TEACHER')" th:action="@{/teacher/save-job}" method="post">
                                     <input type="hidden" name="jobId" th:value="${job.id}"/>
                                     <button type="submit" class="btn btn-sm rounded-circle shadow-sm" 
                                             th:classappend="${savedJobIds != null && savedJobIds.contains(job.id) ? 'btn-danger' : 'btn-outline-danger'}"
@@ -86,53 +76,44 @@
 
                         <p style="color: #475569; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 25px; line-height: 1.6;" 
                            th:text="${job.description}">Job description preview...</p>
+                    </div>
 
-                        <div style="display: flex; gap: 12px; align-items: center; margin-top: auto;">
-                            <!-- Apply Button Logic -->
-                            <div th:if="${job.applyInfo != null and not #strings.isEmpty(job.applyInfo)}" style="flex: 1;">
-                                <a th:if="${#strings.contains(job.applyInfo, '.') and not #strings.contains(job.applyInfo, '@')}"
-                                   th:href="${#strings.startsWith(job.applyInfo, 'http') ? job.applyInfo : 'https://' + job.applyInfo}"
-                                   target="_blank" 
-                                   class="cta-btn" 
-                                   style="display: block; width: 100%; text-align: center; text-decoration: none;"
-                                   onclick="event.stopPropagation();">Apply Now</a>
-                                
-                                <a th:if="${#strings.contains(job.applyInfo, '@')}"
-                                   th:href="'mailto:' + ${job.applyInfo}"
-                                   class="cta-btn" 
-                                   style="display: block; width: 100%; text-align: center; text-decoration: none;"
-                                   onclick="event.stopPropagation();">Email to Apply</a>
-                                
-                                <span th:if="${not #strings.contains(job.applyInfo, '.') and not #strings.contains(job.applyInfo, '@')}"
-                                      class="cta-btn secondary-btn"
-                                      style="display: block; width: 100%; text-align: center; cursor: default; background: #e2e8f0; color: #475569; border: none;"
-                                      onclick="event.stopPropagation();">See Details to Apply</span>
+                    <div style="padding: 20px 30px; border-top: 1px solid #f1f5f9; background: white; display: flex; gap: 12px; align-items: center; margin-top: auto;">
+                        <a th:href="@{/jobs/{id}(id=${job.id})}" class="cta-btn secondary-btn" style="flex: 1; text-align: center; text-decoration: none; border: 1px solid #cbd5e1; background: white; color: #475569;">View Details</a>
+                        
+                        <!-- Quick Apply Button -->
+                        <div sec:authorize="hasRole('TEACHER')" style="flex: 1;">
+                            <div th:if="${appliedJobIds != null && appliedJobIds.contains(job.id)}" class="text-center">
+                                <span class="badge bg-success-subtle text-success py-2 px-3 rounded-pill w-100">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Applied
+                                </span>
                             </div>
-                            
-                            <a th:href="@{/jobs/{id}(id=${job.id})}" class="cta-btn secondary-btn" style="flex: 1; text-align: center; text-decoration: none; border: 1px solid #cbd5e1; background: white; color: #475569;">View Details</a>
+                            <div th:unless="${appliedJobIds != null && appliedJobIds.contains(job.id)}">
+                                <form th:if="${hasResume}" th:action="@{/jobs/{id}/apply(id=${job.id})}" method="POST">
+                                    <button type="submit" class="cta-btn w-100" style="border: none; background: var(--bus-yellow); color: var(--bus-black);">
+                                        <i class="bi bi-lightning-fill me-1"></i> Quick Apply
+                                    </button>
+                                </form>
+                                <a th:unless="${hasResume}" href="/teacher/profile/edit" class="cta-btn w-100 text-center text-decoration-none" style="border: 1px dashed #cbd5e1; background: #f8fafc; color: #64748b;">
+                                    Add Resume
+                                </a>
+                            </div>
                         </div>
                     </div>
                     
                     <div style="padding: 12px 30px; background: #f8fafc; border-top: 1px solid #eee; color: #94a3b8; font-size: 0.85rem;">
-                        Posted <span th:text="${job.postedDate != null ? job.postedDate : 'Just now'}">Today</span>
+                        Posted <span th:text="${job.createdAt != null ? #temporals.format(job.createdAt, 'MMM dd, yyyy') : 'Recently'}">Recently</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- No Jobs Found -->
-        <div th:if="${#lists.isEmpty(jobs)}" style="text-align: center; padding: 80px 0; background: white; border-radius: 16px; border: 1px solid #e2e8f0;">
+        <div th:if="${jobs == null || #lists.isEmpty(jobs)}" style="text-align: center; padding: 80px 0; background: white; border-radius: 16px; border: 1px solid #e2e8f0;">
             <div style="font-size: 3rem; margin-bottom: 20px;">🔍</div>
-            <h3 style="color: var(--bus-black); font-weight: 700;">No jobs match your search</h3>
-            <p style="color: #64748b; max-width: 400px; margin: 0 auto 25px auto;">Try broadening your keywords or changing your location filters!</p>
-            <a href="/jobs" class="cta-btn" style="display: inline-block; text-decoration: none; background: var(--bus-yellow); color: var(--bus-black);">Clear All Filters</a>
-        </div>
-
-        <!-- Pagination -->
-        <div th:if="${totalPages > 1}" style="margin-top: 40px; display: flex; justify-content: center; gap: 8px;">
-            <a th:if="${currentPage > 0}" th:href="@{/jobs(page=${currentPage - 1}, keyword=${keyword}, location=${location}, category=${selectedCategory})}" class="cta-btn secondary-btn" style="text-decoration: none;">&larr; Prev</a>
-            <span style="padding: 10px 15px; color: #64748b; font-weight: 600;">Page <span th:text="${currentPage + 1}">1</span> of <span th:text="${totalPages}">1</span></span>
-            <a th:if="${currentPage < totalPages - 1}" th:href="@{/jobs(page=${currentPage + 1}, keyword=${keyword}, location=${location}, category=${selectedCategory})}" class="cta-btn secondary-btn" style="text-decoration: none;">Next &rarr;</a>
+            <h3 style="color: var(--bus-black); font-weight: 700;">No jobs found</h3>
+            <p style="color: #64748b; max-width: 400px; margin: 0 auto 25px auto;">Try broadening your keywords or browse all jobs!</p>
+            <a href="/jobs" class="cta-btn" style="display: inline-block; text-decoration: none; background: var(--bus-yellow); color: var(--bus-black);">Clear Search</a>
         </div>
     </div>
 </main>
@@ -150,6 +131,7 @@
         font-weight: 700;
         transition: all 0.2s;
         font-size: 0.95rem;
+        display: block;
     }
     .secondary-btn:hover {
         background: #f1f5f9 !important;

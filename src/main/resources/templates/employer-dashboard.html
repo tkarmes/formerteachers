@@ -17,30 +17,30 @@
                         </div>
                         <div class="text-center mb-4">
                             <!-- Show logo if exists, otherwise show icon -->
-                            <div th:if="${profile.logoUrl != null && !profile.logoUrl.isEmpty()}" class="mb-3 d-inline-block">
+                            <div th:if="${profile != null && profile.logoUrl != null && !profile.logoUrl.isEmpty()}" class="mb-3 d-inline-block">
                                 <img th:src="${profile.logoUrl}" th:alt="${profile.companyName}" 
                                      class="img-fluid rounded shadow-sm border p-2 bg-white" 
                                      style="max-height: 80px; width: auto; max-width: 100%;">
                             </div>
-                            <div th:unless="${profile.logoUrl != null && !profile.logoUrl.isEmpty()}" class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <div th:unless="${profile != null && profile.logoUrl != null && !profile.logoUrl.isEmpty()}" class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                                 <i class="fas fa-building fa-2x"></i>
                             </div>
-                            <h4 class="fw-bold mb-1" th:text="${profile.companyName}">Company Name</h4>
-                            <p class="text-muted small mb-0" th:if="${profile.website}">
+                            <h4 class="fw-bold mb-1" th:text="${profile != null ? profile.companyName : 'Company Name'}">Company Name</h4>
+                            <p class="text-muted small mb-0" th:if="${profile != null && profile.website != null && !profile.website.isEmpty()}">
                                 <a th:href="${profile.website.startsWith('http') ? profile.website : 'https://' + profile.website}" 
                                    target="_blank" class="text-decoration-none" th:text="${profile.website}">www.company.com</a>
                             </p>
                         </div>
                         <hr class="opacity-10">
                         <h6 class="fw-bold text-uppercase small text-muted mb-2">About Us</h6>
-                        <p class="small text-secondary mb-0" th:text="${profile.companyDescription != null ? profile.companyDescription : 'Tell us about your company and why teachers should join your team! Click the Edit button above to get started.'}">
+                        <p class="small text-secondary mb-0" th:text="${profile != null && profile.companyDescription != null ? profile.companyDescription : 'Tell us about your company and why teachers should join your team! Click the Edit button above to get started.'}">
                             No company description provided yet.
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="card border-0 shadow-sm h-100">
+                <div class="card border-0 shadow-sm h-100" th:if="${jobs != null}">
                     <div class="card-body">
                         <h5 class="fw-bold mb-4">Quick Stats</h5>
                         <div class="row g-3">
@@ -66,7 +66,7 @@
             <div class="col-md-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="fw-bold"><i class="fas fa-list me-2 text-primary"></i>Your Job Postings</h2>
-                    <a href="/jobs/create" class="btn btn-primary shadow-sm px-4 rounded-pill">
+                    <a href="/jobs/post" class="btn btn-primary shadow-sm px-4 rounded-pill">
                         <i class="fas fa-plus me-1"></i> Post a New Job
                     </a>
                 </div>
@@ -98,6 +98,7 @@
                                 <tr>
                                     <th class="ps-4 py-3">Job Title</th>
                                     <th class="py-3">Status</th>
+                                    <th class="py-3 text-center">Applicants</th>
                                     <th class="py-3">Posted Date</th>
                                     <th class="text-end pe-4 py-3">Actions</th>
                                 </tr>
@@ -116,7 +117,15 @@
                                             <i class="fas fa-clock me-1"></i> Pending Approval
                                         </span>
                                     </td>
-                                    <td class="text-secondary" th:text="${job.postedDate}">Date</td>
+                                    <td class="text-center">
+                                        <a th:href="@{/jobs/applicants/{id}(id=${job.id})}" class="text-decoration-none">
+                                            <span class="badge rounded-pill bg-primary px-3 py-2">
+                                                <i class="fas fa-users me-1"></i>
+                                                <span th:text="${#lists.size(job.applications)}">0</span>
+                                            </span>
+                                        </a>
+                                    </td>
+                                    <td class="text-secondary" th:text="${#temporals.format(job.createdAt, 'MMM dd, yyyy')}">Date</td>
                                     <td class="text-end pe-4">
                                         <div class="btn-group btn-group-sm shadow-sm rounded">
                                             <a th:href="@{/jobs/{id}(id=${job.id})}" class="btn btn-outline-primary border-end-0" title="View Details">
@@ -125,17 +134,18 @@
                                             <a th:href="@{/jobs/edit/{id}(id=${job.id})}" class="btn btn-outline-secondary border-end-0" title="Edit Job">
                                                 <i class="fas fa-edit me-1"></i>Edit
                                             </a>
-                                            <a th:href="@{/jobs/delete/{id}(id=${job.id})}" 
-                                               class="btn btn-outline-danger" 
-                                               onclick="return confirm('Are you sure you want to delete this job posting? This cannot be undone.')"
-                                               title="Delete Job">
-                                                <i class="fas fa-trash-alt me-1"></i>Delete
-                                            </a>
+                                            <form th:action="@{/jobs/delete/{id}(id=${job.id})}" method="post" style="display:inline;">
+                                                <button type="submit" class="btn btn-outline-danger" 
+                                                        onclick="return confirm('Are you sure you want to delete this job posting? This cannot be undone.')"
+                                                        title="Delete Job">
+                                                    <i class="fas fa-trash-alt me-1"></i>Delete
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr th:if="${#lists.isEmpty(jobs)}">
-                                    <td colspan="4" class="text-center py-5 bg-white">
+                                    <td colspan="5" class="text-center py-5 bg-white">
                                         <div class="mb-3">
                                             <i class="fas fa-clipboard-list fa-3x text-muted opacity-25"></i>
                                         </div>

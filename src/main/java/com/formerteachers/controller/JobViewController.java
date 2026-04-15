@@ -228,7 +228,7 @@ public class JobViewController {
         List<Application> applications = applicationService.getJobApplications(job);
         model.addAttribute("job", job);
         model.addAttribute("applications", applications);
-        return "job-applicants";
+        return "job-applicants.html";
     }
 
     @PostMapping("/applications/{id}/status")
@@ -248,6 +248,27 @@ public class JobViewController {
         }
 
         redirectAttributes.addFlashAttribute("error", "Failed to update application status.");
+        return "redirect:/jobs/dashboard";
+    }
+
+    @PostMapping("/applications/{id}/delete")
+    public String deleteApplication(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(auth.getName()).orElse(null);
+
+        Optional<Application> optionalApplication = applicationService.getById(id);
+        if (optionalApplication.isPresent() && user != null && user.getEmployerProfile() != null) {
+            Application application = optionalApplication.get();
+            // Verify ownership
+            if (application.getJob().getEmployer().getId().equals(user.getEmployerProfile().getId())) {
+                Long jobId = application.getJob().getId();
+                applicationService.delete(id);
+                redirectAttributes.addFlashAttribute("success", "Application deleted successfully.");
+                return "redirect:/jobs/applicants/" + jobId;
+            }
+        }
+
+        redirectAttributes.addFlashAttribute("error", "Failed to delete application.");
         return "redirect:/jobs/dashboard";
     }
 }

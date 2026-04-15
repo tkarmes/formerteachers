@@ -36,7 +36,7 @@
                                     <th class="py-3">Applied Date</th>
                                     <th class="py-3">Status</th>
                                     <th class="py-3">Resume</th>
-                                    <th class="text-end pe-4 py-3">Update Status</th>
+                                    <th class="text-end pe-4 py-3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -68,14 +68,19 @@
                                         <span th:unless="${app.resumeUrl}" class="text-muted small italic">No resume</span>
                                     </td>
                                     <td class="text-end pe-4">
-                                        <form th:action="@{/jobs/applications/{id}/status(id=${app.id})}" method="post" class="d-inline-flex">
-                                            <select name="status" class="form-select form-select-sm me-2" style="width: auto;">
+                                        <form th:action="@{/jobs/applications/{id}/status(id=${app.id})}" method="post" class="d-inline-flex me-2">
+                                            <select name="status" class="form-select form-select-sm" style="width: auto;">
                                                 <option value="PENDING" th:selected="${app.status == 'PENDING'}">Pending</option>
                                                 <option value="REVIEWED" th:selected="${app.status == 'REVIEWED'}">Reviewed</option>
                                                 <option value="SHORTLISTED" th:selected="${app.status == 'SHORTLISTED'}">Shortlisted</option>
                                                 <option value="REJECTED" th:selected="${app.status == 'REJECTED'}">Rejected</option>
                                             </select>
-                                            <button type="submit" class="btn btn-sm btn-dark">Update</button>
+                                            <button type="submit" class="btn btn-sm btn-dark ms-2">Update</button>
+                                        </form>
+                                        <form th:action="@{/jobs/applications/{id}/delete(id=${app.id})}" method="post" class="d-inline-flex" onsubmit="return confirm('Are you sure you want to delete this application?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>

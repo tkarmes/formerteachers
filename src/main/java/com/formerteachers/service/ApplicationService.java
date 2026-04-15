@@ -58,4 +58,8 @@ public class ApplicationService {
     public Optional<Application> getById(Long id) {
         return applicationRepository.findById(id);
     }
+
+    public void delete(Long id) {
+        applicationRepository.deleteById(id);
+    }
 }

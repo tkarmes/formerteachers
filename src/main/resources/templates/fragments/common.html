@@ -16,20 +16,20 @@
 
     <nav th:fragment="navbar" class="navbar">
         <div class="nav-container">
-            <a class="logo" href="/">🍎 FormerTeachers</a>
+            <a class="logo" href="/">FormerTeachers</a>
             
             <div class="nav-links">
                 <a href="/jobs">Browse Jobs</a>
                 
                 <!-- Teacher specific -->
-                <a sec:authorize="hasRole('TEACHER')" href="/teacher/profile" style="color: #4db6ac;"><i class="bi bi-person-circle me-1"></i> My Profile</a>
-                <a sec:authorize="hasRole('TEACHER')" href="/teacher/saved-jobs" style="color: #ff8a80;"><i class="bi bi-heart-fill me-1"></i> My Saved Jobs</a>
+                <a sec:authorize="hasRole('TEACHER')" href="/teacher/profile">My Profile</a>
+                <a sec:authorize="hasRole('TEACHER')" href="/teacher/saved-jobs">My Saved Jobs</a>
                 
                 <!-- Employer specific -->
-                <a sec:authorize="hasRole('EMPLOYER')" href="/jobs/dashboard" style="color: var(--bus-yellow);">Employer Dashboard</a>
+                <a sec:authorize="hasRole('EMPLOYER')" href="/jobs/dashboard">Employer Dashboard</a>
                 
                 <!-- Admin specific -->
-                <a sec:authorize="hasRole('ADMIN')" href="/admin/dashboard" style="color: #ff5722;">Admin Dashboard</a>
+                <a sec:authorize="hasRole('ADMIN')" href="/admin/dashboard">Admin Dashboard</a>
 
                 <a sec:authorize="hasAnyRole('EMPLOYER', 'ADMIN')" href="/jobs/create" class="post-job">Post a Job</a>
 
@@ -62,7 +62,9 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS (optional, but good for some components) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <div th:fragment="scripts">
+        <!-- Bootstrap JS (optional, but good for some components) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </div>
 </body>
 </html>

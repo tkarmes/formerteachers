@@ -41,6 +41,10 @@ public class JobViewController {
         List<Job> jobs = jobService.getAllJobs();
         model.addAttribute("jobs", jobs);
         
+        // Initialize with default values
+        model.addAttribute("appliedJobIds", new HashSet<Long>());
+        model.addAttribute("hasResume", false);
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
             User user = userRepository.findByUsername(auth.getName()).orElse(null);
@@ -65,6 +69,10 @@ public class JobViewController {
         Job job = jobService.getJobById(id);
         model.addAttribute("job", job);
 
+        // Initialize with default values to prevent Thymeleaf/SpEL null pointer exceptions
+        model.addAttribute("hasApplied", false);
+        model.addAttribute("hasResume", false);
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
             User user = userRepository.findByUsername(auth.getName()).orElse(null);
@@ -75,14 +83,9 @@ public class JobViewController {
                     if (teacher != null) {
                         model.addAttribute("hasApplied", applicationService.hasApplied(teacher, job));
                         model.addAttribute("hasResume", teacher.getResumeUrl() != null && !teacher.getResumeUrl().isEmpty());
-                    } else {
-                        model.addAttribute("hasResume", false);
                     }
                 }
             }
-        } else {
-            model.addAttribute("hasApplied", false);
-            model.addAttribute("hasResume", false);
         }
 
         return "job-detail";
@@ -121,17 +124,18 @@ public class JobViewController {
         return "redirect:/jobs/" + id;
     }
 
-    @GetMapping("/post")
+    @GetMapping("/create")
     public String showPostJobForm(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated() || auth.getName().equals("anonymousUser")) {
             return "redirect:/login";
         }
         model.addAttribute("job", new Job());
-        return "post-job";
+        model.addAttribute("isEdit", false);
+        return "create-job";
     }
 
-    @PostMapping("/post")
+    @PostMapping("/create")
     public String postJob(@ModelAttribute Job job) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUsername(auth.getName()).orElse(null);
@@ -167,7 +171,8 @@ public class JobViewController {
     public String showEditJobForm(@PathVariable Long id, Model model) {
         Job job = jobService.getJobById(id);
         model.addAttribute("job", job);
-        return "post-job";
+        model.addAttribute("isEdit", true);
+        return "create-job";
     }
 
     @PostMapping("/edit/{id}")
@@ -175,9 +180,14 @@ public class JobViewController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUsername(auth.getName()).orElse(null);
         if (user != null && user.getEmployerProfile() != null) {
-            job.setEmployer(user.getEmployerProfile());
-            job.setId(id);
-            jobService.saveJob(job);
+            Job existingJob = jobService.getJobById(id);
+            if (existingJob != null && existingJob.getEmployer().getId().equals(user.getEmployerProfile().getId())) {
+                job.setEmployer(user.getEmployerProfile());
+                job.setId(id);
+                // Reset approval on edit if required by business logic, 
+                // but for now let's just save.
+                jobService.saveJob(job);
+            }
         }
         return "redirect:/jobs/dashboard";
     }
@@ -193,6 +203,10 @@ public class JobViewController {
         List<Job> jobs = jobService.searchJobs(query);
         model.addAttribute("jobs", jobs);
         model.addAttribute("query", query);
+
+        // Initialize with default values
+        model.addAttribute("appliedJobIds", new HashSet<Long>());
+        model.addAttribute("hasResume", false);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {

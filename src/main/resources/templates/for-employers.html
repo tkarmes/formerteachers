@@ -1,73 +1,108 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Employers - FormerTeachers</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
-
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head(title='For Employers - Former Teachers')}"></head>
+<style>
+    .employer-hero {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+    }
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: #eff6ff;
+        color: #2563eb;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+    .benefit-card {
+        padding: 30px;
+        border-radius: 15px;
+        background: white;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        height: 100%;
+        transition: transform 0.3s ease;
+    }
+    .benefit-card:hover {
+        transform: translateY(-5px);
+    }
+    .cta-section {
+        background: #f8fafc;
+        padding: 80px 0;
+    }
+    .cta-btn {
+        padding: 15px 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        background: #2563eb;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.3s;
+    }
+    .cta-btn:hover {
+        background: #1d4ed8;
+        color: white;
+    }
+</style>
 <body>
+    <div th:replace="~{fragments/common :: navbar}"></div>
 
-<nav class="navbar">
-    <div class="nav-container">
-        <a href="/" class="logo">FormerTeachers</a>
-        <div class="nav-links">
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new" class="post-job">Post a Job</a>
-            
-            <a href="/jobs/admin" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
-            <a href="/login" sec:authorize="isAnonymous()">Login</a>
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
+    <header class="employer-hero">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3">Hire the Best Talent from the Classroom</h1>
+            <p class="lead mb-5">Teachers are natural project managers, clear communicators, and lifelong learners. Find your next superstar here.</p>
+            <a href="/jobs/create" class="cta-btn">Post a Job Now →</a>
         </div>
-    </div>
-</nav>
+    </header>
 
-<div class="hero">
-    <h1>Reach Former Teachers Looking for Their Next Career</h1>
-    <p>Post your job on FormerTeachers and connect directly with talented educators transitioning into edtech, instructional design, corporate training, customer success, and more.</p>
-    <div class="hero-buttons">
-        <a href="/jobs/new" class="cta-btn">Post a Job Now →</a>
-    </div>
-</div>
-
-<div class="features">
-    <div class="feature-card">
-        <h3>Targeted Talent Pool</h3>
-        <p>Reach professionals with proven teaching skills: communication, facilitation, curriculum design, patience, and the ability to explain complex ideas simply.</p>
-    </div>
-    <div class="feature-card">
-        <h3>Easy & Free Posting</h3>
-        <p>No fees, no complicated forms. Post in minutes and get applications from motivated candidates ready for their next chapter.</p>
-    </div>
-    <div class="feature-card">
-        <h3>High-Quality Candidates</h3>
-        <p>Former teachers bring discipline, adaptability, empathy, and strong work ethic — qualities that shine in training, L&D, and customer education roles.</p>
-    </div>
-</div>
-
-<footer>
-    <div class="container">
-        <p style="font-size:24px; margin-bottom:8px; color:var(--bus-yellow); font-weight:bold;">FormerTeachers</p>
-        <p style="max-width:620px; margin:0 auto 25px;">
-            Connecting former teachers with meaningful careers in edtech, instructional design,
-            corporate training, customer education, and beyond.
-        </p>
-        <div>
-            <a href="/">Home</a>
-            <a href="/jobs">Browse Jobs</a>
-            <a href="/jobs/for-employers">For Employers</a>
-            <a href="/jobs/new">Post a Job</a>
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Why Hire Former Teachers?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="benefit-card">
+                        <div class="feature-icon"><i class="fas fa-users-cog"></i></div>
+                        <h3>Project Management</h3>
+                        <p>Teachers manage 30+ "clients" daily, handling scheduling, delivery, and assessment under tight deadlines.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="benefit-card">
+                        <div class="feature-icon"><i class="fas fa-comment-alt"></i></div>
+                        <h3>Communication</h3>
+                        <p>Experts at translating complex information into digestible concepts for diverse audiences.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="benefit-card">
+                        <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                        <h3>Adaptability</h3>
+                        <p>Quick to pivot and solve problems in high-pressure environments while maintaining composure.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <p style="font-size:14px; margin-top:30px;">
-            © 2026 FormerTeachers.com • Helping educators transition to rewarding new careers
-        </p>
-    </div>
-</footer>
+    </section>
 
+    <section class="cta-section text-center">
+        <div class="container">
+            <h2 class="mb-4">Ready to find your next hire?</h2>
+            <p class="lead mb-4 text-muted">Join hundreds of companies finding unique talent in the educator community.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/employer/signup" class="btn btn-outline-primary btn-lg px-4">Create Employer Account</a>
+                <a href="/jobs/create" class="cta-btn">Post a Job</a>
+            </div>
+        </div>
+    </section>
+
+    <div th:replace="~{fragments/common :: footer}"></div>
+    <div th:replace="~{fragments/common :: scripts}"></div>
 </body>
 </html>

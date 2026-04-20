@@ -64,6 +64,7 @@ public class TeacherController {
         existingTeacher.setYearsInClassroom(teacherData.getYearsInClassroom());
         existingTeacher.setSubjectSpecialty(teacherData.getSubjectSpecialty());
         existingTeacher.setDesiredRole(teacherData.getDesiredRole());
+        existingTeacher.setPublicProfile(teacherData.isPublicProfile()); // Update publicProfile field
 
         // Handle profile image upload
         if (profileImage != null && !profileImage.isEmpty()) {

@@ -14,56 +14,63 @@
 </head>
 <body>
 
-    <nav th:fragment="navbar" class="navbar">
-        <div class="nav-container">
-            <a class="logo" href="/">FormerTeachers</a>
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg ft-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-chalkboard-teacher logo-icon"></i>FormerTeachers
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             
-            <div class="nav-links">
-                <a href="/jobs">Browse Jobs</a>
-                
-                <!-- Teacher specific -->
-                <a sec:authorize="hasRole('TEACHER')" href="/teacher/profile">My Profile</a>
-                <a sec:authorize="hasRole('TEACHER')" href="/teacher/saved-jobs">My Saved Jobs</a>
-                
-                <!-- Employer specific -->
-                <a sec:authorize="hasRole('EMPLOYER')" href="/jobs/dashboard">Employer Dashboard</a>
-                
-                <!-- Admin specific -->
-                <a sec:authorize="hasRole('ADMIN')" href="/admin/dashboard">Admin Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/jobs">Browse Jobs</a></li>
+                    <li class="nav-item" sec:authorize="hasRole('TEACHER')"><a class="nav-link" href="/teacher/profile">My Profile</a></li>
+                    <li class="nav-item" sec:authorize="hasRole('TEACHER')"><a class="nav-link" href="/teacher/saved-jobs">Saved Jobs</a></li>
+                    <li class="nav-item" sec:authorize="hasRole('EMPLOYER')"><a class="nav-link" href="/employer/browse-talent">Browse Talent</a></li>
+                    <li class="nav-item" sec:authorize="hasRole('EMPLOYER')"><a class="nav-link" href="/jobs/dashboard">Employer Dashboard</a></li>
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" href="/admin/dashboard">Admin Dashboard</a></li>
+                </ul>
 
-                <a sec:authorize="hasAnyRole('EMPLOYER', 'ADMIN')" href="/jobs/create" class="post-job">Post a Job</a>
-
-                <!-- Auth links -->
-                <a sec:authorize="!isAuthenticated()" href="/login">Login</a>
-                
-                <span sec:authorize="isAuthenticated()" style="display: inline-flex; align-items: center;">
-                    <span style="color: white; margin-left: 20px; opacity: 0.8; font-size: 0.9rem;">
-                        Hi, <span sec:authentication="name">User</span>
-                    </span>
-                    <form th:action="@{/logout}" method="post" style="display: inline; margin: 0;">
-                        <button type="submit" class="logout-btn">Logout</button>
-                    </form>
-                </span>
+                <div class="d-flex align-items-center">
+                    <a sec:authorize="hasAnyRole('EMPLOYER', 'ADMIN')" href="/jobs/create" class="cta-btn py-2 px-3 me-3" style="font-size: 0.9rem;">Post a Job</a>
+                    
+                    <a sec:authorize="!isAuthenticated()" href="/login" class="nav-link">Login</a>
+                    
+                    <div sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            Hi, <span sec:authentication="name">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
     <footer th:fragment="footer">
-        <div class="container py-4">
-            <div class="row align-items-center">
+        <div class="container py-5">
+            <div class="row">
                 <div class="col-md-6 text-center text-md-start">
-                    <h5 class="fw-bold mb-1">FormerTeachers</h5>
-                    <p class="text-white-50 small mb-0">Empowering educators to find their next chapter.</p>
+                    <h5 class="fw-bold mb-3">FormerTeachers</h5>
+                    <p class="text-white-50 small mb-0">The premier destination for educators looking to transition into new careers.</p>
                 </div>
-                <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
-                    <p class="text-white-50 small mb-0">&copy; 2024 Former Teachers Job Board. Made with 🍎 for teachers.</p>
+                <div class="col-md-6 text-center text-md-end mt-4 mt-md-0">
+                    <p class="small mb-2">🍎 Built for Teachers</p>
+                    <p class="text-white-50 small mb-0">&copy; 2024 Former Teachers Job Board. All rights reserved.</p>
                 </div>
             </div>
         </div>
     </footer>
 
     <div th:fragment="scripts">
-        <!-- Bootstrap JS (optional, but good for some components) -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </div>
 </body>

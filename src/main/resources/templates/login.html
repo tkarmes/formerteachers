@@ -1,69 +1,67 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - FormerTeachers</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
-<body style="display: flex; flex-direction: column; min-height: 100vh;">
+<head th:replace="~{fragments/common :: head(title='Login')}"></head>
+<body>
 
 <div th:replace="~{fragments/common :: navbar}"></div>
 
-<div class="form-box shadow-sm" style="margin: 60px auto; max-width: 450px; padding: 40px;">
-    <h2 style="text-align: center; margin-bottom: 30px; color: var(--bus-black); text-transform: uppercase; letter-spacing: 1px;">Login</h2>
+<div class="container d-flex justify-content-center align-items-center" style="flex: 1; padding: 40px 0;">
+    <div class="form-box" style="width: 100%; max-width: 450px; padding: 50px;">
+        <h2 style="text-align: center; margin-bottom: 30px; color: var(--bus-black); font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">Sign In</h2>
 
-    <!-- Success and Error Messages -->
-    <div th:if="${param.error}" class="error" style="text-align: center; margin-bottom: 20px; padding: 10px; border: 1px solid var(--error-red); border-radius: 4px;">
-        Invalid username or password.
-    </div>
-    
-    <div th:if="${param.logout}" class="success">
-        You have been logged out.
-    </div>
-    
-    <div th:if="${param.employerRegistered}" class="success">
-        Registration successful! Please log in below.
-    </div>
-
-    <div th:if="${param.teacherRegistered}" class="success">
-        Teacher registration successful! Please log in below.
-    </div>
-
-    <form th:action="@{/login}" method="post">
-        <div class="form-group">
-            <label for="username">Username or Email</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required autofocus autocomplete="username">
+        <!-- Success and Error Messages -->
+        <div th:if="${param.error}" class="error" style="text-align: center; margin-bottom: 20px; padding: 15px; border: 2px solid var(--error-red);">
+            Invalid username or password.
+        </div>
+        
+        <div th:if="${param.logout}" class="success" style="margin-bottom: 20px;">
+            You have been logged out.
+        </div>
+        
+        <div th:if="${param.employerRegistered}" class="success" style="margin-bottom: 20px;">
+            Registration successful! Please log in below.
         </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+        <div th:if="${param.teacherRegistered}" class="success" style="margin-bottom: 20px;">
+            Teacher registration successful! Please log in below.
         </div>
 
-        <button type="submit" class="cta-btn btn-submit" style="width: 100%; border: none; cursor: pointer; margin-top: 10px;">Sign In</button>
-    </form>
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required autofocus autocomplete="username">
+            </div>
 
-    <div style="margin: 30px 0; border-top: 1px solid #eee; position: relative; text-align: center;">
-        <span style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: white; padding: 0 15px; color: #888; font-size: 0.9rem;">OR</span>
-    </div>
-    
-    <div style="text-align: center;">
-        <p style="margin-bottom: 15px; color: #666;">Are you an employer looking for talent?</p>
-        <a th:href="@{/employer-signup}" class="cta-btn btn-secondary" style="text-decoration: none; display: block; border-width: 2px;">Create Employer Account</a>
-    </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            </div>
 
-    <div style="text-align: center; margin-top: 20px;">
-        <p style="margin-bottom: 15px; color: #666;">Are you a teacher looking for new opportunities?</p>
-        <a th:href="@{/teacher-signup}" class="cta-btn btn-secondary" style="text-decoration: none; display: block; border-width: 2px;">Create Teacher Account</a>
-    </div>
+            <button type="submit" class="cta-btn" style="width: 100%; margin-top: 10px; cursor: pointer;">Enter Class</button>
+        </form>
 
-    <p style="text-align: center; margin-top: 30px;">
-        <a href="/" style="color: var(--chalkboard-green); text-decoration: none; font-weight: bold;">&larr; Back to Home</a>
-    </p>
+        <div style="margin: 30px 0; border-top: 2px solid var(--bus-black); position: relative; text-align: center;">
+            <span style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: white; padding: 0 15px; color: var(--bus-black); font-weight: 900; font-size: 0.9rem;">OR</span>
+        </div>
+        
+        <div style="text-align: center;">
+            <p style="margin-bottom: 15px; color: #555; font-weight: 600;">Employer?</p>
+            <a th:href="@{/employer-signup}" class="btn-secondary" style="text-decoration: none; display: block; text-align: center;">Create Employer Account</a>
+        </div>
+
+        <div style="text-align: center; margin-top: 25px;">
+            <p style="margin-bottom: 15px; color: #555; font-weight: 600;">Teacher?</p>
+            <a th:href="@{/teacher-signup}" class="btn-secondary" style="text-decoration: none; display: block; text-align: center;">Create Teacher Account</a>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px;">
+            <a href="/" style="color: var(--apple-red); text-decoration: none; font-weight: 800; text-transform: uppercase; font-size: 0.85rem;">&larr; Exit to Home</a>
+        </p>
+    </div>
 </div>
 
 <div th:replace="~{fragments/common :: footer}"></div>
+<div th:replace="~{fragments/common :: scripts}"></div>
 
 </body>
 </html>

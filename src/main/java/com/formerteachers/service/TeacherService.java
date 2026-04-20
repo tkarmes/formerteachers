@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -84,8 +85,13 @@ public class TeacherService {
         teacher.setSubjectSpecialty(profileData.getSubjectSpecialty());
         teacher.setDesiredRole(profileData.getDesiredRole());
         teacher.setProfileImageUrl(profileData.getProfileImageUrl());
+        teacher.setPublicProfile(profileData.isPublicProfile());
         
         teacherRepository.save(teacher);
+    }
+
+    public List<Teacher> getPublicTeachers() {
+        return teacherRepository.findByPublicProfileTrue();
     }
 
     private Teacher getOrCreateTeacher(User user) {

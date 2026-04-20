@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head(${teacher.fullName} + ' - Teacher Profile')}">
+</head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/common :: navbar}"></nav>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Back button -->
+            <div class="mb-4">
+                <a href="/employer/browse-talent" class="btn btn-link link-secondary p-0 text-decoration-none">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Browse Talent
+                </a>
+            </div>
+
+            <!-- Profile Header Card -->
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
+                <div class="card-body p-0">
+                    <div class="bg-primary p-4 p-md-5 text-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center mb-3 mb-md-0">
+                                <img th:if="${teacher.profileImageUrl != null && !teacher.profileImageUrl.empty}"
+                                     th:src="${teacher.profileImageUrl}"
+                                     class="rounded-circle border border-4 border-white shadow"
+                                     style="width: 160px; height: 160px; object-fit: cover;"
+                                     alt="Profile Image">
+                                <img th:if="${teacher.profileImageUrl == null || teacher.profileImageUrl.empty}"
+                                     th:src="'https://api.dicebear.com/7.x/initials/svg?seed=' + ${teacher.fullName}"
+                                     class="rounded-circle border border-4 border-white shadow"
+                                     style="width: 160px; height: 160px; object-fit: cover;"
+                                     alt="Default Profile Image">
+                            </div>
+                            <div class="col-md-9 text-center text-md-start">
+                                <h1 class="fw-bold mb-1" th:text="${teacher.fullName}">Teacher Name</h1>
+                                <p class="lead mb-3" th:text="${teacher.desiredRole}">Target Role</p>
+                                <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-briefcase me-2"></i>
+                                        <span th:text="${teacher.yearsInClassroom + ' Years Experience'}">X Years</span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-journal-text me-2"></i>
+                                        <span th:text="${teacher.subjectSpecialty}">Subject</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 p-md-5">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <h3 class="fw-bold mb-4">The Transition Story</h3>
+                                <div class="bg-light p-4 rounded-4 mb-4">
+                                    <p class="mb-0 white-space-pre-wrap" th:text="${teacher.bio}" style="line-height: 1.8;">
+                                        Teacher bio/story...
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="sticky-top" style="top: 2rem;">
+                                    <div class="card border-0 bg-white shadow-sm rounded-4 mb-4">
+                                        <div class="card-body p-4 text-center">
+                                            <h5 class="fw-bold mb-4">Interested?</h5>
+                                            <div class="d-grid gap-3">
+                                                <a th:if="${teacher.resumeUrl != null}" th:href="${teacher.resumeUrl}" target="_blank" class="btn btn-primary py-2 rounded-3">
+                                                    <i class="bi bi-file-earmark-pdf me-2"></i> Download Resume
+                                                </a>
+                                                <a th:href="'mailto:' + ${teacher.user.username}" class="btn btn-outline-primary py-2 rounded-3">
+                                                    <i class="bi bi-envelope me-2"></i> Contact via Email
+                                                </a>
+                                            </div>
+                                            <hr class="my-4">
+                                            <p class="small text-muted mb-0">
+                                                By contacting this candidate, you agree to our terms of service regarding recruitment.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/common :: footer}"></footer>
+
+<style>
+    .white-space-pre-wrap {
+        white-space: pre-wrap;
+    }
+</style>
+
+</body>
+</html>

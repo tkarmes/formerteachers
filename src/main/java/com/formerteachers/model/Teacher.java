@@ -31,6 +31,8 @@ public class Teacher {
     
     private String resumeUrl;
 
+    private Boolean publicProfile = false; // Changed to Boolean to handle existing null rows during migration
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "teacher_saved_jobs",
@@ -123,6 +125,18 @@ public class Teacher {
 
     public void setSavedJobs(Set<Job> savedJobs) {
         this.savedJobs = savedJobs;
+    }
+
+    public Boolean getPublicProfile() {
+        return publicProfile;
+    }
+
+    public void setPublicProfile(Boolean publicProfile) {
+        this.publicProfile = publicProfile;
+    }
+
+    public boolean isPublicProfile() {
+        return publicProfile != null && publicProfile;
     }
 
     public boolean isProfileComplete() {

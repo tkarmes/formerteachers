@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/common :: head('Browse Talent - FormerTeachers')}">
+</head>
+<body class="bg-light">
+
+<nav th:replace="~{fragments/common :: navbar}"></nav>
+
+<div class="container py-5">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h1 class="fw-bold">Browse Talent</h1>
+            <p class="text-muted">Discover former teachers with the transferable skills your team needs.</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <span class="badge bg-primary rounded-pill px-3 py-2" th:text="${teachers.size() + ' Teachers Available'}">0 Teachers Available</span>
+        </div>
+    </div>
+
+    <!-- Talent Grid -->
+    <div class="row g-4">
+        <div th:each="teacher : ${teachers}" class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm hover-shadow transition-all">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <img th:if="${teacher.profileImageUrl != null && !teacher.profileImageUrl.empty}"
+                             th:src="${teacher.profileImageUrl}"
+                             class="rounded-circle me-3"
+                             style="width: 64px; height: 64px; object-fit: cover;"
+                             alt="Profile Image">
+                        <img th:if="${teacher.profileImageUrl == null || teacher.profileImageUrl.empty}"
+                             th:src="'https://api.dicebear.com/7.x/initials/svg?seed=' + ${teacher.fullName}"
+                             class="rounded-circle me-3"
+                             style="width: 64px; height: 64px; object-fit: cover;"
+                             alt="Default Profile Image">
+                        
+                        <div>
+                            <h5 class="card-title mb-0 fw-bold" th:text="${teacher.fullName}">Teacher Name</h5>
+                            <span class="badge bg-light text-primary border border-primary-subtle mt-1" th:text="${teacher.desiredRole}">Desired Role</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex align-items-center text-muted small mb-1">
+                            <i class="bi bi-briefcase me-2"></i>
+                            <span th:text="${teacher.yearsInClassroom + ' Years in Classroom'}">X Years</span>
+                        </div>
+                        <div class="d-flex align-items-center text-muted small">
+                            <i class="bi bi-journal-text me-2"></i>
+                            <span th:text="${teacher.subjectSpecialty}">Subject</span>
+                        </div>
+                    </div>
+
+                    <p class="card-text text-muted line-clamp-3 mb-4" th:text="${teacher.bio}">
+                        Bio goes here...
+                    </p>
+
+                    <div class="d-grid mt-auto">
+                        <a th:href="@{'/employer/teacher-profile/' + ${teacher.id}}" class="btn btn-outline-primary">
+                            View Full Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div th:if="${teachers.empty}" class="col-12 text-center py-5">
+            <div class="bg-white rounded-4 p-5 shadow-sm">
+                <i class="bi bi-people text-muted display-1 mb-3"></i>
+                <h3>No public profiles yet</h3>
+                <p class="text-muted">Teachers are currently preparing their profiles to transition into corporate roles. Check back soon!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/common :: footer}"></footer>
+
+<style>
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    .transition-all {
+        transition: all 0.3s ease;
+    }
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+
+</body>
+</html>

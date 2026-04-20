@@ -1,66 +1,74 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/common :: head(title='Transition to Your Next Career')}"></head>
 <body>
-    <div th:replace="~{fragments/common :: navbar}"></div>
 
-    <header class="hero">
-        <div class="container">
-            <h1>Your Teaching Skills Are in High Demand</h1>
-            <p>We help former teachers find fulfilling careers in corporate training, instructional design, project management, and more.</p>
-            <div class="hero-btns">
-                <a href="/jobs" class="cta-btn">Find a Job</a>
-                <a href="/jobs/create" class="btn-secondary">Post a Job</a>
-            </div>
+<div th:replace="~{fragments/common :: navbar}"></div>
+
+<header class="hero">
+    <div class="container">
+        <h1>From Classroom to Career</h1>
+        <p>The premier job board exclusively for former teachers looking for their next corporate, non-profit, or government role.</p>
+        <div class="hero-btns" sec:authorize="!isAuthenticated()">
+            <a th:href="@{/teacher-signup}" class="cta-btn">Join as a Teacher</a>
+            <a th:href="@{/employer-signup}" class="btn-secondary">Post a Job</a>
         </div>
-    </header>
+        <div class="hero-btns" sec:authorize="isAuthenticated()">
+            <a th:href="@{/jobs}" class="cta-btn">Browse Opportunities</a>
+        </div>
+    </div>
+</header>
 
+<section class="features-container">
     <div class="features">
         <div class="feature-card">
+            <i class="fas fa-bullseye"></i>
             <h3>Curated Roles</h3>
             <p>Hand-picked opportunities that value the unique skill set of educators.</p>
         </div>
         <div class="feature-card">
+            <i class="fas fa-file-alt"></i>
             <h3>Resume Translation</h3>
             <p>Resources to help you frame your classroom experience for corporate recruiters.</p>
         </div>
         <div class="feature-card">
+            <i class="fas fa-users"></i>
             <h3>Supportive Community</h3>
             <p>Connect with other former teachers who have successfully made the leap.</p>
         </div>
     </div>
+</section>
 
-    <main>
+<section class="job-section">
+    <div class="container">
         <h2 class="section-title">Latest Opportunities</h2>
         
-        <div class="job-list">
-            <!-- If no jobs -->
-            <div th:if="${#lists.isEmpty(latestJobs)}" style="text-align: center; grid-column: 1/-1; padding: 40px; background: white; border-radius: 8px;">
-                <p>Check back soon for new job postings!</p>
-                <p>Employers: <a href="/jobs/create" style="color: var(--chalkboard-green); font-weight: bold;">Post your first job here</a> to help former teachers transition.</p>
-            </div>
+        <div th:if="${featuredJobs == null or featuredJobs.isEmpty()}" class="empty-state" style="text-align: center; padding: 40px;">
+            <p style="font-size: 1.2rem; color: #666;">Check back soon for new job postings!</p>
+            <a sec:authorize="hasRole('EMPLOYER')" th:href="@{/jobs/create}" class="btn-secondary">Post your first job here to help former teachers transition.</a>
+        </div>
 
-            <!-- If jobs exist -->
-            <a th:each="job : ${latestJobs}" th:href="@{/jobs/{id}(id=${job.id})}" class="job-card">
-                <div class="job-info">
-                    <h3 th:text="${job.title}">Job Title</h3>
-                    <span class="company" th:text="${job.employer.companyName}">Company Name</span>
-                    <p th:text="${#strings.abbreviate(job.description, 150)}">Short description...</p>
+        <div class="job-list" th:if="${featuredJobs != null and !featuredJobs.isEmpty()}">
+            <a th:each="job : ${featuredJobs}" th:href="@{/jobs/{id}(id=${job.id})}" class="job-card">
+                <div>
+                    <h3 th:text="${job.title}">Instructional Designer</h3>
+                    <span class="company" th:text="${job.company}">EdTech Solutions</span>
                 </div>
                 <div class="job-meta">
-                    <span class="new-badge">New</span>
-                    <span class="tag" th:text="${job.location}">Location</span>
-                    <span class="tag" th:text="${job.type}">Full-time</span>
+                    <span class="tag" th:text="${job.location}">Remote</span>
+                    <span class="tag" th:text="${job.workType}">Full-time</span>
                 </div>
             </a>
         </div>
-
-        <div style="text-align: center; margin-bottom: 60px;" th:if="${not #lists.isEmpty(latestJobs)}">
-            <a href="/jobs" class="cta-btn">Browse All Jobs</a>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a th:href="@{/jobs}" class="btn-secondary">View All Jobs</a>
         </div>
-    </main>
+    </div>
+</section>
 
-    <div th:replace="~{fragments/common :: footer}"></div>
-    <div th:replace="~{fragments/common :: scripts}"></div>
+<div th:replace="~{fragments/common :: footer}"></div>
+<div th:replace="~{fragments/common :: scripts}"></div>
+
 </body>
 </html>

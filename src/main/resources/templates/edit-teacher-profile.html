@@ -62,6 +62,17 @@
                                 <input type="text" class="form-label form-control" id="fullName" th:field="*{fullName}" required>
                             </div>
 
+                            <!-- Visibility Toggle -->
+                            <div class="col-md-12">
+                                <div class="form-check form-switch p-3 bg-light rounded border">
+                                    <input class="form-check-input ms-0" type="checkbox" role="switch" id="publicProfile" th:field="*{publicProfile}">
+                                    <label class="form-check-label ms-2 fw-bold" for="publicProfile">
+                                        Make Profile Publicly Searchable for Employers
+                                    </label>
+                                    <div class="small text-muted ms-2 mt-1">When enabled, employers can find you in the Talent Gallery.</div>
+                                </div>
+                            </div>
+
                             <!-- Resume Upload Section -->
                             <div class="col-md-12">
                                 <label for="resume" class="form-label">Resume (PDF, DOC, DOCX)</label>

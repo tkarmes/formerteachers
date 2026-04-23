@@ -69,13 +69,14 @@
         </div>
     </div>
 
-    <footer th:replace="~{fragments/common :: footer}"></footer>
-    
     <style>
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         }
     </style>
+
+    <footer th:replace="~{fragments/common :: footer}"></footer>
+    <div th:replace="~{fragments/common :: scripts}"></div>
 </body>
 </html>

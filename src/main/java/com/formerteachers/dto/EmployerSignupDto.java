@@ -14,6 +14,9 @@ public class EmployerSignupDto {
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
+    @NotBlank(message = "Confirmation password is required")
+    private String confirmPassword;
+
     @NotBlank(message = "Company Name is required")
     private String companyName;
 
@@ -27,6 +30,9 @@ public class EmployerSignupDto {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getConfirmPassword() { return confirmPassword; }
+    public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
 
     public String getCompanyName() { return companyName; }
     public void setCompanyName(String companyName) { this.companyName = companyName; }

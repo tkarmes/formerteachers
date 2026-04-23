@@ -45,6 +45,10 @@ public class EmployerSignupController {
             result.rejectValue("username", "error.user", "Email already exists");
         }
 
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+            result.rejectValue("confirmPassword", "error.password", "Passwords do not match");
+        }
+
         if (result.hasErrors()) {
             return "employer-signup";
         }

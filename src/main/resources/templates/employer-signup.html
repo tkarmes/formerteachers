@@ -1,65 +1,76 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employer Registration - FormerTeachers</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
-<body style="display: flex; flex-direction: column; min-height: 100vh;">
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/common :: head(title='Employer Registration - FormerTeachers')}"></head>
+<body class="bg-light">
+    <nav th:replace="~{fragments/common :: navbar}"></nav>
 
-<div th:replace="~{fragments/common :: navbar}"></div>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-7">
+                <div class="card shadow border-0 p-4">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold">Employer Registration</h2>
+                        <p class="text-muted">Connect with former teachers and educational professionals.</p>
+                    </div>
 
-<div class="form-box shadow-sm" style="margin: 40px auto; max-width: 650px;">
-    <h2 style="text-align: center; margin-bottom: 20px; color: var(--bus-black); text-transform: uppercase;">Employer Registration</h2>
-    <p style="text-align: center; color: #666; margin-bottom: 30px;">Connect with former teachers and educational professionals.</p>
+                    <form th:action="@{/employer-signup}" th:object="${employerDto}" method="post" autocomplete="off">
+                        
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="username" class="form-label">Email Address (Username)</label>
+                                <input type="email" id="username" th:field="*{username}" class="form-control" placeholder="example@company.com" required autocomplete="username">
+                                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger small mt-1"></div>
+                            </div>
+                        </div>
 
-    <form th:action="@{/employer-signup}" th:object="${employerDto}" method="post" autocomplete="off">
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div class="form-group">
-                <label for="username">Email Address (Username)</label>
-                <input type="email" id="username" th:field="*{username}" class="form-control" placeholder="example@company.com" required autocomplete="username">
-                <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="At least 6 characters" required autocomplete="new-password">
+                                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger small mt-1"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" id="confirmPassword" th:field="*{confirmPassword}" class="form-control" placeholder="Re-type password" required autocomplete="new-password">
+                                <div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger small mt-1"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 mb-3 border-bottom pb-2">
+                            <h4 class="fw-bold text-primary">Company Details</h4>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="companyName" class="form-label">Company Name</label>
+                            <input type="text" id="companyName" th:field="*{companyName}" class="form-control" placeholder="ACME Inc." required>
+                            <div th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}" class="text-danger small mt-1"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="website" class="form-label">Company Website</label>
+                            <input type="text" id="website" th:field="*{website}" class="form-control" placeholder="www.example.com (optional)">
+                            <div class="form-text">Example: www.google.com</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="companyDescription" class="form-label">Company Description</label>
+                            <textarea id="companyDescription" th:field="*{companyDescription}" class="form-control" rows="4" placeholder="Briefly describe your company..."></textarea>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">Create Employer Account</button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <span class="text-muted small">Already have an account? <a th:href="@{/login}" class="text-decoration-none fw-bold text-primary">Log In</a></span>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="At least 6 characters" required autocomplete="new-password">
-                <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-            </div>
         </div>
-
-        <div style="margin: 30px 0; border-top: 2px solid var(--bus-yellow); padding-top: 20px;">
-            <h3 style="margin-bottom: 20px; color: var(--chalkboard-green);">Company Details</h3>
-        </div>
-
-        <div class="form-group">
-            <label for="companyName">Company Name</label>
-            <input type="text" id="companyName" th:field="*{companyName}" class="form-control" placeholder="ACME Inc." required>
-            <div class="error" th:if="${#fields.hasErrors('companyName')}" th:errors="*{companyName}"></div>
-        </div>
-
-        <div class="form-group">
-            <label for="website">Company Website</label>
-            <input type="text" id="website" th:field="*{website}" class="form-control" placeholder="www.example.com (optional)">
-            <p style="font-size: 0.8rem; color: #888; margin-top: 5px;">Example: www.google.com</p>
-        </div>
-
-        <div class="form-group">
-            <label for="companyDescription">Company Description</label>
-            <textarea id="companyDescription" th:field="*{companyDescription}" class="form-control" rows="4" placeholder="Briefly describe your company..."></textarea>
-        </div>
-
-        <button type="submit" class="cta-btn btn-submit" style="width: 100%; border: none; cursor: pointer; margin-top: 10px;">Create Employer Account</button>
-    </form>
-
-    <div style="text-align: center; margin-top: 30px;">
-        <p>Already have an account? <a th:href="@{/login}" style="color: var(--chalkboard-green); text-decoration: none; font-weight: bold;">Login here</a></p>
     </div>
-</div>
 
-<div th:replace="~{fragments/common :: footer}"></div>
-
+    <div th:replace="~{fragments/common :: footer}"></div>
+    <div th:replace="~{fragments/common :: scripts}"></div>
 </body>
 </html>

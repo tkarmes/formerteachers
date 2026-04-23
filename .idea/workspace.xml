@@ -6,16 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="a310fb34-00e8-479a-af21-4e763b96f362" name="Changes" comment="Initial working landing page with HomeController, index template, and local domain setup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/EmployerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/EmployerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/TeacherController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/TeacherController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/EmployerSignupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/controller/EmployerSignupController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/dto/EmployerSignupDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/dto/EmployerSignupDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Teacher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/model/Teacher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/repository/TeacherRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/repository/TeacherRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formerteachers/service/TeacherService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formerteachers/service/TeacherService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/edit-teacher-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/edit-teacher-profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragments/common.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragments/common.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/employer-signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/employer-signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/teacher-signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/teacher-signup.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

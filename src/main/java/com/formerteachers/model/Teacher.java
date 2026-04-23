@@ -16,22 +16,29 @@ public class Teacher {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "full_name")
     private String fullName;
     
     @Column(columnDefinition = "TEXT")
     private String bio;
     
+    @Column(name = "years_in_classroom")
     private Integer yearsInClassroom;
     
+    @Column(name = "subject_specialty")
     private String subjectSpecialty;
     
+    @Column(name = "desired_role")
     private String desiredRole;
 
+    @Column(name = "profile_image_url")
     private String profileImageUrl;
     
+    @Column(name = "resume_url")
     private String resumeUrl;
 
-    private Boolean publicProfile = false; // Changed to Boolean to handle existing null rows during migration
+    @Column(name = "public_profile", nullable = true)
+    private Boolean publicProfile;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -45,6 +52,7 @@ public class Teacher {
 
     public Teacher(User user) {
         this.user = user;
+        this.publicProfile = false;
     }
 
     public Long getId() {

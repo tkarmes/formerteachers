@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.Set;
@@ -95,5 +96,31 @@ public class TeacherController {
         Set<Job> savedJobs = teacherService.getSavedJobs(userDetails.getUsername());
         model.addAttribute("savedJobs", savedJobs);
         return "saved-jobs";
+    }
+
+    @PostMapping("/save-job")
+    public String saveJob(@AuthenticationPrincipal UserDetails userDetails,
+                          @RequestParam("jobId") Long jobId,
+                          RedirectAttributes redirectAttributes) {
+        try {
+            teacherService.saveJob(userDetails.getUsername(), jobId);
+            redirectAttributes.addFlashAttribute("success", "Job saved successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error saving job: " + e.getMessage());
+        }
+        return "redirect:/jobs";
+    }
+
+    @PostMapping("/unsave-job")
+    public String unsaveJob(@AuthenticationPrincipal UserDetails userDetails,
+                            @RequestParam("jobId") Long jobId,
+                            RedirectAttributes redirectAttributes) {
+        try {
+            teacherService.unsaveJob(userDetails.getUsername(), jobId);
+            redirectAttributes.addFlashAttribute("success", "Job removed from saved jobs.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error removing job: " + e.getMessage());
+        }
+        return "redirect:/teacher/saved-jobs";
     }
 }

@@ -6,6 +6,7 @@ import com.formerteachers.model.User;
 import com.formerteachers.repository.EmployerProfileRepository;
 import com.formerteachers.repository.TeacherRepository;
 import com.formerteachers.repository.UserRepository;
+import com.formerteachers.service.FileService; // Import FileService
 import com.formerteachers.service.TeacherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,19 +33,22 @@ public class EmployerController {
     private final UserRepository userRepository;
     private final TeacherService teacherService;
     private final TeacherRepository teacherRepository;
+    private final FileService fileService; // Inject FileService
 
     // Define the upload directory relative to the project root
-    private static final String UPLOAD_DIR = "src/main/resources/static/images/logos/";
+    // private static final String UPLOAD_DIR = "src/main/resources/static/images/logos/"; // No longer needed with FileService
 
     @Autowired
     public EmployerController(EmployerProfileRepository employerProfileRepository, 
                                UserRepository userRepository,
                                TeacherService teacherService,
-                               TeacherRepository teacherRepository) {
+                               TeacherRepository teacherRepository,
+                               FileService fileService) { // Add FileService to constructor
         this.employerProfileRepository = employerProfileRepository;
         this.userRepository = userRepository;
         this.teacherService = teacherService;
         this.teacherRepository = teacherRepository;
+        this.fileService = fileService; // Initialize FileService
     }
 
     @GetMapping("/profile/edit")
@@ -81,39 +85,15 @@ public class EmployerController {
         // Handle logo file upload
         if (logoFile != null && !logoFile.isEmpty()) {
             try {
-                // Ensure the upload directory exists
-                Path uploadPath = Paths.get(UPLOAD_DIR);
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-
-                // Generate a unique file name
-                String originalFilename = logoFile.getOriginalFilename();
-                String fileExtension = "";
-                if (originalFilename != null && originalFilename.contains(".")) {
-                    fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
-                }
-                String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
-                Path filePath = uploadPath.resolve(uniqueFileName);
-                
-                // Save the file
-                Files.copy(logoFile.getInputStream(), filePath);
-                
-                // Set the logoUrl to the relative path for web access
-                existingProfile.setLogoUrl("/images/logos/" + uniqueFileName);
-                logger.info("New logo uploaded for user {}: {}", username, existingProfile.getLogoUrl());
+                String logoPath = fileService.uploadFile(logoFile); // Use FileService to upload
+                existingProfile.setLogoUrl(logoPath);
+                logger.info("New logo uploaded for user {}. Stored logo URL: {}", username, existingProfile.getLogoUrl());
 
             } catch (IOException e) {
                 logger.error("Failed to upload logo for user {}: {}", username, e.getMessage());
                 // Optionally, add an error message to the model or redirect with an error param
             }
         } else {
-            // If no new file is uploaded, retain the existing logoUrl
-            // The @ModelAttribute already binds the existing logoUrl if it was present in the form
-            // but since we are removing the text input, we need to explicitly keep it if no file is uploaded.
-            // However, if the form doesn't send the logoUrl anymore, we need to fetch it from the existing profile.
-            // For now, we assume if logoFile is null/empty, we don't change the logoUrl.
-            // If the user wants to remove the logo, a separate mechanism would be needed.
             logger.info("No new logo file uploaded for user {}. Retaining existing logo URL.", username);
         }
         

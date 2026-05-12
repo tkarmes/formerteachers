@@ -1,311 +1,101 @@
 :root {
-    --pencil-yellow: #ffcf33;
-    --pencil-yellow-dark: #e6b800;
-    --paper-white: #fdfdfd;
-    --ink-black: #222222;
-    --apple-red: #d9534f;
-    --bus-black: #111111;
-    --line-gray: #f0f0f0;
-    --error-red: #d9534f;
+    --primary: #1e3a8a;
+    --primary-dark: #1e2937;
+    --accent: #3b82f6;
+    --light: #f8fafc;
+    --dark: #111827;
+    --gray: #64748b;
 }
 
 body {
-    background-color: var(--paper-white);
-    background-image: linear-gradient(var(--line-gray) 1px, transparent 1px);
-    background-size: 100% 40px;
-    color: var(--ink-black);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    background-color: #f8fafc;
+    color: #1f2937;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
 }
 
-/* Theme-specific Navbar */
-.ft-navbar {
-    background-color: var(--bus-black) !important;
-    border-bottom: 4px solid var(--pencil-yellow);
+/* Navbar */
+.navbar-dark {
+    background-color: var(--dark) !important;
 }
 
-.ft-navbar .navbar-brand {
-    color: var(--pencil-yellow) !important;
+.navbar-brand {
     font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 1.5rem;
+    color: white !important;
 }
 
-.ft-navbar .nav-link {
+.nav-link {
     color: white !important;
     font-weight: 500;
 }
 
-.ft-navbar .nav-link:hover {
-    color: var(--pencil-yellow) !important;
+.nav-link:hover {
+    color: var(--accent) !important;
 }
 
-.ft-navbar .logo-icon {
-    color: var(--apple-red);
-    margin-right: 8px;
-    filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
-}
-
-/* Hero Section */
-.hero {
-    background-color: var(--pencil-yellow);
-    padding: 100px 0;
-    text-align: center;
-    border-bottom: 8px solid var(--bus-black);
-    margin-bottom: 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 20px);
-    pointer-events: none;
-}
-
-.hero h1 {
-    font-size: 4rem;
-    font-weight: 900;
-    color: var(--bus-black);
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    position: relative;
-    z-index: 1;
-}
-
-.hero p {
-    font-size: 1.5rem;
-    max-width: 800px;
-    margin: 0 auto 40px;
-    color: var(--bus-black);
-    font-weight: 500;
-    position: relative;
-    z-index: 1;
-}
-
-/* CTA Buttons */
-.cta-btn {
-    background-color: var(--bus-black);
-    color: var(--pencil-yellow);
-    padding: 15px 40px;
-    border-radius: 0;
-    text-decoration: none;
-    font-weight: 800;
-    text-transform: uppercase;
-    display: inline-block;
-    transition: all 0.2s;
-    border: 3px solid var(--bus-black);
-    position: relative;
-    z-index: 1;
-}
-
-.cta-btn:hover {
-    background-color: var(--pencil-yellow);
-    color: var(--bus-black);
-    text-decoration: none;
-    box-shadow: 5px 5px 0 var(--bus-black);
-}
-
-.btn-secondary {
-    background-color: transparent;
-    color: var(--bus-black);
-    padding: 15px 40px;
-    border-radius: 0;
-    text-decoration: none;
-    font-weight: 800;
-    text-transform: uppercase;
-    border: 3px solid var(--bus-black);
-    display: inline-block;
-    transition: all 0.2s;
-    position: relative;
-    z-index: 1;
-}
-
-.btn-secondary:hover {
-    background-color: var(--bus-black);
+/* Hero */
+header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
-    text-decoration: none;
 }
 
-/* Features */
-.features-container {
-    padding: 80px 0;
-    background-color: rgba(255,255,255,0.7);
+/* Cards */
+.card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
+/* Feature Cards */
 .feature-card {
-    background: white;
-    padding: 50px 40px;
-    border-radius: 0;
-    text-align: center;
-    border: 4px solid var(--bus-black);
-    box-shadow: 8px 8px 0 var(--pencil-yellow);
-    transition: all 0.3s;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .feature-card:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0 var(--pencil-yellow);
+    transform: translateY(-5px);
 }
 
-.feature-card i {
-    font-size: 3rem;
-    color: var(--apple-red);
-    margin-bottom: 25px;
-    display: block;
-}
-
-.feature-card h3 {
-    color: var(--bus-black);
-    font-weight: 900;
-    text-transform: uppercase;
-    margin-bottom: 15px;
-}
-
-/* Forms */
-.form-box {
-    background: white;
-    border: 4px solid var(--bus-black);
-    box-shadow: 10px 10px 0 var(--pencil-yellow);
-    border-radius: 0;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    margin-bottom: 8px;
-    display: block;
-    color: var(--bus-black);
-}
-
-.form-control {
-    border-radius: 0 !important;
-    border: 2px solid var(--bus-black) !important;
-    padding: 12px !important;
-    font-weight: 500;
-}
-
-.form-control:focus {
-    box-shadow: 4px 4px 0 var(--pencil-yellow) !important;
-    border-color: var(--bus-black) !important;
-}
-
-/* Job Section */
-.job-section {
-    padding: 80px 0;
-    background-color: transparent;
-}
-
-.section-title {
-    color: var(--bus-black);
-    margin-bottom: 50px;
-    font-weight: 900;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 2.5rem;
-}
-
-.job-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
+/* Job Cards */
 .job-card {
-    background: white;
-    padding: 35px;
-    border-radius: 0;
-    border: 3px solid var(--bus-black);
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.3s;
-    box-shadow: 5px 5px 0 #eee;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .job-card:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 8px 8px 0 var(--pencil-yellow);
-    text-decoration: none;
-    color: inherit;
-}
-
-.job-card h3 {
-    margin: 0 0 10px;
-    color: var(--bus-black);
-    font-weight: 800;
-}
-
-.company {
-    font-weight: 700;
-    color: var(--apple-red);
-    margin-bottom: 15px;
-}
-
-.job-meta {
-    margin-top: auto;
-    padding-top: 20px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.tag {
-    background: var(--bus-black);
-    padding: 6px 18px;
-    border-radius: 0;
-    font-size: 0.8rem;
-    color: white;
-    font-weight: 600;
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
 /* Footer */
 footer {
-    background-color: var(--bus-black);
-    color: white;
-    padding: 80px 0 40px;
-    margin-top: auto;
-    border-top: 10px solid var(--pencil-yellow);
+    background-color: var(--dark);
+    color: #e2e8f0;
+    border-top: 4px solid var(--accent);
 }
 
-footer a {
-    color: var(--pencil-yellow);
-    text-decoration: none;
-    font-weight: bold;
+/* Buttons */
+.btn-primary {
+    background-color: var(--accent);
+    border: none;
 }
 
-footer a:hover {
-    color: white;
-    text-decoration: underline;
+.btn-primary:hover {
+    background-color: #2563eb;
 }
 
-/* Utilities */
-.text-brand { color: var(--bus-black); }
-.bg-brand { background-color: var(--bus-black); }
-.success { color: #28a745; text-align: center; margin-bottom: 20px; font-weight: bold; }
-.error { color: var(--error-red); font-weight: bold; }
+/* Misc */
+.badge {
+    font-weight: 500;
+}
+
+.lead {
+    font-weight: 400;
+}

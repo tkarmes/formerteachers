@@ -1,26 +1,21 @@
-FROM eclipse-temurin:23-jdk
+FROM eclipse-temurin:23-jdk AS build
 
 WORKDIR /app
 
-# Copy Maven wrapper and pom
-COPY .mvn/ .mvn
-COPY mvnw .
+# Copy pom and source
 COPY pom.xml .
-
-# Download dependencies (better caching)
-RUN ./mvnw dependency:go-offline -B
-
-# Copy source code and build
 COPY src ./src
-RUN ./mvnw clean package -DskipTests
+
+# Build the application
+RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
 
 # Runtime stage
 FROM eclipse-temurin:23-jre
 
 WORKDIR /app
 
-# Copy the built jar from the build stage
-COPY --from=0 /app/target/formerteachers-0.0.1-SNAPSHOT.jar app.jar
+# Copy the built jar
+COPY --from=build /app/target/formerteachers-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 

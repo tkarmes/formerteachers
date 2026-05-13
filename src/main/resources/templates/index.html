@@ -1,49 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:replace="~{fragments/common :: head(title='FormerTeachers - Leave Teaching, Find a Better Career')}"></head>
+<head th:replace="~{fragments/common :: head(title='FormerTeachers')}"></head>
 <body>
 
 <div th:replace="~{fragments/common :: navbar}"></div>
 
-<!-- Hero Section - Clean & Modern -->
-<header style="background: linear-gradient(135deg, #1e3a8a, #334155); color: white; padding: 110px 20px 90px; text-align: center;">
+<!-- Hero -->
+<header style="background: linear-gradient(135deg, #1e3a8a 0%, #1e2937 100%); color: white; padding: 130px 20px 100px; text-align: center;">
     <div class="container">
-        <h1 style="font-size: 3.8rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px;">
+        <h1 style="font-size: 3.6rem; font-weight: 800; line-height: 1.15; margin-bottom: 24px;">
             Your Next Chapter<br>Starts Here
         </h1>
-        <p style="font-size: 1.35rem; max-width: 750px; margin: 0 auto 35px; opacity: 0.95;">
-            The premier job board exclusively for former teachers looking for their next corporate, non-profit, or government role.
+        <p style="font-size: 1.35rem; max-width: 760px; margin: 0 auto 40px; color: #cbd5e1;">
+            The job board built by former teachers, for former teachers.<br>
+            Real opportunities that value your experience.
         </p>
 
-        <div sec:authorize="!isAuthenticated()" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
-            <a th:href="@{/teacher-signup}" class="btn btn-light btn-lg px-5 py-3 fw-semibold">
-                Join as a Teacher
-            </a>
-            <a th:href="@{/employer-signup}" class="btn btn-outline-light btn-lg px-5 py-3 fw-semibold">
-                Post a Job
-            </a>
+        <div sec:authorize="!isAuthenticated()" class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+            <a th:href="@{/teacher-signup}" class="btn btn-light btn-lg px-5 py-3 fw-semibold">I'm Ready to Transition</a>
+            <a th:href="@{/employer-signup}" class="btn btn-outline-light btn-lg px-5 py-3 fw-semibold">Post a Job</a>
         </div>
 
         <div sec:authorize="isAuthenticated()">
-            <a th:href="@{/jobs}" class="btn btn-light btn-lg px-5 py-3 fw-semibold">
-                Browse Opportunities →
-            </a>
+            <a th:href="@{/jobs}" class="btn btn-light btn-lg px-5 py-3 fw-semibold">Browse Opportunities →</a>
         </div>
     </div>
 </header>
-<!-- Rest of the page remains the same as last version -->
-<!-- Trust Bar, Features, Jobs, Final CTA -->
 
+<!-- Trust Bar -->
 <div class="bg-white py-3 border-bottom">
     <div class="container">
         <div class="row text-center small text-muted">
-            <div class="col">✅ Trusted by hundreds of former teachers</div>
-            <div class="col">🏢 Companies actively hiring educators</div>
-            <div class="col">💼 Remote, Hybrid & In-person roles</div>
+            <div class="col">✅ Trusted by former teachers</div>
+            <div class="col">🏢 Companies hiring educators</div>
+            <div class="col">💼 Remote • Hybrid • On-site</div>
         </div>
     </div>
 </div>
 
+<!-- Features -->
 <section class="py-5">
     <div class="container">
         <h2 class="text-center fw-bold mb-5">Why Former Teachers Choose Us</h2>
@@ -51,29 +46,27 @@
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm p-4 text-center">
                     <div class="fs-1 mb-3">🎯</div>
-                    <h4>Curated for You</h4>
-                    <p class="text-muted">We only show roles that value real teaching experience.</p>
+                    <h4>Curated Roles</h4>
+                    <p class="text-muted">Hand-picked jobs that value real teaching skills.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm p-4 text-center">
                     <div class="fs-1 mb-3">🔄</div>
                     <h4>Resume Translation</h4>
-                    <p class="text-muted">Turn your classroom skills into corporate language.</p>
+                    <p class="text-muted">Turn classroom experience into corporate strengths.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm p-4 text-center">
                     <div class="fs-1 mb-3">👥</div>
                     <h4>Real Community</h4>
-                    <p class="text-muted">Learn from teachers who’ve already succeeded.</p>
+                    <p class="text-muted">Learn from teachers who’ve already made the leap.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Add the rest of the sections from previous version if you want, or keep what you have -->
 
 <div th:replace="~{fragments/common :: footer}"></div>
 <div th:replace="~{fragments/common :: scripts}"></div>

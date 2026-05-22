@@ -198,6 +198,13 @@ public class JobViewController {
         return "redirect:/jobs/dashboard";
     }
 
+    @PostMapping("/admin/jobs/{id}/delete")
+    public String deleteJobByAdmin(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        jobService.deleteJob(id);
+        redirectAttributes.addFlashAttribute("success", "Job post deleted successfully by admin.");
+        return "redirect:/admin/jobs"; // Assuming /admin/jobs is the correct redirect for admin job listings
+    }
+
     @GetMapping("/search")
     public String searchJobs(@RequestParam String query, Model model) {
         List<Job> jobs = jobService.searchJobs(query);
@@ -284,5 +291,12 @@ public class JobViewController {
 
         redirectAttributes.addFlashAttribute("error", "Failed to delete application.");
         return "redirect:/jobs/dashboard";
+    }
+
+    @GetMapping("/admin/jobs")
+    public String adminJobs(Model model) {
+        List<Job> jobs = jobService.getAllJobs(); // Fetch all jobs
+        model.addAttribute("jobs", jobs);
+        return "admin-jobs"; // Return the admin-jobs.html template
     }
 }

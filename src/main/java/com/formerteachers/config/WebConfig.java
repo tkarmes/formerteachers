@@ -16,13 +16,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Map /uploads/** to the 'uploads' folder in the project root
-        Path uploadDir = Paths.get("uploads");
-        String uploadPath = uploadDir.toFile().getAbsolutePath();
 
-        logger.info("Configuring static resource handler for /uploads/** to serve from: file:/{}/", uploadPath);
+        Path uploadDir = Paths.get("uploads").toAbsolutePath().normalize();
+
+        logger.info("Serving /uploads/** from: {}", uploadDir);
 
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:/" + uploadPath + "/");
+                .addResourceLocations(uploadDir.toUri().toString());
     }
 }

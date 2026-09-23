@@ -14,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Set;
@@ -21,6 +23,8 @@ import java.util.Set;
 @Controller
 @RequestMapping("/teacher")
 public class TeacherController {
+
+    private static final Logger logger = LoggerFactory.getLogger(TeacherController.class);
 
     @Autowired
     private TeacherService teacherService;
@@ -55,6 +59,10 @@ public class TeacherController {
                                 @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
                                 @RequestParam(value = "resume", required = false) MultipartFile resume,
                                 Model model) {
+
+        logger.info("=== PROFILE UPDATE REQUEST RECEIVED ===");
+        logger.info("Profile image received: {}", profileImage != null && !profileImage.isEmpty());
+
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Teacher existingTeacher = teacherService.findByUser(user);
@@ -65,14 +73,20 @@ public class TeacherController {
         existingTeacher.setYearsInClassroom(teacherData.getYearsInClassroom());
         existingTeacher.setSubjectSpecialty(teacherData.getSubjectSpecialty());
         existingTeacher.setDesiredRole(teacherData.getDesiredRole());
-        existingTeacher.setPublicProfile(teacherData.isPublicProfile()); // Update publicProfile field
+        existingTeacher.setPublicProfile(teacherData.isPublicProfile());
 
         // Handle profile image upload
         if (profileImage != null && !profileImage.isEmpty()) {
             try {
+                logger.info("Attempting to upload profile image: {}", profileImage.getOriginalFilename());
+
                 String imagePath = fileService.uploadFile(profileImage);
+
+                logger.info("Profile image saved at: {}", imagePath);
+
                 existingTeacher.setProfileImageUrl(imagePath);
             } catch (IOException e) {
+                logger.error("Error uploading profile image", e);
                 return "redirect:/teacher/profile/edit?error=upload";
             }
         }
@@ -83,6 +97,7 @@ public class TeacherController {
                 String resumePath = fileService.uploadFile(resume);
                 existingTeacher.setResumeUrl(resumePath);
             } catch (IOException e) {
+                logger.error("Error uploading resume", e);
                 return "redirect:/teacher/profile/edit?error=upload";
             }
         }

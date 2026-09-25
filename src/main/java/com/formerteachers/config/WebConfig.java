@@ -21,6 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
         logger.info("Serving /uploads/** from: {}", uploadPath);
 
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations(uploadPath);
+                .addResourceLocations("file:/app/uploads/");
     }
 }

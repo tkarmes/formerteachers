@@ -61,7 +61,8 @@ public class TeacherController {
                                 Model model) {
 
         logger.info("=== PROFILE UPDATE REQUEST RECEIVED ===");
-        logger.info("Profile image received: {}", profileImage != null && !profileImage.isEmpty());
+        logger.info("Pro" +
+                "file image received: {}", profileImage != null && !profileImage.isEmpty());
 
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
